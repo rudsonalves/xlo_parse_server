@@ -19,12 +19,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import '../../common/singletons/app_settings.dart';
 import '../../common/validators/validators.dart';
 import '../../components/buttons/big_button.dart';
+import '../../components/dialogs/simple_message.dart';
 import '../../components/form_fields/custom_form_field.dart';
 import '../../components/form_fields/password_form_field.dart';
 import '../login/login_screen.dart';
+import 'signup_controller.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -36,32 +37,53 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final checkPasswordController = TextEditingController();
-  final nicknameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final app = AppSettings.instance;
-
-  final emailFocusNode = FocusNode();
-  final celularFocusNode = FocusNode();
-  final passwordFocusNode = FocusNode();
-  final checkPassFocusNode = FocusNode();
+  final _controller = SignupController();
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    checkPasswordController.dispose();
-    nicknameController.dispose();
-    phoneController.dispose();
-
-    emailFocusNode.dispose();
-    celularFocusNode.dispose();
-    passwordFocusNode.dispose();
-    checkPassFocusNode.dispose();
+    _controller.dispose();
 
     super.dispose();
+  }
+
+  Future<void> signupUser() async {
+    final valid =
+        _formKey.currentState != null && _formKey.currentState!.validate();
+    if (valid) {
+      try {
+        final user = await _controller.signupUser();
+        log(user.toString());
+        if (!mounted) return;
+        await SimpleMessage.open(
+          context,
+          title: 'Usuário Criado',
+          message: 'Usuário foi criado com sucesso.'
+              ' Agora pode logar em sua conta.',
+        );
+        if (mounted) Navigator.pop(context);
+        return;
+      } catch (err) {
+        final errCode = err.toString().split(':')[0];
+
+        String message;
+        switch (errCode) {
+          case '203':
+            message = 'Este e-mail já foi utilizado. Tente '
+                'um outro e-mail ou recupere a senha na página de login.';
+          default:
+            message = 'Desculpe. Ocorreu um erro. Favor tentar mais tarde.';
+        }
+        if (!mounted) return;
+        await SimpleMessage.open(
+          context,
+          title: 'Ocorreu um Error',
+          message: message,
+          type: MessageType.error,
+        );
+        log(err.toString());
+        return;
+      }
+    }
   }
 
   @override
@@ -69,8 +91,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor:
-          app.isDark ? null : colorScheme.onPrimary.withOpacity(0.85),
+      backgroundColor: _controller.app.isDark
+          ? null
+          : colorScheme.onPrimary.withOpacity(0.85),
       appBar: AppBar(
         title: const Text('Cadastrar'),
         centerTitle: true,
@@ -78,7 +101,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: Center(
         child: SingleChildScrollView(
           child: Card(
-            color: app.isDark ? colorScheme.primary.withOpacity(.15) : null,
+            color: _controller.app.isDark
+                ? colorScheme.primary.withOpacity(.15)
+                : null,
             margin: const EdgeInsets.all(20),
             child: Padding(
               padding: const EdgeInsets.all(12),
@@ -108,57 +133,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomFormField(
                           labelText: 'Apelido',
                           hintText: 'Como aparecerá em seus anúncios',
-                          controller: nicknameController,
+                          controller: _controller.nicknameController,
                           validator: Validator.nickname,
-                          nextFocusNode: emailFocusNode,
+                          nextFocusNode: _controller.emailFocusNode,
                         ),
                         CustomFormField(
                           labelText: 'E-mail',
                           hintText: 'seu-email@provedor.com',
-                          controller: emailController,
+                          controller: _controller.emailController,
                           validator: Validator.email,
                           keyboardType: TextInputType.emailAddress,
-                          focusNode: emailFocusNode,
-                          nextFocusNode: celularFocusNode,
+                          focusNode: _controller.emailFocusNode,
+                          nextFocusNode: _controller.celularFocusNode,
                         ),
                         CustomFormField(
                           labelText: 'Celular',
                           hintText: '(19) 9999-9999',
-                          controller: phoneController,
+                          controller: _controller.phoneController,
                           validator: Validator.phone,
                           keyboardType: TextInputType.phone,
-                          focusNode: celularFocusNode,
-                          nextFocusNode: passwordFocusNode,
+                          focusNode: _controller.celularFocusNode,
+                          nextFocusNode: _controller.passwordFocusNode,
                         ),
                         PasswordFormField(
                           labelText: 'Senha',
                           hintText: '6+ letras e números',
-                          passwordController: passwordController,
+                          passwordController: _controller.passwordController,
                           validator: Validator.password,
-                          focusNode: passwordFocusNode,
+                          focusNode: _controller.passwordFocusNode,
                           textInputAction: TextInputAction.next,
-                          nextFocusNode: checkPassFocusNode,
+                          nextFocusNode: _controller.checkPassFocusNode,
                         ),
                         PasswordFormField(
                           labelText: 'Confirmar senha',
                           hintText: '6+ letras e números',
-                          passwordController: checkPasswordController,
-                          focusNode: checkPassFocusNode,
+                          passwordController:
+                              _controller.checkPasswordController,
+                          focusNode: _controller.checkPassFocusNode,
                           validator: (value) => Validator.checkPassword(
-                            passwordController.text,
+                            _controller.passwordController.text,
                             value,
                           ),
                         ),
                         BigButton(
                           color: Colors.amber,
                           label: 'Registrar',
-                          onPress: () {
-                            final valid = _formKey.currentState != null &&
-                                _formKey.currentState!.validate();
-                            if (valid) {
-                              log('${emailController.text}, ${passwordController.text}');
-                            }
-                          },
+                          onPress: signupUser,
                         ),
                         const Divider(),
                         Row(
