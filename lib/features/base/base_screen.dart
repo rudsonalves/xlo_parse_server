@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:xlo_mobx/features/home/home_screen.dart';
 
+import '../../common/singletons/app_settings.dart';
 import '../../components/custom_drawer/custom_drawer.dart';
 import '../account/account_screen.dart';
 import '../chat/chat_screen.dart';
@@ -35,6 +36,7 @@ class BaseScreen extends StatefulWidget {
 
 class _BaseScreenState extends State<BaseScreen> {
   final pageController = PageController();
+  final app = AppSettings.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,18 @@ class _BaseScreenState extends State<BaseScreen> {
         title: const Text('XLO'),
         centerTitle: true,
         elevation: 5,
+        actions: [
+          IconButton(
+            onPressed: app.toggleBrightnessMode,
+            icon: ValueListenableBuilder(
+                valueListenable: app.brightness,
+                builder: (context, value, _) {
+                  return Icon(
+                    app.isDark ? Icons.light_mode : Icons.dark_mode,
+                  );
+                }),
+          ),
+        ],
       ),
       drawer: CustomDrawer(
         colorScheme: colorScheme,
