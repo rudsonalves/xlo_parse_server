@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
 // This file is part of xlo_parse_server.
@@ -16,33 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-enum UserType { particular, professional }
+abstract class SignUpState {}
 
-class UserModel {
-  String? id;
-  String? name;
-  String email;
-  String? phone;
-  String? password;
-  UserType type;
-  DateTime? createAt;
+class SignUpStateInitial extends SignUpState {}
 
-  UserModel({
-    this.id,
-    this.name,
-    required this.email,
-    this.phone,
-    this.password,
-    this.type = UserType.particular,
-    DateTime? createAt,
-  }) : createAt = createAt ?? DateTime.now();
+class SignUpStateLoading extends SignUpState {}
 
-  @override
-  String toString() {
-    return 'User(id: $id, name:'
-        ' $name, email:'
-        ' $email, phone: $phone,'
-        ' password: $password,'
-        ' createAt: $createAt';
-  }
-}
+class SignUpStateSuccess extends SignUpState {}
+
+class SignUpStateError extends SignUpState {}

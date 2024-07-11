@@ -21,20 +21,46 @@ import '../common/models/user.dart';
 import 'constants.dart';
 
 class UserRepository {
-  static Future<User> signUp(User user) async {
-    final parserUser = ParseUser(user.email, user.password, user.email);
+  static Future<UserModel> signUp(UserModel user) async {
+    final parseUser = ParseUser(user.email, user.password, user.email);
 
-    parserUser.set<String>(keyUserName, user.name);
-    parserUser.set<String>(keyUserPhone, user.phone);
-    parserUser.set<int>(keyUserType, user.type.index);
+    parseUser.set<String>(keyUserName, user.email);
+    parseUser.set<String>(keyUserNickname, user.name!);
+    parseUser.set<String>(keyUserPhone, user.phone!);
+    parseUser.set<int>(keyUserType, user.type.index);
 
-    final response = await parserUser.signUp();
+    final response = await parseUser.signUp();
     if (!response.success) {
-      throw Exception('${response.error!.code}: ${response.error!.message}');
+      throw Exception(response.error);
     }
 
-    user.id = parserUser.objectId;
-    user.createAt = parserUser.createdAt;
-    return user;
+    final newUser = _parseServerToUser(parseUser);
+
+    parseUser.logout();
+
+    return newUser;
+  }
+
+  static Future<UserModel> loginWithEmail(UserModel user) async {
+    final parseUser = ParseUser(user.email, user.password, null);
+
+    final response = await parseUser.login();
+
+    if (!response.success) {
+      throw Exception(response.error);
+    }
+
+    return _parseServerToUser(parseUser);
+  }
+
+  static UserModel _parseServerToUser(ParseUser parseUser) {
+    return UserModel(
+      id: parseUser.objectId,
+      name: parseUser.get(keyUserNickname),
+      email: parseUser.username!,
+      phone: parseUser.get(keyUserPhone),
+      type: UserType.values[parseUser.get(keyUserType)],
+      createAt: parseUser.createdAt,
+    );
   }
 }

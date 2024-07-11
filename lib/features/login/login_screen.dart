@@ -15,16 +15,17 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
-import '../../common/singletons/app_settings.dart';
-import '../../common/validators/validators.dart';
+import '../../common/models/user.dart';
+import '../../common/parse_server/errors_mensages.dart';
 import '../../components/buttons/big_button.dart';
-import '../../components/form_fields/custom_form_field.dart';
-import '../../components/form_fields/password_form_field.dart';
+import '../../components/dialogs/simple_message.dart';
 import '../signup/signup_screen.dart';
+import 'login_controller.dart';
+import 'login_state.dart';
+import 'widgets/login_form.dart';
+import '../../components/others_widgets/or_row.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,19 +36,61 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _controller = LoginController();
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final passwordFocusNode = FocusNode();
-  final app = AppSettings.instance;
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    passwordFocusNode.dispose();
+    _controller.dispose();
 
     super.dispose();
+  }
+
+  Future<void> _userLogin() async {
+    final valid =
+        _formKey.currentState != null && _formKey.currentState!.validate();
+
+    if (valid) {
+      try {
+        final user = await _controller.login(
+          UserModel(
+            email: _controller.emailController.text,
+            password: _controller.passwordController.text,
+          ),
+        );
+
+        if (user == null || user.id == null) {
+          throw Exception(
+              '-1	Error code indicating that an unknown error or an error unrelated to Parse occurred.');
+        }
+
+        if (mounted) Navigator.pop(context);
+        return;
+      } catch (err) {
+        if (!mounted) return;
+        await SimpleMessage.open(
+          context,
+          title: 'Ocorreu um Error',
+          message: ParserServerErrors.message(err),
+          type: MessageType.error,
+        );
+
+        return;
+      }
+    }
+  }
+
+  void _navSignUp() {
+    Navigator.pop(context);
+    Navigator.pushNamed(
+      context,
+      SignUpScreen.routeName,
+    );
+  }
+
+  void _navLostPassword() {
+    // TODO: not implemented
+    Navigator.pop(context);
   }
 
   @override
@@ -55,107 +98,61 @@ class _LoginScreenState extends State<LoginScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor:
-          app.isDark ? null : colorScheme.onPrimary.withOpacity(0.85),
+      backgroundColor: _controller.app.isDark
+          ? null
+          : colorScheme.onPrimary.withOpacity(0.85),
       appBar: AppBar(
         title: const Text('Entrar'),
         centerTitle: true,
         elevation: 5,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Card(
-            color: app.isDark ? colorScheme.primary.withOpacity(.15) : null,
-            margin: const EdgeInsets.all(20),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  BigButton(
-                    color: Colors.blue,
-                    label: 'Entrar com Facebook',
-                    onPress: () {},
-                  ),
-                  const Row(
-                    children: [
-                      Expanded(child: Divider()),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Text('ou'),
-                      ),
-                      Expanded(child: Divider()),
-                    ],
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text('Acessar com E-mail'),
-                        CustomFormField(
-                          labelText: 'E-mail',
-                          hintText: 'seu-email@provedor.com',
-                          controller: emailController,
-                          validator: Validator.email,
-                          keyboardType: TextInputType.emailAddress,
-                          nextFocusNode: passwordFocusNode,
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: InkWell(
-                            onTap: () {},
-                            child: Text(
-                              'Esqueceu a senha?',
-                              style: TextStyle(
-                                color: colorScheme.primary,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
-                        PasswordFormField(
-                          labelText: 'Senha',
-                          passwordController: passwordController,
-                          validator: Validator.password,
-                          focusNode: passwordFocusNode,
-                        ),
-                        BigButton(
-                          color: Colors.amber,
-                          label: 'Entrar',
-                          onPress: () {
-                            final valid = _formKey.currentState != null &&
-                                _formKey.currentState!.validate();
-                            if (valid) {
-                              log('${emailController.text}, ${passwordController.text}');
-                            }
-                          },
-                        ),
-                        const Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+      body: ListenableBuilder(
+        listenable: _controller,
+        builder: (context, _) {
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Card(
+                      color: _controller.app.isDark
+                          ? colorScheme.primary.withOpacity(.15)
+                          : null,
+                      margin: const EdgeInsets.all(20),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text('Não possui uma conta?'),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pushNamed(
-                                  context,
-                                  SignUpScreen.routeName,
-                                );
-                              },
-                              child: const Text('Cadastrar'),
+                            BigButton(
+                              color: Colors.blue,
+                              label: 'Entrar com Facebook',
+                              onPress: () {},
+                            ),
+                            const OrRow(),
+                            LoginForm(
+                              formKey: _formKey,
+                              controller: _controller,
+                              userLogin: _userLogin,
+                              navSignUp: _navSignUp,
+                              navLostPassword: _navLostPassword,
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
+              if (_controller.state is LoginStateLoading)
+                const Positioned.fill(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

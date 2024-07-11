@@ -21,8 +21,13 @@ import '../../common/models/user.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../components/form_fields/masked_text_controller.dart';
 import '../../repository/user_repository.dart';
+import 'signup_state.dart';
 
-class SignupController {
+class SignupController extends ChangeNotifier {
+  SignUpState _state = SignUpStateInitial();
+
+  SignUpState get state => _state;
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final checkPasswordController = TextEditingController();
@@ -36,7 +41,9 @@ class SignupController {
   final passwordFocusNode = FocusNode();
   final checkPassFocusNode = FocusNode();
 
+  @override
   void dispose() {
+    super.dispose();
     emailController.dispose();
     passwordController.dispose();
     checkPasswordController.dispose();
@@ -49,14 +56,25 @@ class SignupController {
     checkPassFocusNode.dispose();
   }
 
-  Future<User?> signupUser() async {
-    final user = User(
-      name: nicknameController.text,
-      email: emailController.text,
-      phone: phoneController.text,
-      password: passwordController.text,
-    );
+  void _changeState(SignUpState newState) {
+    _state = newState;
+    notifyListeners();
+  }
 
-    return await UserRepository.signUp(user);
+  Future<UserModel?> signupUser() async {
+    try {
+      _changeState(SignUpStateLoading());
+      final user = UserModel(
+        name: nicknameController.text,
+        email: emailController.text,
+        phone: phoneController.text,
+        password: passwordController.text,
+      );
+      _changeState(SignUpStateSuccess());
+      return await UserRepository.signUp(user);
+    } catch (err) {
+      _changeState(SignUpStateError());
+      throw Exception(err);
+    }
   }
 }

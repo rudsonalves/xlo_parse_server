@@ -17,6 +17,7 @@
 
 const keyUserId = 'objectId';
 const keyUserName = 'username';
+const keyUserNickname = 'nickname';
 const keyUserEmail = 'email';
 const keyUserPassword = 'password';
 const keyUserPhone = 'phone';
