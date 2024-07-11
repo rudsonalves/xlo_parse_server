@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:xlo_mobx/my_material_app.dart';
 
+import 'common/singletons/app_settings.dart';
+
 Future<void> startParseServer() async {
   const keyApplicationId = 'P9jsCPvsvxmqSM86HGQVIkJn7JLxh4BRnhpt9ACa';
   const keyClientKey = 'dHHt2v3BdE5bAq12vRys4t4pBMXk8lidYO77vv3B';
@@ -19,6 +21,8 @@ Future<void> startParseServer() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await startParseServer();
+
+  await AppSettings.instance.init();
 
   runApp(const MyMaterialApp());
 }

@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'common/singletons/app_settings.dart';
 import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
 import 'features/account/account_screen.dart';
@@ -24,32 +25,41 @@ import 'features/base/base_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/insert/insert_screen.dart';
+import 'features/login/login_screen.dart';
+import 'features/signup/signup_screen.dart';
 
-class MyMaterialApp extends StatelessWidget {
+class MyMaterialApp extends StatefulWidget {
   const MyMaterialApp({super.key});
 
   @override
+  State<MyMaterialApp> createState() => _MyMaterialAppState();
+}
+
+class _MyMaterialAppState extends State<MyMaterialApp> {
+  final app = AppSettings.instance;
+
+  @override
   Widget build(BuildContext context) {
-    final brightness = View.of(context).platformDispatcher.platformBrightness;
-
-    // Retrieves the default theme for the platform
-    //TextTheme textTheme = Theme.of(context).textTheme;
-
-    // Use with Google Fonts package to use downloadable fonts
-    TextTheme textTheme = createTextTheme(context, "Montserrat", "Aboreto");
-
+    TextTheme textTheme = createTextTheme(context, "Nunito Sans", "Poppins");
     MaterialTheme theme = MaterialTheme(textTheme);
-    return MaterialApp(
-      theme: brightness == Brightness.light ? theme.light() : theme.dark(),
-      debugShowCheckedModeBanner: false,
-      initialRoute: BaseScreen.routeName,
-      routes: {
-        BaseScreen.routeName: (context) => const BaseScreen(),
-        HomeScreen.routeName: (context) => const HomeScreen(),
-        InsertScreen.routeName: (context) => const InsertScreen(),
-        ChatScreen.routeName: (context) => const ChatScreen(),
-        AccountScreen.routeName: (context) => const AccountScreen(),
-      },
-    );
+
+    return ValueListenableBuilder(
+        valueListenable: app.brightness,
+        builder: (context, value, _) {
+          return MaterialApp(
+            theme: value == Brightness.light ? theme.light() : theme.dark(),
+            debugShowCheckedModeBanner: false,
+            initialRoute: BaseScreen.routeName,
+            routes: {
+              BaseScreen.routeName: (_) => const BaseScreen(),
+              HomeScreen.routeName: (_) => const HomeScreen(),
+              InsertScreen.routeName: (_) => const InsertScreen(),
+              ChatScreen.routeName: (_) => const ChatScreen(),
+              AccountScreen.routeName: (_) => const AccountScreen(),
+              LoginScreen.routeName: (_) => const LoginScreen(),
+              SignUpScreen.routeName: (_) => const SignUpScreen(),
+            },
+          );
+        });
   }
 }

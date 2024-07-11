@@ -17,8 +17,12 @@
 
 import 'package:flutter/material.dart';
 
+import '../../common/singletons/app_settings.dart';
+import '../../features/login/login_screen.dart';
+import 'widgets/custom_drawer_header.dart';
+
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({
+  CustomDrawer({
     super.key,
     required this.colorScheme,
     required this.pageController,
@@ -26,13 +30,26 @@ class CustomDrawer extends StatelessWidget {
 
   final ColorScheme colorScheme;
   final PageController pageController;
+  final app = AppSettings.instance;
+
+  void _navToLoginScreen(BuildContext context) {
+    if (app.isLogin) {
+      Navigator.pop(context);
+      pageController.jumpToPage(4);
+    } else {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, LoginScreen.routeName);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Drawer(
-      backgroundColor: colorScheme.primary.withOpacity(0.15),
+      backgroundColor: app.isDark
+          ? colorScheme.primary.withOpacity(0.15)
+          : colorScheme.onPrimary.withOpacity(0.85),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         topRight: Radius.circular(35),
@@ -40,43 +57,9 @@ class CustomDrawer extends StatelessWidget {
       )),
       child: ListView(
         children: [
-          DrawerHeader(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: colorScheme.onPrimary,
-            ),
-            child: Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.person,
-                    size: 50,
-                  ),
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Acessar sua conta agora!',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                      TextButton(
-                        child: const Text('Click aqui!'),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          InkWell(
+            onTap: () => _navToLoginScreen(context),
+            child: const CustomDrawerHeader(),
           ),
           ListTile(
             leading: const Icon(Icons.list),
