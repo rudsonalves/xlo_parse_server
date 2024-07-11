@@ -17,6 +17,9 @@
 
 import 'package:flutter/material.dart';
 
+import '../../repository/user_repository.dart';
+import '../models/user.dart';
+
 class AppSettings {
   AppSettings._();
   static final _instance = AppSettings._();
@@ -25,9 +28,16 @@ class AppSettings {
   final ValueNotifier<Brightness> _brightness =
       ValueNotifier<Brightness>(Brightness.dark);
   // late final ValueNotifier<Contrast> _contrast;
+  UserModel? user;
+
+  bool get isLogin => user != null;
 
   ValueNotifier<Brightness> get brightness => _brightness;
   bool get isDark => _brightness.value == Brightness.dark;
+
+  Future<void> init() async {
+    user = await UserRepository.getCurrentUser();
+  }
 
   void toggleBrightnessMode() {
     _brightness.value = _brightness.value == Brightness.dark

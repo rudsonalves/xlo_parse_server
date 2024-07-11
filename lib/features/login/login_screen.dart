@@ -47,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _userLogin() async {
+    FocusScope.of(context).unfocus();
     final valid =
         _formKey.currentState != null && _formKey.currentState!.validate();
 

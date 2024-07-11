@@ -15,9 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/models/user.dart';
@@ -53,8 +50,7 @@ class LoginController extends ChangeNotifier {
     try {
       _changeState(LoginStateLoading());
       final newUser = await UserRepository.loginWithEmail(user);
-      await Future.delayed(const Duration(seconds: 5));
-      log(newUser.toString());
+      app.user = newUser;
       _changeState(LoginStateSuccess());
       return newUser;
     } catch (err) {

@@ -53,6 +53,23 @@ class UserRepository {
     return _parseServerToUser(parseUser);
   }
 
+  static Future<UserModel?> getCurrentUser() async {
+    ParseUser? currentUser = await ParseUser.currentUser() as ParseUser?;
+    if (currentUser == null) return null;
+
+    // Checks whether the user's session token is valid
+    final parseResponse =
+        await ParseUser.getCurrentUserFromServer(currentUser.sessionToken!);
+
+    if (parseResponse != null && parseResponse.success) {
+      return _parseServerToUser(currentUser);
+    } else {
+      // Invalid session. Logout
+      await currentUser.logout();
+      return null;
+    }
+  }
+
   static UserModel _parseServerToUser(ParseUser parseUser) {
     return UserModel(
       id: parseUser.objectId,
