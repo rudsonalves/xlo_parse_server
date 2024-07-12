@@ -16,14 +16,14 @@
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/features/home/home_screen.dart';
 
-import '../../common/singletons/app_settings.dart';
 import '../../components/custom_drawer/custom_drawer.dart';
 import '../account/account_screen.dart';
 import '../chat/chat_screen.dart';
 import '../favorites/favorites_screen.dart';
+import '../home/home_screen.dart';
 import '../insert/insert_screen.dart';
+import 'base_controller.dart';
 
 class BaseScreen extends StatefulWidget {
   const BaseScreen({super.key});
@@ -35,8 +35,16 @@ class BaseScreen extends StatefulWidget {
 }
 
 class _BaseScreenState extends State<BaseScreen> {
-  final pageController = PageController();
-  final app = AppSettings.instance;
+  final controller = BaseController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _changeToPage(int page) {
+    controller.jumpToPage(page);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,28 +52,33 @@ class _BaseScreenState extends State<BaseScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('XLO'),
+        title: ValueListenableBuilder(
+          valueListenable: controller.titleNotifier,
+          builder: (context, value, _) {
+            return Text(value);
+          },
+        ),
         centerTitle: true,
         elevation: 5,
         actions: [
           IconButton(
-            onPressed: app.toggleBrightnessMode,
+            onPressed: controller.app.toggleBrightnessMode,
             icon: ValueListenableBuilder(
-                valueListenable: app.brightness,
+                valueListenable: controller.app.brightness,
                 builder: (context, value, _) {
                   return Icon(
-                    app.isDark ? Icons.light_mode : Icons.dark_mode,
+                    controller.app.isDark ? Icons.light_mode : Icons.dark_mode,
                   );
                 }),
           ),
         ],
       ),
       drawer: CustomDrawer(
-        colorScheme: colorScheme,
-        pageController: pageController,
-      ),
+          colorScheme: colorScheme,
+          pageController: controller.pageController,
+          changeToPage: _changeToPage),
       body: PageView(
-        controller: pageController,
+        controller: controller.pageController,
         physics: const NeverScrollableScrollPhysics(),
         children: const [
           HomeScreen(),

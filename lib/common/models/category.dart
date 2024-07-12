@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
 // This file is part of xlo_parse_server.
@@ -15,14 +16,24 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-const keyUserId = 'objectId';
-const keyUserName = 'username';
-const keyUserNickname = 'nickname';
-const keyUserEmail = 'email';
-const keyUserPassword = 'password';
-const keyUserPhone = 'phone';
-const keyUserType = 'type';
+class CategoryModel {
+  String? id;
+  String? name;
+  String? description;
+  DateTime? createAt;
 
-const keyCategoryTable = 'Categories';
-const keyCategoryName = 'name';
-const keyCategoryDescription = 'description';
+  CategoryModel({
+    this.id,
+    this.name,
+    this.description,
+    this.createAt,
+  });
+
+  @override
+  String toString() {
+    return 'CategoryModel(id: $id,'
+        ' name: $name,'
+        ' description: $description,'
+        ' createAt: $createAt)';
+  }
+}

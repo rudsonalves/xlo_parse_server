@@ -18,25 +18,31 @@
 import 'package:flutter/material.dart';
 
 class CustomFormField extends StatelessWidget {
-  final String labelText;
-  final String hintText;
+  final String? labelText;
+  final String? hintText;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
+  final bool fullBorder;
+  final int? maxLines;
+  final FloatingLabelBehavior? floatingLabelBehavior;
 
   CustomFormField({
     super.key,
-    required this.labelText,
-    required this.hintText,
+    this.labelText,
+    this.hintText,
     this.controller,
     this.validator,
     this.keyboardType,
     this.textInputAction,
     this.focusNode,
     this.nextFocusNode,
+    this.fullBorder = true,
+    this.maxLines = 1,
+    this.floatingLabelBehavior = FloatingLabelBehavior.always,
   });
 
   final errorString = ValueNotifier<String?>(null);
@@ -54,14 +60,17 @@ class CustomFormField extends StatelessWidget {
             focusNode: focusNode,
             keyboardType: keyboardType,
             textInputAction: textInputAction ?? TextInputAction.next,
+            maxLines: maxLines,
             decoration: InputDecoration(
               labelText: labelText,
               hintText: hintText,
               errorText: errorText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
+              border: fullBorder
+                  ? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    )
+                  : null,
+              floatingLabelBehavior: floatingLabelBehavior,
             ),
             onChanged: (value) {
               if (value.length > 2 && validator != null) {

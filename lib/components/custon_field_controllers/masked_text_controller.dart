@@ -22,7 +22,7 @@ class MaskedTextController extends TextEditingController {
   bool _isApplyingMask = false;
 
   MaskedTextController({required this.mask}) {
-    addListener(_onTextChanged);
+    addListener(_onValueChanged);
   }
 
   @override
@@ -55,7 +55,7 @@ class MaskedTextController extends TextEditingController {
   }
 
   String _cleanString(String text) {
-    final regex = RegExp(r'[\da-zA-Z]');
+    final regex = RegExp(r'[\d]');
     final newText = StringBuffer();
     for (int i = 0; i < text.length; i++) {
       final char = text[i];
@@ -66,7 +66,7 @@ class MaskedTextController extends TextEditingController {
     return newText.toString();
   }
 
-  void _onTextChanged() {
+  void _onValueChanged() {
     if (_isApplyingMask) return;
 
     _isApplyingMask = true;

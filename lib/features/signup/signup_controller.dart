@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/models/user.dart';
 import '../../common/singletons/app_settings.dart';
-import '../../components/form_fields/masked_text_controller.dart';
+import '../../components/custon_field_controllers/masked_text_controller.dart';
 import '../../repository/user_repository.dart';
 import 'signup_state.dart';
 
