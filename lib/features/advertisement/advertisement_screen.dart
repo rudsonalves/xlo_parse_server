@@ -20,21 +20,21 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import '../../components/buttons/big_button.dart';
-import 'insert_controller.dart';
+import 'advertisement_controller.dart';
 import 'widgets/horizontal_image_gallery.dart';
-import 'widgets/insert_form.dart';
+import 'widgets/advertisement_form.dart';
 
-class InsertScreen extends StatefulWidget {
-  const InsertScreen({super.key});
+class AdvertisementScreen extends StatefulWidget {
+  const AdvertisementScreen({super.key});
 
   static const routeName = '/insert';
 
   @override
-  State<InsertScreen> createState() => _InsertScreenState();
+  State<AdvertisementScreen> createState() => _AdvertisementScreenState();
 }
 
-class _InsertScreenState extends State<InsertScreen> {
-  final controller = InsertController();
+class _AdvertisementScreenState extends State<AdvertisementScreen> {
+  final controller = AdvertisementController();
 
   @override
   void initState() {
@@ -97,7 +97,7 @@ class _InsertScreenState extends State<InsertScreen> {
                   }
                 },
               ),
-              InsertForm(controller: controller),
+              AdvertisementForm(controller: controller),
               BigButton(
                 color: Colors.orange,
                 label: 'Envia',
@@ -112,7 +112,7 @@ class _InsertScreenState extends State<InsertScreen> {
 }
 
 class ImagesListView extends StatelessWidget {
-  final InsertController controller;
+  final AdvertisementController controller;
   final bool validator;
 
   const ImagesListView({

@@ -25,7 +25,7 @@ import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
 import '../../manager/mechanics_manager.dart';
 
-class InsertController {
+class AdvertisementController {
   final app = AppSettings.instance;
   final currentUser = CurrentUser.instance;
   final mechanicsManager = MechanicsManager.instance;

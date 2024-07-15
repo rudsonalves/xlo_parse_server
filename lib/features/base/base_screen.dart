@@ -22,7 +22,7 @@ import '../account/account_screen.dart';
 import '../chat/chat_screen.dart';
 import '../favorites/favorites_screen.dart';
 import '../home/home_screen.dart';
-import '../insert/insert_screen.dart';
+import '../advertisement/advertisement_screen.dart';
 import 'base_controller.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -82,7 +82,7 @@ class _BaseScreenState extends State<BaseScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: const [
           HomeScreen(),
-          InsertScreen(),
+          AdvertisementScreen(),
           ChatScreen(),
           FavoritesScreen(),
           AccountScreen(),

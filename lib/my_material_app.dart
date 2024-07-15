@@ -26,7 +26,7 @@ import 'features/base/base_screen.dart';
 import 'features/mecanics/mecanics_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/home/home_screen.dart';
-import 'features/insert/insert_screen.dart';
+import 'features/advertisement/advertisement_screen.dart';
 import 'features/login/login_screen.dart';
 import 'features/signup/signup_screen.dart';
 
@@ -55,7 +55,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             routes: {
               BaseScreen.routeName: (_) => const BaseScreen(),
               HomeScreen.routeName: (_) => const HomeScreen(),
-              InsertScreen.routeName: (_) => const InsertScreen(),
+              AdvertisementScreen.routeName: (_) => const AdvertisementScreen(),
               ChatScreen.routeName: (_) => const ChatScreen(),
               AccountScreen.routeName: (_) => const AccountScreen(),
               LoginScreen.routeName: (_) => const LoginScreen(),
