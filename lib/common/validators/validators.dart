@@ -61,4 +61,54 @@ class Validator {
     }
     return null;
   }
+
+  // Sales Validators
+  static String? title(String? value) {
+    if (value == null || value.length < 3) {
+      return 'Título é obrigatório e deve ser maior que 3 caracteres';
+    }
+    return null;
+  }
+
+  static String? description(String? value) {
+    if (value == null) {
+      return 'Descrição é obrigatório.';
+    } else if (value.length < 20) {
+      return 'Ao menos 20 caracteres. Detalhe o estado do produto.';
+    }
+    return null;
+  }
+
+  static String? mechanics(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Selecione alguma mecânica.';
+    }
+    return null;
+  }
+
+  static String? address(String? value) {
+    if (value == null) {
+      return 'Endereço é obrigatório';
+    }
+    if (value.isEmpty || value.length < 8) {
+      return 'Endereço inválido';
+    }
+    return null;
+  }
+
+  static String? zipCode(String? value) {
+    if (value == null) {
+      return 'CEP é obrigatório';
+    } else if (value.length < 8) {
+      return 'CEP inválido';
+    }
+    return null;
+  }
+
+  static String? cust(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Preço é obrigatório';
+    }
+    return null;
+  }
 }

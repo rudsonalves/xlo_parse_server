@@ -16,24 +16,40 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-class MechanicModel {
-  String? id;
-  String? name;
-  String? description;
-  DateTime? createAt;
+import 'package:flutter/services.dart';
 
-  MechanicModel({
-    this.id,
-    this.name,
-    this.description,
-    this.createAt,
+class CustomInputFormatter extends TextInputFormatter {
+  final String mask;
+
+  CustomInputFormatter({
+    required this.mask,
   });
 
   @override
-  String toString() {
-    return 'CategoryModel(id: $id,'
-        ' name: $name,'
-        ' description: $description,'
-        ' createAt: $createAt)';
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    String digitsOnly = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    final StringBuffer buffer = StringBuffer();
+    int index = 0;
+    for (int i = 0; i < digitsOnly.length && index < mask.length; i++) {
+      if (mask[index] != '#') {
+        buffer.write(mask[index]);
+        index++;
+        i--;
+        continue;
+      }
+      buffer.write(digitsOnly[i]);
+      index++;
+    }
+
+    String strBuffer = buffer.toString();
+
+    return TextEditingValue(
+      text: strBuffer,
+      selection: TextSelection.collapsed(offset: strBuffer.length),
+    );
   }
 }

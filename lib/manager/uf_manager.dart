@@ -15,32 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
+import 'package:xlo_mobx/repository/ibge_repository.dart';
 
-class AppSettings {
-  AppSettings._();
-  static final _instance = AppSettings._();
-  static AppSettings get instance => _instance;
+import '../common/models/uf.dart';
 
-  final ValueNotifier<Brightness> _brightness =
-      ValueNotifier<Brightness>(Brightness.dark);
+class UFManager {
+  UFManager._();
+  static final _instance = UFManager._();
+  static UFManager get instance => _instance;
 
-  ValueNotifier<Brightness> get brightness => _brightness;
-  bool get isDark => _brightness.value == Brightness.dark;
+  final _upList = <UFModel>[];
+  List<UFModel> get ufList => _upList;
 
-  // Future<void> init() async {}
-
-  void toggleBrightnessMode() {
-    _brightness.value = _brightness.value == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
-  }
-
-  void setBrightnessMode(Brightness brightness) {
-    _brightness.value = brightness;
-  }
-
-  void dispose() {
-    _brightness.dispose();
+  Future<void> init() async {
+    final ufNewList = await IbgeRepository.getUFList();
+    _upList.addAll(ufNewList);
   }
 }

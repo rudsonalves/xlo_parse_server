@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
+import 'package:xlo_mobx/repository/ibge_repository.dart';
 
-import 'common/singletons/app_settings.dart';
+import 'common/singletons/current_user.dart';
+import 'manager/mechanics_manager.dart';
 import 'my_material_app.dart';
 
 Future<void> startParseServer() async {
@@ -16,13 +18,19 @@ Future<void> startParseServer() async {
     autoSendSessionId: true,
     debug: true,
   );
+
+  await MechanicsManager.instance.init();
+
+  await IbgeRepository.getUFList();
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await startParseServer();
 
-  await AppSettings.instance.init();
+  // await AppSettings.instance.init();
+
+  await CurrentUser.instance.init();
 
   runApp(const MyMaterialApp());
 }

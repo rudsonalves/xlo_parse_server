@@ -20,14 +20,14 @@ import 'package:xlo_mobx/repository/constants.dart';
 
 import '../common/models/category.dart';
 
-class CategoryRepositories {
-  static Future<List<CategoryModel>?> getList() async {
-    final categories = <CategoryModel>[];
+class MechanicRepository {
+  static Future<List<MechanicModel>?> getList() async {
+    final mechanics = <MechanicModel>[];
 
-    final parseCategories = ParseObject(keyCategoryTable);
-    final queryBuilder = QueryBuilder<ParseObject>(parseCategories)
+    final parseMechanics = ParseObject(keyMechanicTable);
+    final queryBuilder = QueryBuilder<ParseObject>(parseMechanics)
       ..orderByAscending(
-        keyCategoryName,
+        keyMechanicName,
       );
 
     final response = await queryBuilder.query();
@@ -36,21 +36,21 @@ class CategoryRepositories {
       throw Exception('${response.error!.code} - ${response.error}');
     }
 
-    categories.addAll(
+    mechanics.addAll(
       response.results!.map(
         (objParse) => parseCategory(objParse),
       ),
     );
 
-    return categories;
+    return mechanics;
   }
 
-  static parseCategory(ParseObject parseCategory) {
-    return CategoryModel(
-      id: parseCategory.objectId,
-      name: parseCategory.get(keyCategoryName),
-      description: parseCategory.get(keyCategoryDescription),
-      createAt: parseCategory.createdAt,
+  static parseCategory(ParseObject parseMechanic) {
+    return MechanicModel(
+      id: parseMechanic.objectId,
+      name: parseMechanic.get(keyMechanicName),
+      description: parseMechanic.get(keyMechanicDescription),
+      createAt: parseMechanic.createdAt,
     );
   }
 }

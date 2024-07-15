@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/models/user.dart';
 import '../../common/singletons/app_settings.dart';
+import '../../common/singletons/current_user.dart';
 import '../../repository/user_repository.dart';
 import 'login_state.dart';
 
@@ -36,6 +37,7 @@ class LoginController extends ChangeNotifier {
   final passwordController = TextEditingController();
   final passwordFocusNode = FocusNode();
   final app = AppSettings.instance;
+  final currentUser = CurrentUser.instance;
 
   @override
   void dispose() {
@@ -50,7 +52,7 @@ class LoginController extends ChangeNotifier {
     try {
       _changeState(LoginStateLoading());
       final newUser = await UserRepository.loginWithEmail(user);
-      app.user = newUser;
+      CurrentUser.instance.init(newUser);
       _changeState(LoginStateSuccess());
       return newUser;
     } catch (err) {

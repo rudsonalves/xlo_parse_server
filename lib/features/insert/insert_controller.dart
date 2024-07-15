@@ -19,23 +19,42 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../common/models/category.dart';
 import '../../common/singletons/app_settings.dart';
+import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
-import '../../components/custon_field_controllers/masked_text_controller.dart';
+import '../../manager/mechanics_manager.dart';
 
 class InsertController {
   final app = AppSettings.instance;
+  final currentUser = CurrentUser.instance;
+  final mechanicsManager = MechanicsManager.instance;
+
+  final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final categoryController = TextEditingController();
-  final cepController = MaskedTextController(mask: '###.###.###-##');
+  final cepController = TextEditingController();
   final custController = CurrencyTextController();
+  final hidePhone = ValueNotifier<bool>(false);
 
   final _images = <String>[];
   final _imagesLength = ValueNotifier<int>(0);
+  final List<MechanicModel> _selectedMechanics = [];
+
+  List<MechanicModel> get mechanics => mechanicsManager.mechanics;
+  List<String> get mechanicsNames => mechanicsManager.mechanicsNames;
+
+  List<String> get selectedMechanicsIds =>
+      _selectedMechanics.map((c) => c.id!).toList();
+  List<String> get selectedCategoriesNames =>
+      _selectedMechanics.map((c) => c.name!).toList();
 
   ValueNotifier<int> get imagesLength => _imagesLength;
   List<String> get images => _images;
+
+  final _valit = ValueNotifier<bool?>(null);
+  ValueNotifier<bool?> get valit => _valit;
 
   void dispose() {
     titleController.dispose();
@@ -44,6 +63,7 @@ class InsertController {
     cepController.dispose();
     custController.dispose();
     _imagesLength.dispose();
+    hidePhone.dispose();
   }
 
   void addImage(String path) {
@@ -58,5 +78,21 @@ class InsertController {
       _imagesLength.value = _images.length;
       file.delete();
     }
+  }
+
+  void getCategoriesIds(List<String> categoriesIds) {
+    _selectedMechanics.clear();
+
+    _selectedMechanics.addAll(
+      mechanics.where((c) => categoriesIds.contains(c.id!)),
+    );
+    categoryController.text = selectedCategoriesNames.join(', ');
+  }
+
+  bool formValidate() {
+    _valit.value = formKey.currentState != null &&
+        formKey.currentState!.validate() &&
+        imagesLength.value > 0;
+    return _valit.value!;
   }
 }

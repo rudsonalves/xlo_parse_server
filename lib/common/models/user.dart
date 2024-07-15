@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
@@ -45,4 +47,47 @@ class UserModel {
         ' password: $password,'
         ' createAt: $createAt';
   }
+
+  UserModel copyFromUsreModel(UserModel user) {
+    return UserModel(
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      password: user.password,
+      type: user.type,
+      createAt: user.createAt,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'password': password,
+      'type': type.name,
+      'createAt': createAt?.millisecondsSinceEpoch,
+    };
+  }
+
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      id: map['id'] != null ? map['id'] as String : null,
+      name: map['name'] != null ? map['name'] as String : null,
+      email: map['email'] as String,
+      phone: map['phone'] != null ? map['phone'] as String : null,
+      password: map['password'] != null ? map['password'] as String : null,
+      type: UserType.values[map['type']],
+      createAt: map['createAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['createAt'] as int)
+          : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

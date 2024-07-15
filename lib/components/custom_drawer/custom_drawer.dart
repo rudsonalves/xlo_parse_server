@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 
 import '../../common/singletons/app_settings.dart';
+import '../../common/singletons/current_user.dart';
 import '../../features/login/login_screen.dart';
 import 'widgets/custom_drawer_header.dart';
 
@@ -34,9 +35,10 @@ class CustomDrawer extends StatelessWidget {
   });
 
   final app = AppSettings.instance;
+  final currentUSer = CurrentUser.instance;
 
   void _navToLoginScreen(BuildContext context) {
-    if (app.isLogin) {
+    if (currentUSer.isLogin) {
       Navigator.pop(context);
       changeToPage(4);
     } else {

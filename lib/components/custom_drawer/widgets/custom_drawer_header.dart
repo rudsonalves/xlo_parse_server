@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../common/singletons/app_settings.dart';
+import '../../../common/singletons/current_user.dart';
 import '../../../common/utils/utils.dart';
 
 class CustomDrawerHeader extends StatelessWidget {
@@ -28,7 +28,7 @@ class CustomDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final app = AppSettings.instance;
+    final currentUser = CurrentUser.instance;
 
     return DrawerHeader(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -53,15 +53,17 @@ class CustomDrawerHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  app.isLogin
-                      ? Utils.title(app.user!.name!)
+                  currentUser.isLogin
+                      ? Utils.title(currentUser.user!.name!)
                       : 'Acessar sua conta agora!',
                   style: const TextStyle(
                     fontSize: 20,
                   ),
                 ),
                 const SizedBox(height: 6),
-                Text(app.isLogin ? app.user!.email : 'Click aqui!'),
+                Text(currentUser.isLogin
+                    ? currentUser.user!.email
+                    : 'Click aqui!'),
               ],
             ),
           ),

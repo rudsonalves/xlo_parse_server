@@ -17,7 +17,10 @@
 
 import 'package:flutter/material.dart';
 
+import '../../../common/validators/validators.dart';
 import '../../../components/form_fields/custom_form_field.dart';
+import '../../address/address_screen.dart';
+import '../../mecanics/mecanics_screen.dart';
 import '../insert_controller.dart';
 
 class InsertForm extends StatefulWidget {
@@ -33,85 +36,108 @@ class InsertForm extends StatefulWidget {
 }
 
 class _InsertFormState extends State<InsertForm> {
-  final hidePhone = ValueNotifier<bool>(false);
+  late final InsertController controller;
 
   @override
-  void dispose() {
-    super.dispose();
-    hidePhone.dispose();
+  void initState() {
+    super.initState();
+
+    controller = widget.controller;
+  }
+
+  void _addMecanics() {
+    Navigator.pushNamed(
+      context,
+      MecanicsScreen.routeName,
+      arguments: {
+        'selectedIds': controller.selectedMechanicsIds,
+        'callBack': controller.getCategoriesIds
+      },
+    );
+  }
+
+  void _addAddress() {
+    Navigator.pushNamed(context, AddressScreen.routeName);
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: controller.formKey,
       child: Column(
         children: [
           CustomFormField(
-            controller: widget.controller.titleController,
+            controller: controller.titleController,
             labelText: 'Título *',
             fullBorder: false,
             floatingLabelBehavior: null,
+            validator: Validator.title,
           ),
           CustomFormField(
-            controller: widget.controller.descriptionController,
+            controller: controller.descriptionController,
             labelText: 'Descrição *',
             fullBorder: false,
             maxLines: null,
             floatingLabelBehavior: null,
+            validator: Validator.description,
           ),
-          DropdownButtonFormField(
-            hint: const Text('Categoria *'),
-            items: const [
-              DropdownMenuItem<String>(
-                value: 'Carros',
-                child: Text('Carros'),
+          InkWell(
+            onTap: _addMecanics,
+            child: AbsorbPointer(
+              child: CustomFormField(
+                labelText: 'Mecânicas *',
+                controller: controller.categoryController,
+                fullBorder: false,
+                maxLines: null,
+                floatingLabelBehavior: null,
+                readOnly: true,
+                suffixIcon: const Icon(Icons.ads_click),
+                validator: Validator.mechanics,
               ),
-              DropdownMenuItem<String>(
-                value: 'Roupas',
-                child: Text('Roupas'),
-              ),
-              DropdownMenuItem<String>(
-                value: 'Brinquedos',
-                child: Text('Brinquedos'),
-              ),
-            ],
-            onChanged: (value) {
-              if (value != null) {
-                widget.controller.categoryController.text = value;
-              }
-            },
+            ),
           ),
-          CustomFormField(
-            labelText: 'CEP *',
-            controller: widget.controller.cepController,
-            fullBorder: false,
-            keyboardType: TextInputType.number,
-            floatingLabelBehavior: null,
+          InkWell(
+            onTap: _addAddress,
+            child: AbsorbPointer(
+              child: CustomFormField(
+                labelText: 'Endereço *',
+                controller: controller.cepController,
+                fullBorder: false,
+                maxLines: null,
+                floatingLabelBehavior: null,
+                readOnly: true,
+                suffixIcon: const Icon(Icons.ads_click),
+                validator: Validator.address,
+              ),
+            ),
           ),
           CustomFormField(
             labelText: 'Preço *',
-            controller: widget.controller.custController,
+            controller: controller.custController,
             fullBorder: false,
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
             floatingLabelBehavior: null,
+            validator: Validator.cust,
           ),
           Row(
             children: [
               ValueListenableBuilder(
-                valueListenable: hidePhone,
+                valueListenable: controller.hidePhone,
                 builder: (context, value, _) {
                   return Checkbox(
                     value: value,
                     onChanged: (value) {
                       if (value != null) {
-                        hidePhone.value = value;
+                        controller.hidePhone.value = value;
                       }
                     },
                   );
                 },
               ),
-              const Text('Ocultar meu telefone neste anúncio.'),
+              const Expanded(
+                child: Text('Ocultar meu telefone neste anúncio.'),
+              ),
             ],
           ),
         ],

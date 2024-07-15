@@ -27,13 +27,13 @@ import 'photo_origin_bottom_sheet.dart';
 
 const maxImages = 5;
 
-class ImageGallery extends StatefulWidget {
+class HotizontalImageGallery extends StatefulWidget {
   final int length;
   final List<String> images;
   final void Function(String path) addImage;
   final void Function(int index) removeImage;
 
-  const ImageGallery({
+  const HotizontalImageGallery({
     super.key,
     required this.length,
     required this.images,
@@ -42,10 +42,10 @@ class ImageGallery extends StatefulWidget {
   });
 
   @override
-  State<ImageGallery> createState() => _ImageGalleryState();
+  State<HotizontalImageGallery> createState() => _HotizontalImageGalleryState();
 }
 
-class _ImageGalleryState extends State<ImageGallery> {
+class _HotizontalImageGalleryState extends State<HotizontalImageGallery> {
   Future<void> getFromCamera() async {
     Navigator.pop(context);
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -131,8 +131,8 @@ class _ImageGalleryState extends State<ImageGallery> {
                 );
               },
               child: SizedBox(
-                width: 108,
-                height: 108,
+                // width: 108,
+                // height: 108,
                 child: Image.file(
                   File(
                     widget.images[index],

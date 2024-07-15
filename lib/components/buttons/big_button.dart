@@ -21,12 +21,14 @@ class BigButton extends StatelessWidget {
   final Color color;
   final String label;
   final VoidCallback onPress;
+  final FocusNode? focusNode;
 
   const BigButton({
     super.key,
     required this.color,
     required this.label,
     required this.onPress,
+    this.focusNode,
   });
 
   @override
@@ -37,6 +39,7 @@ class BigButton extends StatelessWidget {
         children: [
           Expanded(
             child: FilledButton.tonal(
+              focusNode: focusNode,
               onPressed: onPress,
               style: ButtonStyle(
                 shape: ButtonStyleButton.allOrNull(

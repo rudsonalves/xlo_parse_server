@@ -73,9 +73,9 @@ class UserRepository {
   static UserModel _parseServerToUser(ParseUser parseUser) {
     return UserModel(
       id: parseUser.objectId,
-      name: parseUser.get(keyUserNickname),
+      name: parseUser.get<String>(keyUserNickname),
       email: parseUser.username!,
-      phone: parseUser.get(keyUserPhone),
+      phone: parseUser.get<String>(keyUserPhone),
       type: UserType.values[parseUser.get(keyUserType)],
       createAt: parseUser.createdAt,
     );
