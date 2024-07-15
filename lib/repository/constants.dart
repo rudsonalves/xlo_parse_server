@@ -22,3 +22,18 @@ const keyUserEmail = 'email';
 const keyUserPassword = 'password';
 const keyUserPhone = 'phone';
 const keyUserType = 'type';
+
+const keyMechanicTable = 'Mechanics';
+const keyMechanicName = 'name';
+const keyMechanicDescription = 'description';
+
+const keyAddressTable = 'Address';
+const keyAddressId = 'objectId';
+const keyAddressUserId = 'userId';
+const keyAddressZipCode = 'zipCode';
+const keyAddressStreet = 'street';
+const keyAddressNumber = 'number';
+const keyAddressComplement = 'complement';
+const keyAddressNeighborhood = 'neighborhood';
+const keyAddressState = 'state';
+const keyAddressCity = 'city';

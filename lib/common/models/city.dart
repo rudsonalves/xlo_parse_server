@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
 // This file is part of xlo_parse_server.
@@ -15,32 +18,34 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
+class CityModel {
+  final int id;
+  final String nome;
 
-class AppSettings {
-  AppSettings._();
-  static final _instance = AppSettings._();
-  static AppSettings get instance => _instance;
+  CityModel({
+    required this.id,
+    required this.nome,
+  });
 
-  final ValueNotifier<Brightness> _brightness =
-      ValueNotifier<Brightness>(Brightness.dark);
-
-  ValueNotifier<Brightness> get brightness => _brightness;
-  bool get isDark => _brightness.value == Brightness.dark;
-
-  // Future<void> init() async {}
-
-  void toggleBrightnessMode() {
-    _brightness.value = _brightness.value == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'nome': nome,
+    };
   }
 
-  void setBrightnessMode(Brightness brightness) {
-    _brightness.value = brightness;
+  factory CityModel.fromMap(Map<String, dynamic> map) {
+    return CityModel(
+      id: map['id'] as int,
+      nome: map['nome'] as String,
+    );
   }
 
-  void dispose() {
-    _brightness.dispose();
-  }
+  String toJson() => json.encode(toMap());
+
+  factory CityModel.fromJson(String source) =>
+      CityModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'CityModel(id: $id, nome: $nome)';
 }

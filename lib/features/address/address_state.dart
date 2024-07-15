@@ -15,32 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
+abstract class AddressState {}
 
-class AppSettings {
-  AppSettings._();
-  static final _instance = AppSettings._();
-  static AppSettings get instance => _instance;
+class AddressStateInitial extends AddressState {}
 
-  final ValueNotifier<Brightness> _brightness =
-      ValueNotifier<Brightness>(Brightness.dark);
+class AddressStateLoading extends AddressState {}
 
-  ValueNotifier<Brightness> get brightness => _brightness;
-  bool get isDark => _brightness.value == Brightness.dark;
+class AddressStateSuccess extends AddressState {}
 
-  // Future<void> init() async {}
-
-  void toggleBrightnessMode() {
-    _brightness.value = _brightness.value == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
-  }
-
-  void setBrightnessMode(Brightness brightness) {
-    _brightness.value = brightness;
-  }
-
-  void dispose() {
-    _brightness.dispose();
-  }
-}
+class AddressStateError extends AddressState {}

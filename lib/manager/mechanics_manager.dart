@@ -15,32 +15,26 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
+import '../common/models/category.dart';
+import '../repository/mechanic_repository.dart';
 
-class AppSettings {
-  AppSettings._();
-  static final _instance = AppSettings._();
-  static AppSettings get instance => _instance;
+class MechanicsManager {
+  MechanicsManager._();
+  static final _instance = MechanicsManager._();
+  static MechanicsManager get instance => _instance;
 
-  final ValueNotifier<Brightness> _brightness =
-      ValueNotifier<Brightness>(Brightness.dark);
+  final List<MechanicModel> _mechanics = [];
+  List<MechanicModel> get mechanics => _mechanics;
+  List<String> get mechanicsNames =>
+      _mechanics.map((item) => item.name!).toList();
 
-  ValueNotifier<Brightness> get brightness => _brightness;
-  bool get isDark => _brightness.value == Brightness.dark;
+  Future<void> init() async {
+    final cats = await MechanicRepository.getList();
 
-  // Future<void> init() async {}
-
-  void toggleBrightnessMode() {
-    _brightness.value = _brightness.value == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
-  }
-
-  void setBrightnessMode(Brightness brightness) {
-    _brightness.value = brightness;
-  }
-
-  void dispose() {
-    _brightness.dispose();
+    if (cats != null) {
+      _mechanics.addAll(cats);
+    } else {
+      throw Exception('Sorry. An error occurred, try later.');
+    }
   }
 }

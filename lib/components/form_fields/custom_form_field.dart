@@ -18,25 +18,37 @@
 import 'package:flutter/material.dart';
 
 class CustomFormField extends StatelessWidget {
-  final String labelText;
-  final String hintText;
+  final String? labelText;
+  final String? hintText;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
+  final bool fullBorder;
+  final int? maxLines;
+  final FloatingLabelBehavior? floatingLabelBehavior;
+  final bool readOnly;
+  final Widget? suffixIcon;
+  final String? errorText;
 
   CustomFormField({
     super.key,
-    required this.labelText,
-    required this.hintText,
+    this.labelText,
+    this.hintText,
     this.controller,
     this.validator,
     this.keyboardType,
     this.textInputAction,
     this.focusNode,
     this.nextFocusNode,
+    this.fullBorder = true,
+    this.maxLines = 1,
+    this.floatingLabelBehavior = FloatingLabelBehavior.always,
+    this.readOnly = false,
+    this.suffixIcon,
+    this.errorText,
   });
 
   final errorString = ValueNotifier<String?>(null);
@@ -45,35 +57,35 @@ class CustomFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      child: ValueListenableBuilder(
-        valueListenable: errorString,
-        builder: (context, errorText, _) {
-          return TextFormField(
-            controller: controller,
-            validator: validator,
-            focusNode: focusNode,
-            keyboardType: keyboardType,
-            textInputAction: textInputAction ?? TextInputAction.next,
-            decoration: InputDecoration(
-              labelText: labelText,
-              hintText: hintText,
-              errorText: errorText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-            onChanged: (value) {
-              if (value.length > 2 && validator != null) {
-                errorString.value = validator!(value);
-              }
-            },
-            onFieldSubmitted: (value) {
-              if (nextFocusNode != null) {
-                FocusScope.of(context).requestFocus(nextFocusNode);
-              }
-            },
-          );
+      child: TextFormField(
+        controller: controller,
+        validator: validator,
+        focusNode: focusNode,
+        keyboardType: keyboardType,
+        textInputAction: textInputAction ?? TextInputAction.next,
+        maxLines: maxLines,
+        readOnly: readOnly,
+        decoration: InputDecoration(
+          labelText: labelText,
+          hintText: hintText,
+          errorText: errorText,
+          suffixIcon: suffixIcon,
+          border: fullBorder
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                )
+              : null,
+          floatingLabelBehavior: floatingLabelBehavior,
+        ),
+        onChanged: (value) {
+          if (value.length > 2 && validator != null) {
+            errorString.value = validator!(value);
+          }
+        },
+        onFieldSubmitted: (value) {
+          if (nextFocusNode != null) {
+            FocusScope.of(context).requestFocus(nextFocusNode);
+          }
         },
       ),
     );

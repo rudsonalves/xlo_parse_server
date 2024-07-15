@@ -18,24 +18,29 @@
 import 'package:flutter/material.dart';
 
 import '../../common/singletons/app_settings.dart';
+import '../../common/singletons/current_user.dart';
 import '../../features/login/login_screen.dart';
 import 'widgets/custom_drawer_header.dart';
 
 class CustomDrawer extends StatelessWidget {
+  final ColorScheme colorScheme;
+  final PageController pageController;
+  final void Function(int page) changeToPage;
+
   CustomDrawer({
     super.key,
     required this.colorScheme,
     required this.pageController,
+    required this.changeToPage,
   });
 
-  final ColorScheme colorScheme;
-  final PageController pageController;
   final app = AppSettings.instance;
+  final currentUSer = CurrentUser.instance;
 
   void _navToLoginScreen(BuildContext context) {
-    if (app.isLogin) {
+    if (currentUSer.isLogin) {
       Navigator.pop(context);
-      pageController.jumpToPage(4);
+      changeToPage(4);
     } else {
       Navigator.pop(context);
       Navigator.pushNamed(context, LoginScreen.routeName);
@@ -48,7 +53,7 @@ class CustomDrawer extends StatelessWidget {
 
     return Drawer(
       backgroundColor: app.isDark
-          ? colorScheme.primary.withOpacity(0.15)
+          ? colorScheme.onSecondary.withOpacity(0.85)
           : colorScheme.onPrimary.withOpacity(0.85),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -66,7 +71,7 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Anúncios'),
             selected: pageController.page == 0,
             onTap: () {
-              pageController.jumpToPage(0);
+              changeToPage(0);
               Navigator.pop(context);
             },
           ),
@@ -75,7 +80,7 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Inserir Anúncio'),
             selected: pageController.page == 1,
             onTap: () {
-              pageController.jumpToPage(1);
+              changeToPage(1);
               Navigator.pop(context);
             },
           ),
@@ -84,7 +89,7 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Chat'),
             selected: pageController.page == 2,
             onTap: () {
-              pageController.jumpToPage(2);
+              changeToPage(2);
               Navigator.pop(context);
             },
           ),
@@ -93,7 +98,7 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Favoritos'),
             selected: pageController.page == 3,
             onTap: () {
-              pageController.jumpToPage(3);
+              changeToPage(3);
               Navigator.pop(context);
             },
           ),
@@ -102,7 +107,7 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Minha Conta'),
             selected: pageController.page == 4,
             onTap: () {
-              pageController.jumpToPage(4);
+              changeToPage(4);
               Navigator.pop(context);
             },
           ),

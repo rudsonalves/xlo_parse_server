@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
 // This file is part of xlo_parse_server.
@@ -15,32 +16,24 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
+class MechanicModel {
+  String? id;
+  String? name;
+  String? description;
+  DateTime? createAt;
 
-class AppSettings {
-  AppSettings._();
-  static final _instance = AppSettings._();
-  static AppSettings get instance => _instance;
+  MechanicModel({
+    this.id,
+    this.name,
+    this.description,
+    this.createAt,
+  });
 
-  final ValueNotifier<Brightness> _brightness =
-      ValueNotifier<Brightness>(Brightness.dark);
-
-  ValueNotifier<Brightness> get brightness => _brightness;
-  bool get isDark => _brightness.value == Brightness.dark;
-
-  // Future<void> init() async {}
-
-  void toggleBrightnessMode() {
-    _brightness.value = _brightness.value == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
-  }
-
-  void setBrightnessMode(Brightness brightness) {
-    _brightness.value = brightness;
-  }
-
-  void dispose() {
-    _brightness.dispose();
+  @override
+  String toString() {
+    return 'CategoryModel(id: $id,'
+        ' name: $name,'
+        ' description: $description,'
+        ' createAt: $createAt)';
   }
 }
