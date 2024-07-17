@@ -17,7 +17,7 @@
 
 enum AdStatus { pending, active, sold, closed }
 
-class AdSaleModel {
+class AdvertModel {
   String? id;
   String userId;
   List<dynamic> images;
@@ -31,7 +31,7 @@ class AdSaleModel {
   int views;
   DateTime createdAt;
 
-  AdSaleModel({
+  AdvertModel({
     this.id,
     required this.userId,
     required this.images,

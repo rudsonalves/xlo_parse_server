@@ -20,11 +20,11 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
-import '../common/models/ad_sale.dart';
+import '../common/models/advert.dart';
 import 'constants.dart';
 
 class AdvertRepository {
-  static Future<AdSaleModel> save(AdSaleModel ad) async {
+  static Future<AdvertModel> save(AdvertModel ad) async {
     final parseImages = await _saveImages(ad.images);
 
     final parseUser = await ParseUser.currentUser() as ParseUser?;
@@ -99,8 +99,8 @@ class AdvertRepository {
     }
   }
 
-  static AdSaleModel _parserServerToAdSale(ParseObject parseAd) {
-    return AdSaleModel(
+  static AdvertModel _parserServerToAdSale(ParseObject parseAd) {
+    return AdvertModel(
       userId: 'userId',
       images: ['images'],
       title: 'title',

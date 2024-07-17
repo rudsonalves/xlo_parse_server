@@ -16,9 +16,9 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'package:xlo_mobx/repository/constants.dart';
 
 import '../common/models/category.dart';
+import 'constants.dart';
 
 class MechanicRepository {
   static Future<List<MechanicModel>?> getList() async {

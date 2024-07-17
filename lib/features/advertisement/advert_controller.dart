@@ -19,13 +19,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../common/models/ad_sale.dart';
+import '../../common/models/advert.dart';
 import '../../common/models/category.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
 import '../../manager/mechanics_manager.dart';
-import '../../repository/ad_repository.dart';
+import '../../repository/advert_repository.dart';
 
 class AdvertController {
   final app = AppSettings.instance;
@@ -104,7 +104,7 @@ class AdvertController {
   Future<void> createAnnounce() async {
     if (!formValit) return;
 
-    final ad = AdSaleModel(
+    final ad = AdvertModel(
       userId: currentUser.userId,
       images: [],
       title: titleController.text,

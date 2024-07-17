@@ -18,8 +18,8 @@
 import 'package:flutter/material.dart';
 
 import '../../components/buttons/big_button.dart';
-import 'advertisement_controller.dart';
-import 'widgets/advertisement_form.dart';
+import 'advert_controller.dart';
+import 'widgets/advert_form.dart';
 import 'widgets/image_list_view.dart';
 
 class AdvertScreen extends StatefulWidget {
@@ -33,15 +33,6 @@ class AdvertScreen extends StatefulWidget {
 
 class _AdvertScreenState extends State<AdvertScreen> {
   final controller = AdvertController();
-
-  @override
-  void initState() {
-    super.initState();
-    // if (controller.currentUser.addresses != null) {
-    //   controller.addressController.text =
-    //       controller.currentUser.addresses!.addressString();
-    // }
-  }
 
   @override
   void dispose() {

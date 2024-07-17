@@ -19,16 +19,16 @@ import 'package:xlo_mobx/repository/ibge_repository.dart';
 
 import '../common/models/uf.dart';
 
-class UFManager {
-  UFManager._();
-  static final _instance = UFManager._();
-  static UFManager get instance => _instance;
+class StateManager {
+  StateManager._();
+  static final _instance = StateManager._();
+  static StateManager get instance => _instance;
 
   final _upList = <UFModel>[];
   List<UFModel> get ufList => _upList;
 
   Future<void> init() async {
-    final ufNewList = await IbgeRepository.getUFList();
-    _upList.addAll(ufNewList);
+    final stateNewList = await IbgeRepository.getUFList();
+    _upList.addAll(stateNewList);
   }
 }
