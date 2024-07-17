@@ -36,8 +36,9 @@ class AddressController extends ChangeNotifier {
     notifyListeners();
   }
 
-  final formKey = GlobalKey<FormState>();
+  final user = CurrentUser.instance;
 
+  final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final zipCodeController = MaskedTextController(mask: '##.###-###');
   final streetController = TextEditingController();
@@ -47,38 +48,34 @@ class AddressController extends ChangeNotifier {
   final cityController = TextEditingController();
   final stateController = TextEditingController();
 
+  final zipFocus = FocusNode();
   final numberFocus = FocusNode();
   final complementFocus = FocusNode();
   final buttonFocus = FocusNode();
 
-  final currentUser = CurrentUser.instance;
+  Map<String, AddressModel> get addresses => user.addresses;
 
   bool zipCodeReativit = true;
+  String _selectedAddress = '';
+  String get selectedAddress => _selectedAddress;
+
+  bool get valid {
+    return formKey.currentState != null && formKey.currentState!.validate();
+  }
 
   void init() {
     zipCodeController.addListener(_checkZipCodeReady);
 
-    final addresses = currentUser.addresses;
-    String defaultKey = 'padrão';
+    String defaultKey = 'Padrão';
 
     if (addresses.isEmpty) return;
     if (!addresses.containsKey(defaultKey) &&
-        addresses.containsKey('residencial')) {
-      defaultKey = 'residencial';
+        addresses.containsKey('Residencial')) {
+      defaultKey = 'Residencial';
     } else {
       return;
     }
-
-    nameController.text = currentUser.addresses[defaultKey]!.name;
-    zipCodeReativit = false;
-    zipCodeController.text = addresses[defaultKey]!.zipCode;
-    streetController.text = addresses[defaultKey]!.street;
-    numberController.text = addresses[defaultKey]!.number;
-    complementController.text = addresses[defaultKey]!.complement ?? '';
-    neighborhoodController.text = addresses[defaultKey]!.neighborhood;
-    cityController.text = addresses[defaultKey]!.city;
-    stateController.text = addresses[defaultKey]!.state;
-    zipCodeReativit = true;
+    setFormFromAdresses(defaultKey);
   }
 
   @override
@@ -94,10 +91,25 @@ class AddressController extends ChangeNotifier {
     numberFocus.dispose();
     complementFocus.dispose();
     buttonFocus.dispose();
+    zipFocus.dispose();
     super.dispose();
   }
 
-  Future<void> getAddress() async {
+  void setFormFromAdresses(String addressKey) {
+    _selectedAddress = addressKey;
+    nameController.text = addresses[addressKey]!.name;
+    zipCodeReativit = false;
+    zipCodeController.text = addresses[addressKey]!.zipCode;
+    streetController.text = addresses[addressKey]!.street;
+    numberController.text = addresses[addressKey]!.number;
+    complementController.text = addresses[addressKey]!.complement ?? '';
+    neighborhoodController.text = addresses[addressKey]!.neighborhood;
+    cityController.text = addresses[addressKey]!.city;
+    stateController.text = addresses[addressKey]!.state;
+    zipCodeReativit = true;
+  }
+
+  Future<void> getAddressFromViacep() async {
     try {
       _changeState(AddressStateLoading());
       final response =
@@ -119,7 +131,7 @@ class AddressController extends ChangeNotifier {
       final newAddress = AddressModel(
         name: nameController.text,
         zipCode: zipCodeController.text,
-        userId: currentUser.userId,
+        userId: user.userId,
         street: streetController.text,
         number: numberController.text,
         complement: complementController.text,
@@ -127,7 +139,13 @@ class AddressController extends ChangeNotifier {
         state: stateController.text,
         city: cityController.text,
       );
-      await AddressRepository.saveAddress(newAddress);
+
+      if (addresses.containsKey(newAddress.name)) {
+        newAddress.id = addresses[newAddress.name]!.id;
+      }
+      if (addresses[newAddress.name] != newAddress) {
+        await AddressRepository.saveAddress(newAddress);
+      }
       _changeState(AddressStateSuccess());
     } catch (err) {
       log(err.toString());
@@ -139,12 +157,17 @@ class AddressController extends ChangeNotifier {
     if (!zipCodeReativit) return;
     final cleanZip = zipCodeController.text.replaceAll(RegExp(r'[^\d]'), '');
     if (cleanZip.length == 8) {
-      getAddress();
+      getAddressFromViacep();
     } else {
       streetController.text = '';
       neighborhoodController.text = '';
       cityController.text = '';
       stateController.text = '';
     }
+  }
+
+  void changeAddressType(String? addressType) {
+    if (addressType == null || !addresses.containsKey(addressType)) return;
+    setFormFromAdresses(addressType);
   }
 }

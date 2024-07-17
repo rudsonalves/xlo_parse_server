@@ -22,17 +22,17 @@ import 'advertisement_controller.dart';
 import 'widgets/advertisement_form.dart';
 import 'widgets/image_list_view.dart';
 
-class AdvertisementScreen extends StatefulWidget {
-  const AdvertisementScreen({super.key});
+class AdvertScreen extends StatefulWidget {
+  const AdvertScreen({super.key});
 
   static const routeName = '/insert';
 
   @override
-  State<AdvertisementScreen> createState() => _AdvertisementScreenState();
+  State<AdvertScreen> createState() => _AdvertScreenState();
 }
 
-class _AdvertisementScreenState extends State<AdvertisementScreen> {
-  final controller = AdvertisementController();
+class _AdvertScreenState extends State<AdvertScreen> {
+  final controller = AdvertController();
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _AdvertisementScreenState extends State<AdvertisementScreen> {
   }
 
   void _createAnnounce() {
-    if (!controller.formValidate()) return;
+    if (!controller.formValit) return;
     FocusScope.of(context).unfocus();
     controller.createAnnounce();
   }
@@ -91,7 +91,7 @@ class _AdvertisementScreenState extends State<AdvertisementScreen> {
                   }
                 },
               ),
-              AdvertisementForm(controller: controller),
+              AdvertForm(controller: controller),
               BigButton(
                 color: Colors.orange,
                 label: 'Envia',

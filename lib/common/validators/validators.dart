@@ -50,7 +50,7 @@ class Validator {
 
   static String? nickname(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Apelido é obrigatório!';
+      return 'Um nome/apelido é obrigatório!';
     }
     return null;
   }
@@ -99,7 +99,9 @@ class Validator {
   static String? zipCode(String? value) {
     if (value == null) {
       return 'CEP é obrigatório';
-    } else if (value.length < 8) {
+    }
+    final cleanCode = value.replaceAll(RegExp(r'[^\d]'), '');
+    if (cleanCode.length < 8) {
       return 'CEP inválido';
     }
     return null;
@@ -108,6 +110,56 @@ class Validator {
   static String? cust(String? value) {
     if (value == null || value.isEmpty) {
       return 'Preço é obrigatório';
+    }
+    return null;
+  }
+}
+
+class AddressValidator {
+  static get zipCode => Validator.zipCode;
+
+  static String? name(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Tipo de endereço é obrigatório!';
+    } else if (value.length < 3) {
+      return 'Tipo de endereço dever 3 ou mais caracteres!';
+    }
+    return null;
+  }
+
+  static String? street(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Rua/Av é obrigatório!';
+    } else if (value.length < 3) {
+      return 'Tipo de endereço dever 3 ou mais caracteres!';
+    }
+    return null;
+  }
+
+  static String? number(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Número é obrigatório!';
+    }
+    return null;
+  }
+
+  static String? neighborhood(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Bairro é obrigatório!';
+    }
+    return null;
+  }
+
+  static String? state(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Estado é obrigatório!';
+    }
+    return null;
+  }
+
+  static String? city(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Cidade é obrigatório!';
     }
     return null;
   }

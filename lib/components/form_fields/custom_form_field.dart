@@ -24,6 +24,7 @@ class CustomFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final TextCapitalization? textCapitalization;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
   final bool fullBorder;
@@ -49,6 +50,7 @@ class CustomFormField extends StatelessWidget {
     this.readOnly = false,
     this.suffixIcon,
     this.errorText,
+    this.textCapitalization,
   });
 
   final errorString = ValueNotifier<String?>(null);
@@ -65,6 +67,7 @@ class CustomFormField extends StatelessWidget {
         textInputAction: textInputAction ?? TextInputAction.next,
         maxLines: maxLines,
         readOnly: readOnly,
+        textCapitalization: textCapitalization ?? TextCapitalization.none,
         decoration: InputDecoration(
           labelText: labelText,
           hintText: hintText,

@@ -55,7 +55,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             routes: {
               BaseScreen.routeName: (_) => const BaseScreen(),
               HomeScreen.routeName: (_) => const HomeScreen(),
-              AdvertisementScreen.routeName: (_) => const AdvertisementScreen(),
+              AdvertScreen.routeName: (_) => const AdvertScreen(),
               ChatScreen.routeName: (_) => const ChatScreen(),
               AccountScreen.routeName: (_) => const AccountScreen(),
               LoginScreen.routeName: (_) => const LoginScreen(),

@@ -22,8 +22,8 @@ import '../../../components/form_fields/custom_form_field.dart';
 import '../../../components/form_fields/dropdown_form_field.dart';
 import '../address_controller.dart';
 
-class AddressForm extends StatelessWidget {
-  AddressForm({
+class AddressForm extends StatefulWidget {
+  const AddressForm({
     super.key,
     required this.controller,
     required this.errorText,
@@ -32,7 +32,19 @@ class AddressForm extends StatelessWidget {
   final AddressController controller;
   final String? errorText;
 
-  final List<String> addressType = ['Residencial', 'Comercial'];
+  @override
+  State<AddressForm> createState() => _AddressFormState();
+}
+
+class _AddressFormState extends State<AddressForm> {
+  final List<String> addressType = [];
+  AddressController get controller => widget.controller;
+
+  @override
+  void initState() {
+    super.initState();
+    addressType.addAll(controller.user.addressNames);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +58,23 @@ class AddressForm extends StatelessWidget {
             hintText: 'Residencial, Comercial, ...',
             fullBorder: false,
             stringList: addressType,
+            validator: AddressValidator.name,
+            nextFocusNode: controller.zipFocus,
+            textCapitalization: TextCapitalization.sentences,
+            onSelected: controller.changeAddressType,
           ),
           CustomFormField(
             labelText: 'CEP',
             controller: controller.zipCodeController,
             fullBorder: false,
             floatingLabelBehavior: null,
-            validator: Validator.zipCode,
+            validator: AddressValidator.zipCode,
             keyboardType: TextInputType.number,
-            errorText: errorText,
+            errorText: widget.errorText,
+            focusNode: controller.zipFocus,
             nextFocusNode: controller.numberFocus,
             suffixIcon: IconButton(
-              onPressed: controller.getAddress,
+              onPressed: controller.getAddressFromViacep,
               icon: const Icon(Icons.refresh),
             ),
           ),
@@ -67,7 +84,7 @@ class AddressForm extends StatelessWidget {
             fullBorder: false,
             readOnly: true,
             floatingLabelBehavior: null,
-            // validator: Validator.zipCode,
+            validator: AddressValidator.street,
             suffixIcon: const Icon(Icons.auto_fix_high),
           ),
           CustomFormField(
@@ -75,7 +92,7 @@ class AddressForm extends StatelessWidget {
             controller: controller.numberController,
             fullBorder: false,
             floatingLabelBehavior: null,
-            // validator: Validator.zipCode,
+            validator: AddressValidator.number,
             keyboardType: TextInputType.streetAddress,
             focusNode: controller.numberFocus,
             nextFocusNode: controller.complementFocus,
@@ -87,6 +104,7 @@ class AddressForm extends StatelessWidget {
             floatingLabelBehavior: null,
             focusNode: controller.complementFocus,
             nextFocusNode: controller.buttonFocus,
+            textCapitalization: TextCapitalization.sentences,
           ),
           CustomFormField(
             labelText: 'Bairro',
@@ -94,6 +112,7 @@ class AddressForm extends StatelessWidget {
             fullBorder: false,
             readOnly: true,
             floatingLabelBehavior: null,
+            validator: AddressValidator.neighborhood,
             suffixIcon: const Icon(Icons.auto_fix_high),
           ),
           CustomFormField(
@@ -102,6 +121,7 @@ class AddressForm extends StatelessWidget {
             fullBorder: false,
             readOnly: true,
             floatingLabelBehavior: null,
+            validator: AddressValidator.state,
             suffixIcon: const Icon(Icons.auto_fix_high),
           ),
           CustomFormField(
@@ -110,6 +130,7 @@ class AddressForm extends StatelessWidget {
             fullBorder: false,
             readOnly: true,
             floatingLabelBehavior: null,
+            validator: AddressValidator.city,
             suffixIcon: const Icon(Icons.auto_fix_high),
           ),
         ],
