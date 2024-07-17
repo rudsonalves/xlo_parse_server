@@ -21,7 +21,7 @@ import '../../../common/validators/validators.dart';
 import '../../../components/form_fields/custom_form_field.dart';
 import '../../address/address_screen.dart';
 import '../../mecanics/mecanics_screen.dart';
-import '../advertisement_controller.dart';
+import '../advert_controller.dart';
 
 class AdvertForm extends StatefulWidget {
   final AdvertController controller;

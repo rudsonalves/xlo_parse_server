@@ -26,7 +26,7 @@ import 'features/base/base_screen.dart';
 import 'features/mecanics/mecanics_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/home/home_screen.dart';
-import 'features/advertisement/advertisement_screen.dart';
+import 'features/advertisement/advert_screen.dart';
 import 'features/login/login_screen.dart';
 import 'features/signup/signup_screen.dart';
 
