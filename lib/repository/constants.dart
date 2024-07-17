@@ -24,12 +24,13 @@ const keyUserPhone = 'phone';
 const keyUserType = 'type';
 
 const keyMechanicTable = 'Mechanics';
+const keyMechanicId = 'objectId';
 const keyMechanicName = 'name';
 const keyMechanicDescription = 'description';
 
 const keyAddressTable = 'Address';
 const keyAddressId = 'objectId';
-const keyAddressUserId = 'userId';
+const keyAddressName = 'name';
 const keyAddressZipCode = 'zipCode';
 const keyAddressStreet = 'street';
 const keyAddressNumber = 'number';
@@ -37,3 +38,18 @@ const keyAddressComplement = 'complement';
 const keyAddressNeighborhood = 'neighborhood';
 const keyAddressState = 'state';
 const keyAddressCity = 'city';
+const keyAddressOwner = 'owner';
+
+const keyAdTable = 'AdSale';
+const keyAdId = 'objectId';
+const keyAdOwner = 'owner';
+const keyAdTitle = 'title';
+const keyAdDescription = 'description';
+const keyAdHidePhone = 'hidePhone';
+const keyAdPrice = 'price';
+const keyAdStatus = 'status';
+const keyAdMechanics = 'mechanics';
+const keyAdImages = 'images';
+const keyAdAddress = 'addressId';
+const keyAdViews = 'views';
+const keyAdCreatedAt = 'createdAt';

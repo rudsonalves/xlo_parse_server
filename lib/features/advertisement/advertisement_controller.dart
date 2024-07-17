@@ -19,11 +19,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../common/models/ad_sale.dart';
 import '../../common/models/category.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
 import '../../manager/mechanics_manager.dart';
+import '../../repository/ad_repository.dart';
 
 class AdvertisementController {
   final app = AppSettings.instance;
@@ -33,9 +35,9 @@ class AdvertisementController {
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  final categoryController = TextEditingController();
-  final cepController = TextEditingController();
-  final custController = CurrencyTextController();
+  final mechanicsController = TextEditingController();
+  final addressController = TextEditingController();
+  final priceController = CurrencyTextController();
   final hidePhone = ValueNotifier<bool>(false);
 
   final _images = <String>[];
@@ -59,9 +61,9 @@ class AdvertisementController {
   void dispose() {
     titleController.dispose();
     descriptionController.dispose();
-    categoryController.dispose();
-    cepController.dispose();
-    custController.dispose();
+    mechanicsController.dispose();
+    addressController.dispose();
+    priceController.dispose();
     _imagesLength.dispose();
     hidePhone.dispose();
   }
@@ -86,7 +88,7 @@ class AdvertisementController {
     _selectedMechanics.addAll(
       mechanics.where((c) => categoriesIds.contains(c.id!)),
     );
-    categoryController.text = selectedCategoriesNames.join(', ');
+    mechanicsController.text = selectedCategoriesNames.join(', ');
   }
 
   bool formValidate() {
@@ -94,5 +96,22 @@ class AdvertisementController {
         formKey.currentState!.validate() &&
         imagesLength.value > 0;
     return _valit.value!;
+  }
+
+  Future<void> createAnnounce() async {
+    if (!formValidate()) return;
+
+    final ad = AdSaleModel(
+      userId: currentUser.userId,
+      images: [],
+      title: titleController.text,
+      description: descriptionController.text,
+      mechanicsId: [mechanicsController.text],
+      addressId: addressController.text,
+      price: priceController.text,
+      hidePhone: hidePhone.value,
+    );
+
+    await AdRepository.save(ad);
   }
 }

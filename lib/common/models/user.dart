@@ -36,8 +36,8 @@ class UserModel {
     this.phone,
     this.password,
     this.type = UserType.particular,
-    DateTime? createAt,
-  }) : createAt = createAt ?? DateTime.now();
+    DateTime? createdAt,
+  }) : createAt = createdAt ?? DateTime.now();
 
   @override
   String toString() {
@@ -56,7 +56,7 @@ class UserModel {
       phone: user.phone,
       password: user.password,
       type: user.type,
-      createAt: user.createAt,
+      createdAt: user.createAt,
     );
   }
 
@@ -68,7 +68,7 @@ class UserModel {
       'phone': phone,
       'password': password,
       'type': type.name,
-      'createAt': createAt?.millisecondsSinceEpoch,
+      'createdAt': createAt?.millisecondsSinceEpoch,
     };
   }
 
@@ -80,7 +80,7 @@ class UserModel {
       phone: map['phone'] != null ? map['phone'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
       type: UserType.values[map['type']],
-      createAt: map['createAt'] != null
+      createdAt: map['createdAt'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['createAt'] as int)
           : null,
     );

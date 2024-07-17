@@ -24,6 +24,7 @@ import '../favorites/favorites_screen.dart';
 import '../home/home_screen.dart';
 import '../advertisement/advertisement_screen.dart';
 import 'base_controller.dart';
+import 'base_state.dart';
 
 class BaseScreen extends StatefulWidget {
   const BaseScreen({super.key});
@@ -40,6 +41,7 @@ class _BaseScreenState extends State<BaseScreen> {
   @override
   void initState() {
     super.initState();
+    controller.init();
   }
 
   void _changeToPage(int page) {
@@ -77,17 +79,31 @@ class _BaseScreenState extends State<BaseScreen> {
           colorScheme: colorScheme,
           pageController: controller.pageController,
           changeToPage: _changeToPage),
-      body: PageView(
-        controller: controller.pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          HomeScreen(),
-          AdvertisementScreen(),
-          ChatScreen(),
-          FavoritesScreen(),
-          AccountScreen(),
-        ],
-      ),
+      body: ListenableBuilder(
+          listenable: controller,
+          builder: (context, _) {
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: PageView(
+                    controller: controller.pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: const [
+                      HomeScreen(),
+                      AdvertisementScreen(),
+                      ChatScreen(),
+                      FavoritesScreen(),
+                      AccountScreen(),
+                    ],
+                  ),
+                ),
+                if (controller.state is BaseStateLoading)
+                  const Positioned.fill(
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
+            );
+          }),
     );
   }
 }

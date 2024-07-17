@@ -54,18 +54,18 @@ class UserRepository {
   }
 
   static Future<UserModel?> getCurrentUser() async {
-    ParseUser? currentUser = await ParseUser.currentUser() as ParseUser?;
-    if (currentUser == null) return null;
+    ParseUser? parseCurrentUser = await ParseUser.currentUser() as ParseUser?;
+    if (parseCurrentUser == null) return null;
 
     // Checks whether the user's session token is valid
-    final parseResponse =
-        await ParseUser.getCurrentUserFromServer(currentUser.sessionToken!);
+    final parseResponse = await ParseUser.getCurrentUserFromServer(
+        parseCurrentUser.sessionToken!);
 
     if (parseResponse != null && parseResponse.success) {
-      return _parseServerToUser(currentUser);
+      return _parseServerToUser(parseCurrentUser);
     } else {
       // Invalid session. Logout
-      await currentUser.logout();
+      await parseCurrentUser.logout();
       return null;
     }
   }
@@ -77,7 +77,7 @@ class UserRepository {
       email: parseUser.username!,
       phone: parseUser.get<String>(keyUserPhone),
       type: UserType.values[parseUser.get(keyUserType)],
-      createAt: parseUser.createdAt,
+      createdAt: parseUser.createdAt,
     );
   }
 }

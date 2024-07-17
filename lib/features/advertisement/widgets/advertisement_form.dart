@@ -86,7 +86,7 @@ class _AdvertisementFormState extends State<AdvertisementForm> {
             child: AbsorbPointer(
               child: CustomFormField(
                 labelText: 'Mecânicas *',
-                controller: controller.categoryController,
+                controller: controller.mechanicsController,
                 fullBorder: false,
                 maxLines: null,
                 floatingLabelBehavior: null,
@@ -101,7 +101,7 @@ class _AdvertisementFormState extends State<AdvertisementForm> {
             child: AbsorbPointer(
               child: CustomFormField(
                 labelText: 'Endereço *',
-                controller: controller.cepController,
+                controller: controller.addressController,
                 fullBorder: false,
                 maxLines: null,
                 floatingLabelBehavior: null,
@@ -113,7 +113,7 @@ class _AdvertisementFormState extends State<AdvertisementForm> {
           ),
           CustomFormField(
             labelText: 'Preço *',
-            controller: controller.custController,
+            controller: controller.priceController,
             fullBorder: false,
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,

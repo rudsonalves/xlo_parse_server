@@ -21,6 +21,58 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## ## 2024/07/17 - version: 0.2.1+3:
+
+feat: Address management updates and enhancements
+
+This commit introduces several new features and updates to address management within the application. Key changes include:
+
+- Added unique name verification for addresses per user.
+- Implemented logic to handle address creation and updates.
+- Enhanced error handling and response validation.
+- Included additional model fields for address details.
+
+Detailed Changes:
+- lib/common/models/address.dart: Added new model for addresses.
+- lib/common/models/category.dart: Renamed CategoryModel to MechanicModel.
+- lib/common/models/city.dart: Added new model for city information.
+- lib/common/models/uf.dart: Added new model for state information.
+- lib/common/models/user.dart: Updated user model with address-related fields.
+- lib/common/models/viacep_address.dart: Added model for ViaCEP address information.
+- lib/common/singletons/app_settings.dart: Adjusted settings for address handling.
+- lib/common/singletons/current_user.dart: Added singleton for current user with address information.
+- lib/common/validators/validators.dart: Added validation rules for address fields.
+- lib/components/buttons/big_button.dart: Added focus node for address input.
+- lib/components/custom_drawer/custom_drawer.dart: Integrated current user for address display.
+- lib/components/custom_drawer/widgets/custom_drawer_header.dart: Updated drawer header with address info.
+- lib/components/form_fields/custom_form_field.dart: Added new fields for address input.
+- lib/components/others_widgets/custom_input_formatter.dart: Added custom input formatter for address fields.
+- lib/features/address/address_controller.dart: Added controller for address management.
+- lib/features/address/address_screen.dart: Added screen for address input and display.
+- lib/features/address/address_state.dart: Added state management for address operations.
+- lib/features/insert/insert_controller.dart: Enhanced insert functionality with address handling.
+- lib/features/insert/insert_screen.dart: Updated insert screen with address fields.
+- lib/features/insert/widgets/image_gallery.dart: Renamed to horizontal_image_gallery.dart.
+- lib/features/insert/widgets/insert_form.dart: Integrated address fields into insert form.
+- lib/features/login/login_controller.dart: Integrated address handling in login process.
+- lib/features/mecanics/mecanics_screen.dart: Added screen for mechanics selection.
+- lib/main.dart: Integrated address management on app startup.
+- lib/manager/mechanics_manager.dart: Added manager for mechanics data.
+- lib/manager/uf_manager.dart: Added manager for state data.
+- lib/my_material_app.dart: Updated material app with new routes and address handling.
+- lib/repository/address_repository.dart: Added repository for address data handling.
+- lib/repository/constants.dart: Updated constants for address fields.
+- lib/repository/ibge_repository.dart: Added repository for state and city data.
+- lib/repository/mechanic_repository.dart: Renamed from category_repository and updated for mechanics data.
+- lib/repository/user_repository.dart: Updated user repository with address handling.
+- lib/repository/viacep_repository.dart: Added repository for ViaCEP data.
+- pubspec.yaml: Added dependencies for address management.
+- test/repository/ibge_repository_test.dart: Added tests for IBGE repository.
+
+This commit significantly enhances the application's ability to manage user addresses, providing a robust framework for address-related data and operations.
+
+
+
 ## 2024/07/12 - version: 0.2.0+2:
 
 feat: Implemented new features for address management, category handling, and insert functionality

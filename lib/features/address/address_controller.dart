@@ -38,6 +38,7 @@ class AddressController extends ChangeNotifier {
 
   final formKey = GlobalKey<FormState>();
 
+  final nameController = TextEditingController();
   final zipCodeController = MaskedTextController(mask: '##.###-###');
   final streetController = TextEditingController();
   final numberController = TextEditingController();
@@ -57,22 +58,32 @@ class AddressController extends ChangeNotifier {
   void init() {
     zipCodeController.addListener(_checkZipCodeReady);
 
-    if (currentUser.address != null) {
-      zipCodeReativit = false;
-      final address = currentUser.address!;
-      zipCodeController.text = address.zipCode;
-      streetController.text = address.street;
-      numberController.text = address.number;
-      complementController.text = address.complement ?? '';
-      neighborhoodController.text = address.neighborhood;
-      cityController.text = address.city;
-      stateController.text = address.state;
-      zipCodeReativit = true;
+    final addresses = currentUser.addresses;
+    String defaultKey = 'padrão';
+
+    if (addresses.isEmpty) return;
+    if (!addresses.containsKey(defaultKey) &&
+        addresses.containsKey('residencial')) {
+      defaultKey = 'residencial';
+    } else {
+      return;
     }
+
+    nameController.text = currentUser.addresses[defaultKey]!.name;
+    zipCodeReativit = false;
+    zipCodeController.text = addresses[defaultKey]!.zipCode;
+    streetController.text = addresses[defaultKey]!.street;
+    numberController.text = addresses[defaultKey]!.number;
+    complementController.text = addresses[defaultKey]!.complement ?? '';
+    neighborhoodController.text = addresses[defaultKey]!.neighborhood;
+    cityController.text = addresses[defaultKey]!.city;
+    stateController.text = addresses[defaultKey]!.state;
+    zipCodeReativit = true;
   }
 
   @override
   void dispose() {
+    nameController.dispose();
     zipCodeController.dispose();
     streetController.dispose();
     numberController.dispose();
@@ -106,6 +117,7 @@ class AddressController extends ChangeNotifier {
     try {
       _changeState(AddressStateLoading());
       final newAddress = AddressModel(
+        name: nameController.text,
         zipCode: zipCodeController.text,
         userId: currentUser.userId,
         street: streetController.text,
