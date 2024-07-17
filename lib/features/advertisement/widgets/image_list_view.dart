@@ -21,7 +21,7 @@ import '../advertisement_controller.dart';
 import 'horizontal_image_gallery.dart';
 
 class ImagesListView extends StatelessWidget {
-  final AdvertisementController controller;
+  final AdvertController controller;
   final bool validator;
 
   const ImagesListView({

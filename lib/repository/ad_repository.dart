@@ -23,7 +23,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import '../common/models/ad_sale.dart';
 import 'constants.dart';
 
-class AdRepository {
+class AdvertRepository {
   static Future<AdSaleModel> save(AdSaleModel ad) async {
     final parseImages = await _saveImages(ad.images);
 

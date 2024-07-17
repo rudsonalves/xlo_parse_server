@@ -101,4 +101,34 @@ class AddressModel {
         ' state: $state,'
         ' city: $city)';
   }
+
+  @override
+  bool operator ==(covariant AddressModel other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.name == name &&
+        other.zipCode == zipCode &&
+        other.userId == userId &&
+        other.street == street &&
+        other.number == number &&
+        other.complement == complement &&
+        other.neighborhood == neighborhood &&
+        other.state == state &&
+        other.city == city;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        zipCode.hashCode ^
+        userId.hashCode ^
+        street.hashCode ^
+        number.hashCode ^
+        complement.hashCode ^
+        neighborhood.hashCode ^
+        state.hashCode ^
+        city.hashCode;
+  }
 }

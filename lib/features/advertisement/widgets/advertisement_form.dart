@@ -23,26 +23,24 @@ import '../../address/address_screen.dart';
 import '../../mecanics/mecanics_screen.dart';
 import '../advertisement_controller.dart';
 
-class AdvertisementForm extends StatefulWidget {
-  final AdvertisementController controller;
+class AdvertForm extends StatefulWidget {
+  final AdvertController controller;
 
-  const AdvertisementForm({
+  const AdvertForm({
     super.key,
     required this.controller,
   });
 
   @override
-  State<AdvertisementForm> createState() => _AdvertisementFormState();
+  State<AdvertForm> createState() => _AdvertFormState();
 }
 
-class _AdvertisementFormState extends State<AdvertisementForm> {
-  late final AdvertisementController controller;
+class _AdvertFormState extends State<AdvertForm> {
+  AdvertController get controller => widget.controller;
 
   @override
   void initState() {
     super.initState();
-
-    controller = widget.controller;
   }
 
   void _addMecanics() {
@@ -56,8 +54,10 @@ class _AdvertisementFormState extends State<AdvertisementForm> {
     );
   }
 
-  void _addAddress() {
-    Navigator.pushNamed(context, AddressScreen.routeName);
+  Future<void> _addAddress() async {
+    final addressKey =
+        await Navigator.pushNamed(context, AddressScreen.routeName) as String;
+    controller.setSelectedAddress(addressKey);
   }
 
   @override

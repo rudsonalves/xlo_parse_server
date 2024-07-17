@@ -90,7 +90,7 @@ class _BaseScreenState extends State<BaseScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     children: const [
                       HomeScreen(),
-                      AdvertisementScreen(),
+                      AdvertScreen(),
                       ChatScreen(),
                       FavoritesScreen(),
                       AccountScreen(),

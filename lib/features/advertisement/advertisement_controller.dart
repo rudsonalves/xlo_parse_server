@@ -27,7 +27,7 @@ import '../../components/custon_field_controllers/currency_text_controller.dart'
 import '../../manager/mechanics_manager.dart';
 import '../../repository/ad_repository.dart';
 
-class AdvertisementController {
+class AdvertController {
   final app = AppSettings.instance;
   final currentUser = CurrentUser.instance;
   final mechanicsManager = MechanicsManager.instance;
@@ -43,6 +43,9 @@ class AdvertisementController {
   final _images = <String>[];
   final _imagesLength = ValueNotifier<int>(0);
   final List<MechanicModel> _selectedMechanics = [];
+
+  String _selectedAddressId = '';
+  String get selectedAddressId => _selectedAddressId;
 
   List<MechanicModel> get mechanics => mechanicsManager.mechanics;
   List<String> get mechanicsNames => mechanicsManager.mechanicsNames;
@@ -91,7 +94,7 @@ class AdvertisementController {
     mechanicsController.text = selectedCategoriesNames.join(', ');
   }
 
-  bool formValidate() {
+  bool get formValit {
     _valit.value = formKey.currentState != null &&
         formKey.currentState!.validate() &&
         imagesLength.value > 0;
@@ -99,7 +102,7 @@ class AdvertisementController {
   }
 
   Future<void> createAnnounce() async {
-    if (!formValidate()) return;
+    if (!formValit) return;
 
     final ad = AdSaleModel(
       userId: currentUser.userId,
@@ -112,6 +115,15 @@ class AdvertisementController {
       hidePhone: hidePhone.value,
     );
 
-    await AdRepository.save(ad);
+    await AdvertRepository.save(ad);
+  }
+
+  void setSelectedAddress(String addressKey) {
+    final addresses = currentUser.addresses;
+    if (addresses.containsKey(addressKey)) {
+      final address = currentUser.addresses[addressKey]!;
+      addressController.text = address.addressString();
+      _selectedAddressId = address.id!;
+    }
   }
 }

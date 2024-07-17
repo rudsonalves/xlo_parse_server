@@ -115,7 +115,7 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
                           ),
                           child: ListTile(
                             title: Text(categories[index].name!),
-                            subtitle: Text(categories[index].description!),
+                            subtitle: Text(categories[index].description ?? ''),
                             onTap: () {
                               selectedItem[index] = !selectedItem[index];
                               select.value = !select.value;

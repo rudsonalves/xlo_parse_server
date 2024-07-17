@@ -21,6 +21,7 @@ class DropdownFormField extends StatelessWidget {
   final String? labelText;
   final String? hintText;
   final TextEditingController? controller;
+  final TextCapitalization? textCapitalization;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
@@ -33,6 +34,7 @@ class DropdownFormField extends StatelessWidget {
   final Widget? suffixIcon;
   final String? errorText;
   final List<String> stringList;
+  final void Function(String)? onSelected;
 
   DropdownFormField({
     super.key,
@@ -51,6 +53,8 @@ class DropdownFormField extends StatelessWidget {
     this.suffixIcon,
     this.errorText,
     List<String>? stringList,
+    this.textCapitalization,
+    this.onSelected,
   }) : stringList = stringList ?? [];
 
   final errorString = ValueNotifier<String?>(null);
@@ -65,6 +69,7 @@ class DropdownFormField extends StatelessWidget {
         focusNode: focusNode,
         keyboardType: keyboardType,
         textInputAction: textInputAction ?? TextInputAction.next,
+        textCapitalization: textCapitalization ?? TextCapitalization.none,
         maxLines: maxLines,
         readOnly: readOnly,
         decoration: InputDecoration(
@@ -81,7 +86,7 @@ class DropdownFormField extends StatelessWidget {
                   ),
                 )
                 .toList(),
-            onSelected: (value) => controller!.text = value,
+            onSelected: onSelected,
           ),
           border: fullBorder
               ? OutlineInputBorder(

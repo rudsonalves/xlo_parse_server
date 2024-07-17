@@ -30,6 +30,7 @@ class CurrentUser {
 
   final Map<String, AddressModel> _addresses = {};
   Map<String, AddressModel> get addresses => _addresses;
+  Iterable<String> get addressNames => _addresses.keys;
 
   String get userId => _user!.id!;
   bool get isLogin => _user != null;
@@ -44,13 +45,15 @@ class CurrentUser {
 
   Future<void> _loadAddresses() async {
     _user = user;
-    final addressesList = await AddressRepository.getUserAddresses(user!.id!);
-
     _addresses.clear();
-    _addresses.addEntries(
-      addressesList.map(
-        (address) => MapEntry(address.name, address),
-      ),
-    );
+
+    final addressesList = await AddressRepository.getUserAddresses(user!.id!);
+    if (addressesList != null) {
+      _addresses.addEntries(
+        addressesList.map(
+          (address) => MapEntry(address.name, address),
+        ),
+      );
+    }
   }
 }

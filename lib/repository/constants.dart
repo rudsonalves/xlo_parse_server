@@ -28,7 +28,7 @@ const keyMechanicId = 'objectId';
 const keyMechanicName = 'name';
 const keyMechanicDescription = 'description';
 
-const keyAddressTable = 'Address';
+const keyAddressTable = 'Addresses';
 const keyAddressId = 'objectId';
 const keyAddressName = 'name';
 const keyAddressZipCode = 'zipCode';
