@@ -8,7 +8,7 @@ void main() {
       final stateES =
           states.where((item) => item.nome == 'Espírito Santo').toList()[0];
 
-      // expect(stateES.regiao.nome, 'Sudeste');
+      expect(stateES.nome, 'Espírito Santo');
     });
 
     test('getCityListFromApi', () async {

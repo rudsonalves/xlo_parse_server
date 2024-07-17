@@ -16,85 +16,109 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xlo_mobx/repository/constants.dart';
 
 import '../common/models/address.dart';
 
-const sharedUserAddress = 'UserAddress';
-
 class AddressRepository {
   static Future<AddressModel> saveAddress(AddressModel address) async {
     final parseAddress = ParseObject(keyAddressTable);
-    if (address.id != null) {
-      parseAddress.objectId = address.id;
+
+    final parseUser = await ParseUser.currentUser() as ParseUser?;
+    if (parseUser == null) {
+      throw Exception('Current user not found');
     }
 
+    final addressInName = await _getAddressByName(parseUser, address.name);
+
+    if ((address.id != null && addressInName == null) ||
+        (address.id == null && addressInName != null)) {
+      // update
+      parseAddress.objectId = address.id ?? addressInName!.id;
+    } else if (address.id != null && addressInName != null) {
+      if (address.id != addressInName.id) {
+        throw Exception('An address with this name already exists');
+      } else {
+        // update
+        parseAddress.objectId = address.id;
+      }
+    }
+
+    final parseAcl = ParseACL(owner: parseUser);
+    parseAcl.setPublicReadAccess(allowed: true);
+    parseAcl.setPublicWriteAccess(allowed: false);
+
     parseAddress
-      ..set<String>(keyAddressUserId, address.userId)
+      ..set<ParseUser>(keyAddressOwner, parseUser)
+      ..set<String>(keyAddressName, address.name)
       ..set<String>(keyAddressZipCode, address.zipCode)
       ..set<String>(keyAddressStreet, address.street)
       ..set<String>(keyAddressNumber, address.number)
       ..set<String?>(keyAddressComplement, address.complement)
       ..set<String>(keyAddressNeighborhood, address.neighborhood)
       ..set<String>(keyAddressState, address.state)
-      ..set<String>(keyAddressCity, address.city);
+      ..set<String>(keyAddressCity, address.city)
+      ..setACL(parseAcl);
 
     final response = await parseAddress.save();
     if (!response.success) {
       throw Exception(response.error);
     }
 
-    await _saveLocalAddress(address);
-    return _parserServerToAddress(parseAddress);
+    return _parseServerToAddress(parseAddress);
   }
 
-  static Future<void> _saveLocalAddress(AddressModel address) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(sharedUserAddress, address.toJson());
-  }
-
-  static Future<AddressModel?> getUserAddress(String userId) async {
-    final prefs = await SharedPreferences.getInstance();
-    AddressModel? address;
-    if (prefs.containsKey(sharedUserAddress)) {
-      address = await _getLocalAddress(userId);
-      if (address != null) return address;
-    }
-
+  static Future<AddressModel?> _getAddressByName(
+    ParseUser user,
+    String name,
+  ) async {
     final parseAddress = ParseObject(keyAddressTable);
-
     final queryBuilder = QueryBuilder<ParseObject>(parseAddress)
-      ..whereEqualTo(keyAddressUserId, userId)
-      ..setLimit(1);
+      ..whereEqualTo(keyAddressOwner, user)
+      ..whereEqualTo(keyAddressName, name);
 
     final response = await queryBuilder.query();
-
     if (!response.success) {
       throw Exception(response.error);
     }
 
-    if (response.results == null || response.results!.isEmpty) return null;
-    address = _parserServerToAddress(response.results!.first as ParseObject);
-    await _saveLocalAddress(address);
-    return address;
+    if (response.results != null || response.results!.isEmpty) return null;
+
+    return _parseServerToAddress(response.results!.first as ParseObject);
   }
 
-  static Future<AddressModel?> _getLocalAddress(String userId) async {
-    final prefs = await SharedPreferences.getInstance();
+  static Future<List<AddressModel>> getUserAddresses(String userId) async {
+    List<AddressModel>? addresses;
 
-    if (!prefs.containsKey(sharedUserAddress)) return null;
-    final address =
-        AddressModel.fromJson(prefs.get(sharedUserAddress) as String);
+    final parseAddress = ParseObject(keyAddressTable);
 
-    return address.userId == userId ? address : null;
+    final parseUser = await ParseUser.currentUser() as ParseUser?;
+    if (parseUser == null) {
+      throw Exception('Current user not found');
+    }
+
+    final queryBuilder = QueryBuilder<ParseObject>(parseAddress)
+      ..whereEqualTo(keyAddressOwner, parseUser);
+
+    final response = await queryBuilder.query();
+    if (!response.success) {
+      throw Exception(response.error);
+    }
+
+    if (response.results == null || response.results!.isEmpty) return [];
+    addresses = response.results!
+        .map((parse) => _parseServerToAddress(parse as ParseObject))
+        .toList();
+
+    return addresses;
   }
 
-  static AddressModel _parserServerToAddress(ParseObject parseAddress) {
+  static AddressModel _parseServerToAddress(ParseObject parseAddress) {
     return AddressModel(
       id: parseAddress.objectId,
+      name: parseAddress.get<String>(keyAddressName)!,
       zipCode: parseAddress.get<String>(keyAddressZipCode)!,
-      userId: parseAddress.get<String>(keyAddressUserId)!,
+      userId: parseAddress.get<ParseUser>(keyAddressOwner)!.objectId!,
       street: parseAddress.get<String>(keyAddressStreet)!,
       number: parseAddress.get<String>(keyAddressNumber)!,
       complement: parseAddress.get<String?>(keyAddressComplement),

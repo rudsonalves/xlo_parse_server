@@ -28,30 +28,29 @@ class CurrentUser {
   UserModel? _user;
   UserModel? get user => _user;
 
-  AddressModel? _address;
-  AddressModel? get address => _address;
+  final Map<String, AddressModel> _addresses = {};
+  Map<String, AddressModel> get addresses => _addresses;
 
   String get userId => _user!.id!;
   bool get isLogin => _user != null;
 
   Future<void> init([UserModel? user]) async {
-    if (user != null) {
-      _user = user;
-    } else {
-      await _loadUserAndAddress();
-    }
+    user ??= await UserRepository.getCurrentUser();
+    if (user == null) return;
+
+    _user = user;
+    await _loadAddresses();
   }
 
-  Future<void> _loadUserAndAddress() async {
-    final user = await UserRepository.getCurrentUser();
-    if (user != null) {
-      _user = user;
-      final address = await AddressRepository.getUserAddress(user.id!);
-      if (address != null) {
-        _address = address;
-      }
-    } else {
-      throw Exception('User not found!');
-    }
+  Future<void> _loadAddresses() async {
+    _user = user;
+    final addressesList = await AddressRepository.getUserAddresses(user!.id!);
+
+    _addresses.clear();
+    _addresses.addEntries(
+      addressesList.map(
+        (address) => MapEntry(address.name, address),
+      ),
+    );
   }
 }

@@ -21,22 +21,22 @@ import '../../../common/validators/validators.dart';
 import '../../../components/form_fields/custom_form_field.dart';
 import '../../address/address_screen.dart';
 import '../../mecanics/mecanics_screen.dart';
-import '../insert_controller.dart';
+import '../advertisement_controller.dart';
 
-class InsertForm extends StatefulWidget {
-  final InsertController controller;
+class AdvertisementForm extends StatefulWidget {
+  final AdvertisementController controller;
 
-  const InsertForm({
+  const AdvertisementForm({
     super.key,
     required this.controller,
   });
 
   @override
-  State<InsertForm> createState() => _InsertFormState();
+  State<AdvertisementForm> createState() => _AdvertisementFormState();
 }
 
-class _InsertFormState extends State<InsertForm> {
-  late final InsertController controller;
+class _AdvertisementFormState extends State<AdvertisementForm> {
+  late final AdvertisementController controller;
 
   @override
   void initState() {
@@ -86,7 +86,7 @@ class _InsertFormState extends State<InsertForm> {
             child: AbsorbPointer(
               child: CustomFormField(
                 labelText: 'Mecânicas *',
-                controller: controller.categoryController,
+                controller: controller.mechanicsController,
                 fullBorder: false,
                 maxLines: null,
                 floatingLabelBehavior: null,
@@ -101,7 +101,7 @@ class _InsertFormState extends State<InsertForm> {
             child: AbsorbPointer(
               child: CustomFormField(
                 labelText: 'Endereço *',
-                controller: controller.cepController,
+                controller: controller.addressController,
                 fullBorder: false,
                 maxLines: null,
                 floatingLabelBehavior: null,
@@ -113,7 +113,7 @@ class _InsertFormState extends State<InsertForm> {
           ),
           CustomFormField(
             labelText: 'Preço *',
-            controller: controller.custController,
+            controller: controller.priceController,
             fullBorder: false,
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,

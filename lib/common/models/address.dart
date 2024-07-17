@@ -20,6 +20,7 @@ import 'dart:convert';
 
 class AddressModel {
   String? id;
+  String name;
   String zipCode;
   String userId;
   String street;
@@ -31,6 +32,7 @@ class AddressModel {
 
   AddressModel({
     this.id,
+    required this.name,
     required this.zipCode,
     required this.userId,
     required this.street,
@@ -52,7 +54,8 @@ class AddressModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      if (id != null) 'id': id,
+      'id': id,
+      'name': name,
       'zipCode': zipCode,
       'userId': userId,
       'street': street,
@@ -67,6 +70,7 @@ class AddressModel {
   factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
       id: map['id'] != null ? map['id'] as String : null,
+      name: map['name'] as String,
       zipCode: map['zipCode'] as String,
       userId: map['userId'] as String,
       street: map['street'] as String,
@@ -87,6 +91,7 @@ class AddressModel {
   @override
   String toString() {
     return 'AddressModel(id: $id,'
+        ' name: $name,'
         ' zipCode: $zipCode,'
         ' userId: $userId,'
         ' street: $street,'

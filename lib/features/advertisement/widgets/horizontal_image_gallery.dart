@@ -19,7 +19,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -88,48 +87,61 @@ class _HotizontalImageGalleryState extends State<HotizontalImageGallery> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void _showImageEditDialog(int index) {
     final colorScheme = Theme.of(context).colorScheme;
 
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 12,
+        ),
+        backgroundColor: colorScheme.onSecondary,
+        title: const Text('Image'),
+        content: Image.file(
+          File(widget.images[index]),
+        ),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              widget.removeImage(index);
+              Navigator.pop(context);
+            },
+            label: const Text('Remover'),
+            icon: const Icon(Icons.delete),
+          ),
+          TextButton.icon(
+            onPressed: Navigator.of(context).pop,
+            label: const Text('Fechar'),
+            icon: const Icon(Icons.close),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showModelBottomImageSource() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => PhotoOriginBottomSheet(
+        getFromCamera: getFromCamera,
+        getFromGallery: getFromGallery,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: widget.length < maxImages ? widget.length + 1 : maxImages,
       itemBuilder: (context, index) {
         if (index < widget.length) {
+          // Show image
           return Padding(
             padding: const EdgeInsets.all(2),
             child: InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                    ),
-                    backgroundColor: colorScheme.onSecondary,
-                    title: const Text('Image'),
-                    content: Image.file(
-                      File(widget.images[index]),
-                    ),
-                    actions: [
-                      TextButton.icon(
-                        onPressed: () {
-                          widget.removeImage(index);
-                          Navigator.pop(context);
-                        },
-                        label: const Text('Remover'),
-                        icon: const Icon(Icons.delete),
-                      ),
-                      TextButton.icon(
-                        onPressed: Navigator.of(context).pop,
-                        label: const Text('Fechar'),
-                        icon: const Icon(Icons.close),
-                      ),
-                    ],
-                  ),
-                );
-              },
+              onTap: () => _showImageEditDialog(index),
               child: SizedBox(
                 // width: 108,
                 // height: 108,
@@ -142,21 +154,14 @@ class _HotizontalImageGalleryState extends State<HotizontalImageGallery> {
             ),
           );
         } else {
+          // show add image button
           return Padding(
             padding: const EdgeInsets.all(2),
             child: SizedBox(
               width: 108,
               height: 108,
               child: IconButton.filledTonal(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => PhotoOriginBottomSheet(
-                      getFromCamera: getFromCamera,
-                      getFromGallery: getFromGallery,
-                    ),
-                  );
-                },
+                onPressed: _showModelBottomImageSource,
                 icon: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

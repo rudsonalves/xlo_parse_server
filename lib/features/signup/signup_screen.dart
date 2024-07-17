@@ -26,7 +26,7 @@ import '../login/login_screen.dart';
 import '../../components/others_widgets/or_row.dart';
 import 'signup_controller.dart';
 import 'signup_state.dart';
-import 'widgets/signUp_form.dart';
+import 'widgets/signup_form.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
