@@ -19,13 +19,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../common/models/ad_sale.dart';
+import '../../common/models/advert.dart';
 import '../../common/models/category.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
 import '../../manager/mechanics_manager.dart';
-import '../../repository/ad_repository.dart';
+import '../../repository/advert_repository.dart';
 
 class AdvertController {
   final app = AppSettings.instance;
@@ -85,11 +85,10 @@ class AdvertController {
     }
   }
 
-  void getCategoriesIds(List<String> categoriesIds) {
+  void setMechanicsIds(List<String> mechanicsIds) {
     _selectedMechanics.clear();
-
     _selectedMechanics.addAll(
-      mechanics.where((c) => categoriesIds.contains(c.id!)),
+      mechanics.where((c) => mechanicsIds.contains(c.id!)),
     );
     mechanicsController.text = selectedCategoriesNames.join(', ');
   }
@@ -104,14 +103,14 @@ class AdvertController {
   Future<void> createAnnounce() async {
     if (!formValit) return;
 
-    final ad = AdSaleModel(
+    final ad = AdvertModel(
       userId: currentUser.userId,
-      images: [],
+      images: _images,
       title: titleController.text,
       description: descriptionController.text,
       mechanicsId: [mechanicsController.text],
       addressId: addressController.text,
-      price: priceController.text,
+      price: double.parse(priceController.text),
       hidePhone: hidePhone.value,
     );
 

@@ -1,11 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:http/http.dart' as http;
-
-import '../common/models/viacep_address.dart';
-
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
 // This file is part of xlo_parse_server.
@@ -22,6 +14,13 @@ import '../common/models/viacep_address.dart';
 //
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
+
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
+
+import '../common/models/viacep_address.dart';
 
 class ViacepRepository {
   static Future<ViaCEPAddressModel> getLocalByCEP(String cep) async {

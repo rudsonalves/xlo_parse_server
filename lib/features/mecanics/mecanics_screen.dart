@@ -21,12 +21,10 @@ import '../../manager/mechanics_manager.dart';
 
 class MecanicsScreen extends StatefulWidget {
   final List<String> selectedIds;
-  final void Function(List<String> ids) callBack;
 
   const MecanicsScreen({
     super.key,
     required this.selectedIds,
-    required this.callBack,
   });
 
   static const routeName = '/categories';
@@ -58,91 +56,89 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
     super.dispose();
   }
 
-  void storeSelectedIds() {
+  List<String> _storeSelectedIds() {
     final selectedIds = <String>[];
     for (int index = 0; index < selectedItem.length; index++) {
       if (selectedItem[index]) {
         selectedIds.add(categories[index].id!);
       }
     }
-    widget.callBack(selectedIds);
+    return selectedIds;
   }
 
-  void deselectAll() {
+  void _deselectAll() {
     selectedItem.fillRange(0, selectedItem.length, false);
     setState(() {});
   }
 
-  void closeCategoriesPage() {
-    storeSelectedIds();
-    Navigator.pop(context);
+  void _closeCategoriesPage() {
+    _storeSelectedIds();
+    Navigator.pop(context, _storeSelectedIds());
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (didPop) {
-        storeSelectedIds();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Categorias'),
-          centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Categorias'),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: _closeCategoriesPage,
+          icon: const Icon(Icons.arrow_back_ios_new),
         ),
-        body: Card(
-          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ValueListenableBuilder(
-                    valueListenable: select,
-                    builder: (context, value, _) {
-                      return ListView.separated(
-                        itemCount: categories.length,
-                        separatorBuilder: (context, index) =>
-                            const Divider(indent: 24, endIndent: 24),
-                        itemBuilder: (context, index) => Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: selectedItem[index]
-                                ? colorScheme.tertiary.withOpacity(0.15)
-                                : null,
-                          ),
-                          child: ListTile(
-                            title: Text(categories[index].name!),
-                            subtitle: Text(categories[index].description ?? ''),
-                            onTap: () {
-                              selectedItem[index] = !selectedItem[index];
-                              select.value = !select.value;
-                            },
-                          ),
+      ),
+      body: Card(
+        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: ValueListenableBuilder(
+                  valueListenable: select,
+                  builder: (context, value, _) {
+                    return ListView.separated(
+                      itemCount: categories.length,
+                      separatorBuilder: (context, index) =>
+                          const Divider(indent: 24, endIndent: 24),
+                      itemBuilder: (context, index) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: selectedItem[index]
+                              ? colorScheme.tertiary.withOpacity(0.15)
+                              : null,
                         ),
-                      );
-                    },
+                        child: ListTile(
+                          title: Text(categories[index].name!),
+                          subtitle: Text(categories[index].description ?? ''),
+                          onTap: () {
+                            selectedItem[index] = !selectedItem[index];
+                            select.value = !select.value;
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              ButtonBar(
+                alignment: MainAxisAlignment.spaceAround,
+                children: [
+                  FilledButton.tonalIcon(
+                    onPressed: _closeCategoriesPage,
+                    label: const Text('Voltar'),
+                    icon: const Icon(Icons.arrow_back),
                   ),
-                ),
-                ButtonBar(
-                  alignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    FilledButton.tonalIcon(
-                      onPressed: closeCategoriesPage,
-                      label: const Text('Voltar'),
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                    FilledButton.tonalIcon(
-                      onPressed: deselectAll,
-                      icon: const Icon(Icons.deselect),
-                      label: const Text('Deselecionar'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  FilledButton.tonalIcon(
+                    onPressed: _deselectAll,
+                    icon: const Icon(Icons.deselect),
+                    label: const Text('Deselecionar'),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

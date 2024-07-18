@@ -55,60 +55,58 @@ class _AddressScreenState extends State<AddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Endereço'),
-          centerTitle: true,
-          // automaticallyImplyLeading: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: _saveAddressFrom,
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Endereço'),
+        centerTitle: true,
+        // automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: _saveAddressFrom,
         ),
-        body: ListenableBuilder(
-          listenable: controller,
-          builder: (context, _) {
-            String? errorText;
-            if (controller.state is AddressStateError) {
-              errorText = 'CEP Inválido';
-            }
-            return Stack(
-              children: [
-                Positioned.fill(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 12,
-                      ),
-                      child: Column(
-                        children: [
-                          AddressForm(
-                            controller: controller,
-                            errorText: errorText,
-                          ),
-                          BigButton(
-                            color: Colors.deepPurpleAccent,
-                            focusNode: controller.buttonFocus,
-                            label: 'Salvar Endereço',
-                            onPress: _saveAddressFrom,
-                          ),
-                        ],
-                      ),
+      ),
+      body: ListenableBuilder(
+        listenable: controller,
+        builder: (context, _) {
+          String? errorText;
+          if (controller.state is AddressStateError) {
+            errorText = 'CEP Inválido';
+          }
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
+                    child: Column(
+                      children: [
+                        AddressForm(
+                          controller: controller,
+                          errorText: errorText,
+                        ),
+                        BigButton(
+                          color: Colors.deepPurpleAccent,
+                          focusNode: controller.buttonFocus,
+                          label: 'Salvar Endereço',
+                          onPress: _saveAddressFrom,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                if (controller.state is AddressStateLoading)
-                  const Positioned.fill(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+              ),
+              if (controller.state is AddressStateLoading)
+                const Positioned.fill(
+                  child: Center(
+                    child: CircularProgressIndicator(),
                   ),
-              ],
-            );
-          },
-        ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

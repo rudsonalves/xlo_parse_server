@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../advertisement_controller.dart';
+import '../advert_controller.dart';
 import 'horizontal_image_gallery.dart';
 
 class ImagesListView extends StatelessWidget {

@@ -22,7 +22,7 @@ import '../account/account_screen.dart';
 import '../chat/chat_screen.dart';
 import '../favorites/favorites_screen.dart';
 import '../home/home_screen.dart';
-import '../advertisement/advertisement_screen.dart';
+import '../advertisement/advert_screen.dart';
 import 'base_controller.dart';
 import 'base_state.dart';
 

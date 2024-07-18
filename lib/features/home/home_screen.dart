@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  static const routeName = '/announcement';
+  static const routeName = '/shop';
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

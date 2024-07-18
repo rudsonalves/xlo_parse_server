@@ -21,6 +21,80 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/18 - version: 0.2.3+5
+
+feat: Implement new features for address management and validation
+
+- **lib/common/models/address.dart**
+  - Added `operator ==` and `hashCode` methods to `AddressModel` for better address comparison and management.
+
+- **lib/common/singletons/current_user.dart**
+  - Updated to load addresses and provide access to address names.
+  - Improved logic for address initialization and retrieval.
+
+- **lib/common/validators/validators.dart**
+  - Added `AddressValidator` for validating various address fields.
+  - Enhanced `Validator.zipCode` to clean and validate the zip code correctly.
+
+- **lib/components/form_fields/custom_form_field.dart**
+  - Added `textCapitalization` property to `CustomFormField`.
+
+- **lib/components/form_fields/dropdown_form_field.dart**
+  - Added `textCapitalization` and `onSelected` properties to `DropdownFormField`.
+
+- **lib/features/advertisement/widgets/advert_form.dart**
+  - Added `textCapitalization` property to `AdvertForm`.
+
+- **lib/features/address/address_controller.dart**
+  - Enhanced `AddressController` to manage addresses more efficiently.
+  - Added methods for validation and setting the form from addresses.
+  - Included `zipFocus` to manage focus on the zip code field.
+
+- **lib/features/address/address_screen.dart**
+  - Updated `AddressScreen` to validate and save addresses upon leaving the screen.
+  - Integrated `PopScope` to handle back navigation and save address changes.
+
+- **lib/features/address/widgets/address_form.dart**
+  - Updated `AddressForm` to use `AddressValidator`.
+  - Added logic to initialize address types from `CurrentUser`.
+
+- **lib/features/advertisement/advertisement_controller.dart**
+  - Renamed `AdvertisementController` to `AdvertController`.
+  - Updated methods for address handling and validation.
+
+- **lib/features/advertisement/advertisement_screen.dart**
+  - Renamed `AdvertisementScreen` to `AdvertScreen`.
+
+- **lib/features/advertisement/widgets/advertisement_form.dart**
+  - Renamed `AdvertisementForm` to `AdvertForm`.
+  - Updated address selection logic.
+
+- **lib/features/advertisement/widgets/image_list_view.dart**
+  - Updated to use `AdvertController` instead of `AdvertisementController`.
+
+- **lib/features/base/base_screen.dart**
+  - Updated route for `AdvertScreen`.
+
+- **lib/features/mecanics/mecanics_screen.dart**
+  - Updated `MecanicsScreen` to handle null descriptions gracefully.
+
+- **lib/my_material_app.dart**
+  - Updated routes to use `AdvertScreen`.
+
+- **lib/repository/ad_repository.dart**
+  - Renamed `AdRepository` to `AdvertRepository`.
+
+- **lib/repository/address_repository.dart**
+  - Enhanced `saveAddress` method to handle address name uniqueness per user.
+  - Added `_getAddressByName` to fetch addresses by name.
+  - Improved error handling and logging.
+
+- **lib/repository/constants.dart**
+  - Updated `keyAddressTable` to `'Addresses'`.
+
+This commit message provides a detailed breakdown of changes made to each file, highlighting the specific updates and improvements.
+
+
 ## 2024/07/17 - version: 0.2.2+4
 
 feat: Implement new features for address management, category handling, and insert functionality
