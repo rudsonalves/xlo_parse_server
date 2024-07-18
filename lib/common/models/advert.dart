@@ -20,12 +20,12 @@ enum AdStatus { pending, active, sold, closed }
 class AdvertModel {
   String? id;
   String userId;
-  List<dynamic> images;
+  List<String> images;
   String title;
   String description;
   List<String> mechanicsId;
   String addressId;
-  String price;
+  double price;
   bool hidePhone;
   AdStatus status;
   int views;
@@ -40,7 +40,7 @@ class AdvertModel {
     required this.mechanicsId,
     required this.addressId,
     required this.price,
-    required this.hidePhone,
+    this.hidePhone = false,
     this.status = AdStatus.pending,
     this.views = 0,
     DateTime? createdAt,

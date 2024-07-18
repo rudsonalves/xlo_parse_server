@@ -43,15 +43,19 @@ class _AdvertFormState extends State<AdvertForm> {
     super.initState();
   }
 
-  void _addMecanics() {
-    Navigator.pushNamed(
+  Future<void> _addMecanics() async {
+    final result = await Navigator.pushNamed(
       context,
       MecanicsScreen.routeName,
       arguments: {
         'selectedIds': controller.selectedMechanicsIds,
-        'callBack': controller.getCategoriesIds
       },
-    );
+    ) as List<String>?;
+
+    if (result != null) {
+      controller.setMechanicsIds(result);
+      if (mounted) FocusScope.of(context).nextFocus();
+    }
   }
 
   Future<void> _addAddress() async {
@@ -71,6 +75,7 @@ class _AdvertFormState extends State<AdvertForm> {
             labelText: 'Título *',
             fullBorder: false,
             floatingLabelBehavior: null,
+            textCapitalization: TextCapitalization.sentences,
             validator: Validator.title,
           ),
           CustomFormField(
@@ -79,6 +84,7 @@ class _AdvertFormState extends State<AdvertForm> {
             fullBorder: false,
             maxLines: null,
             floatingLabelBehavior: null,
+            textCapitalization: TextCapitalization.sentences,
             validator: Validator.description,
           ),
           InkWell(

@@ -66,13 +66,10 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
               if (settings.name == MecanicsScreen.routeName) {
                 return MaterialPageRoute(builder: (context) {
                   final args = settings.arguments as Map<String, dynamic>;
-                  final callBack =
-                      args['callBack'] as void Function(List<String> ids);
                   final selectedIds = args['selectedIds'] as List<String>;
 
                   return MecanicsScreen(
                     selectedIds: selectedIds,
-                    callBack: callBack,
                   );
                 });
               }

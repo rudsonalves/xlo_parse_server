@@ -50,6 +50,6 @@ const keyAdPrice = 'price';
 const keyAdStatus = 'status';
 const keyAdMechanics = 'mechanics';
 const keyAdImages = 'images';
-const keyAdAddress = 'addressId';
+const keyAdAddress = 'address';
 const keyAdViews = 'views';
 const keyAdCreatedAt = 'createdAt';

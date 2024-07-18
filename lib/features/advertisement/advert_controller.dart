@@ -85,11 +85,10 @@ class AdvertController {
     }
   }
 
-  void getCategoriesIds(List<String> categoriesIds) {
+  void setMechanicsIds(List<String> mechanicsIds) {
     _selectedMechanics.clear();
-
     _selectedMechanics.addAll(
-      mechanics.where((c) => categoriesIds.contains(c.id!)),
+      mechanics.where((c) => mechanicsIds.contains(c.id!)),
     );
     mechanicsController.text = selectedCategoriesNames.join(', ');
   }
@@ -106,12 +105,12 @@ class AdvertController {
 
     final ad = AdvertModel(
       userId: currentUser.userId,
-      images: [],
+      images: _images,
       title: titleController.text,
       description: descriptionController.text,
       mechanicsId: [mechanicsController.text],
       addressId: addressController.text,
-      price: priceController.text,
+      price: double.parse(priceController.text),
       hidePhone: hidePhone.value,
     );
 

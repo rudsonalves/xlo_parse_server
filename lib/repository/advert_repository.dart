@@ -15,100 +15,155 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:developer';
 import 'dart:io';
 
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../common/models/advert.dart';
 import 'constants.dart';
 
 class AdvertRepository {
-  static Future<AdvertModel> save(AdvertModel ad) async {
-    final parseImages = await _saveImages(ad.images);
+  static Future<AdvertModel?> save(AdvertModel ad) async {
+    List<ParseFile> parseImages = [];
 
-    final parseUser = await ParseUser.currentUser() as ParseUser?;
-    if (parseUser == null) {
-      throw Exception('Current user access error');
+    try {
+      final parseUser = await ParseUser.currentUser() as ParseUser?;
+      if (parseUser == null) {
+        throw Exception('Current user access error');
+      }
+
+      parseImages = await _saveImages(ad.images, parseUser);
+
+      final List<ParseObject> parseMechanics = ad.mechanicsId
+          .map<ParseObject>(
+            (id) => ParseObject(keyMechanicTable)..set(keyMechanicId, id),
+          )
+          .toList();
+
+      final parseAddress = ParseObject(keyAddressTable)
+        ..set(keyAdAddress, ad.addressId);
+
+      final parseAd = ParseObject(keyAdTable);
+      if (ad.id != null) {
+        parseAd.objectId = ad.id;
+      }
+
+      final parseAcl = ParseACL(owner: parseUser);
+      parseAcl.setPublicReadAccess(allowed: true);
+      parseAcl.setPublicWriteAccess(allowed: false);
+
+      parseAd
+        ..setACL(parseAcl)
+        ..set<ParseUser>(keyAdOwner, parseUser)
+        ..set<List<ParseFile>>(keyAdImages, parseImages)
+        ..set<String>(keyAdTitle, ad.title)
+        ..set<String>(keyAdDescription, ad.description)
+        ..set<bool>(keyAdHidePhone, ad.hidePhone)
+        ..set<double>(keyAdPrice, ad.price)
+        ..set<String>(keyAdStatus, ad.status.name)
+        ..set<List<ParseObject>>(keyAdMechanics, parseMechanics)
+        ..set<ParseObject>(keyAdAddress, parseAddress);
+      // ..set<int>(keyAdViews, ad.views);
+
+      final response = await parseAd.save();
+      if (!response.success) {
+        throw Exception(response.error);
+      }
+
+      return _parserServerToAdSale(parseAd);
+    } catch (err) {
+      await _deleteOrphanImages(parseImages);
+      log(err.toString());
+      return null;
     }
-
-    final List<ParseObject> parseMechanics = ad.mechanicsId
-        .map<ParseObject>(
-          (id) => ParseObject(keyMechanicTable)..set(keyMechanicId, id),
-        )
-        .toList();
-
-    final parseAddress = ParseObject(keyAddressTable)
-      ..set(keyAdAddress, ad.addressId);
-
-    final parseAd = ParseObject(keyAdTable);
-    if (ad.id != null) {
-      parseAd.objectId = ad.id;
-    }
-
-    final parseAcl = ParseACL(owner: parseUser);
-    parseAcl.setPublicReadAccess(allowed: true);
-    parseAcl.setPublicWriteAccess(allowed: false);
-
-    parseAd
-      ..setACL(parseAcl)
-      ..set<ParseUser>(keyAdOwner, parseUser)
-      ..set<String>(keyAdImages, ad.images.toString())
-      ..set<String>(keyAdTitle, ad.title)
-      ..set<String>(keyAdDescription, ad.description)
-      ..set<String>(keyAdMechanics, ad.mechanicsId.toString())
-      ..set<ParseObject>(keyAdAddress, parseAddress)
-      ..set<String>(keyAdPrice, ad.price)
-      ..set<bool>(keyAdHidePhone, ad.hidePhone)
-      ..set<String>(keyAdStatus, ad.status.name)
-      ..set<int>(keyAdViews, ad.views)
-      ..set<List<ParseFile>>(keyAdImages, parseImages)
-      ..set<List<ParseObject>>(keyAdMechanics, parseMechanics);
-
-    final response = await parseAd.save();
-    if (!response.success) {
-      throw Exception(response.error);
-    }
-
-    return _parserServerToAdSale(parseAd);
   }
 
-  static Future<List<ParseFile>> _saveImages(List<dynamic> images) async {
+  static Future<void> _deleteOrphanImages(List<ParseFile> images) async {
+    for (final image in images) {
+      try {
+        final parseFile = ParseFile(null, name: image.name, url: image.url);
+        log('Attempting to delete file with URL: ${parseFile.url} and name: ${parseFile.name}');
+
+        final response = await parseFile.delete();
+        if (!response.success) {
+          throw Exception('Failed to delete image: ${response.error}');
+        }
+      } catch (err) {
+        log('Failed to delete image: ${image.url}');
+        log(err.toString());
+      }
+    }
+  }
+
+  static Future<List<ParseFile>> _saveImages(
+    List<String> imagesPaths,
+    ParseUser parseUser,
+  ) async {
     final parseImages = <ParseFile>[];
 
     try {
-      for (final image in images) {
-        if (image is File) {
-          final parseFile = ParseFile(image, name: path.basename(image.path));
+      for (final path in imagesPaths) {
+        if (!path.contains('://')) {
+          final file = File(path);
+          final parseFile = ParseFile(file, name: basename(path));
+
+          final acl = ParseACL(owner: parseUser);
+          acl.setPublicReadAccess(allowed: true);
+          acl.setPublicWriteAccess(allowed: false);
+
+          parseFile.setACL(acl);
+
           final response = await parseFile.save();
+          log('ParseFile save response: ${response.results}');
           if (!response.success) {
+            log('Error saving file: ${response.error}');
             throw Exception(response.error);
           }
+
+          log('Saved file URL: ${parseFile.url}');
+          log('Saved file name: ${parseFile.name}');
+
+          if (parseFile.url == null) {
+            const message = 'Failed to get URL after saving the file';
+            log(message);
+            throw Exception(message);
+          }
+
           parseImages.add(parseFile);
         } else {
-          final parseFile = ParseFile(null);
-          parseFile.name = path.basename(image);
-          parseFile.url = image;
+          final parseFile = ParseFile(null, name: basename(path), url: path);
           parseImages.add(parseFile);
         }
       }
 
       return parseImages;
     } catch (err) {
+      log('Exception in _saveImages: $err');
       throw Exception(err);
     }
   }
 
   static AdvertModel _parserServerToAdSale(ParseObject parseAd) {
     return AdvertModel(
-      userId: 'userId',
-      images: ['images'],
-      title: 'title',
-      description: 'description',
-      mechanicsId: ['mechanics'],
-      addressId: 'address',
-      price: 'price',
-      hidePhone: false,
+      id: parseAd.objectId,
+      userId: parseAd.get<ParseUser>(keyAdOwner)!.objectId!,
+      images: parseAd
+          .get<List<ParseFile>>(keyAdImages)!
+          .map((item) => item.url!)
+          .toList(),
+      title: parseAd.get<String>(keyAdTitle)!,
+      description: parseAd.get<String>(keyAdDescription)!,
+      mechanicsId: parseAd
+          .get<List<ParseObject>>(keyAdMechanics)!
+          .map((item) => item.objectId!)
+          .toList(),
+      addressId: parseAd.get<ParseObject>(keyAdAddress)!.objectId!,
+      price: parseAd.get<double>(keyAdPrice)!,
+      hidePhone: parseAd.get<bool>(keyAdHidePhone)!,
+      status: AdStatus.values
+          .firstWhere((s) => s.name == parseAd.get<String>(keyAdStatus)!),
     );
   }
 }
