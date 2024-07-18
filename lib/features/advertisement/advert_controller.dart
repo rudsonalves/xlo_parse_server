@@ -15,19 +15,30 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 
 import '../../common/models/advert.dart';
-import '../../common/models/category.dart';
+import '../../common/models/mechanic.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
 import '../../manager/mechanics_manager.dart';
 import '../../repository/advert_repository.dart';
+import 'advert_state.dart';
 
-class AdvertController {
+class AdvertController extends ChangeNotifier {
+  AdvertState _state = AdvertStateInitial();
+
+  AdvertState get state => _state;
+
+  void _changeState(AdvertState newState) {
+    _state = newState;
+    notifyListeners();
+  }
+
   final app = AppSettings.instance;
   final currentUser = CurrentUser.instance;
   final mechanicsManager = MechanicsManager.instance;
@@ -42,7 +53,7 @@ class AdvertController {
 
   final _images = <String>[];
   final _imagesLength = ValueNotifier<int>(0);
-  final List<MechanicModel> _selectedMechanics = [];
+  final List<String> _selectedMechIds = [];
 
   String _selectedAddressId = '';
   String get selectedAddressId => _selectedAddressId;
@@ -50,10 +61,11 @@ class AdvertController {
   List<MechanicModel> get mechanics => mechanicsManager.mechanics;
   List<String> get mechanicsNames => mechanicsManager.mechanicsNames;
 
-  List<String> get selectedMechanicsIds =>
-      _selectedMechanics.map((c) => c.id!).toList();
-  List<String> get selectedCategoriesNames =>
-      _selectedMechanics.map((c) => c.name!).toList();
+  List<String> get selectedMechIds => _selectedMechIds;
+  List<String> get selectedMachNames => mechanics
+      .where((c) => _selectedMechIds.contains(c.id!))
+      .map((c) => c.name!)
+      .toList();
 
   ValueNotifier<int> get imagesLength => _imagesLength;
   List<String> get images => _images;
@@ -61,6 +73,7 @@ class AdvertController {
   final _valit = ValueNotifier<bool?>(null);
   ValueNotifier<bool?> get valit => _valit;
 
+  @override
   void dispose() {
     titleController.dispose();
     descriptionController.dispose();
@@ -69,6 +82,7 @@ class AdvertController {
     priceController.dispose();
     _imagesLength.dispose();
     hidePhone.dispose();
+    super.dispose();
   }
 
   void addImage(String path) {
@@ -86,11 +100,11 @@ class AdvertController {
   }
 
   void setMechanicsIds(List<String> mechanicsIds) {
-    _selectedMechanics.clear();
-    _selectedMechanics.addAll(
-      mechanics.where((c) => mechanicsIds.contains(c.id!)),
+    _selectedMechIds.clear();
+    _selectedMechIds.addAll(
+      mechanics.where((c) => mechanicsIds.contains(c.id!)).map((c) => c.id!),
     );
-    mechanicsController.text = selectedCategoriesNames.join(', ');
+    mechanicsController.text = selectedMachNames.join(', ');
   }
 
   bool get formValit {
@@ -101,20 +115,26 @@ class AdvertController {
   }
 
   Future<void> createAnnounce() async {
-    if (!formValit) return;
+    try {
+      _changeState(AdvertStateLoading());
+      if (!formValit) return;
 
-    final ad = AdvertModel(
-      userId: currentUser.userId,
-      images: _images,
-      title: titleController.text,
-      description: descriptionController.text,
-      mechanicsId: [mechanicsController.text],
-      addressId: addressController.text,
-      price: double.parse(priceController.text),
-      hidePhone: hidePhone.value,
-    );
-
-    await AdvertRepository.save(ad);
+      final ad = AdvertModel(
+        userId: currentUser.userId,
+        images: _images,
+        title: titleController.text,
+        description: descriptionController.text,
+        mechanicsId: _selectedMechIds,
+        addressId: _selectedAddressId,
+        price: priceController.currencyValue,
+        hidePhone: hidePhone.value,
+      );
+      await AdvertRepository.save(ad);
+      _changeState(AdvertStateSuccess());
+    } catch (err) {
+      log(err.toString());
+      _changeState(AdvertStateError());
+    }
   }
 
   void setSelectedAddress(String addressName) {
@@ -124,5 +144,9 @@ class AdvertController {
       addressController.text = address.addressString();
       _selectedAddressId = address.id!;
     }
+  }
+
+  void gotoSuccess() {
+    _changeState(AdvertStateSuccess());
   }
 }

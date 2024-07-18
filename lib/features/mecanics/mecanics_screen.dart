@@ -27,14 +27,14 @@ class MecanicsScreen extends StatefulWidget {
     required this.selectedIds,
   });
 
-  static const routeName = '/categories';
+  static const routeName = '/mechanics';
 
   @override
   State<MecanicsScreen> createState() => _MecanicsScreenState();
 }
 
 class _MecanicsScreenState extends State<MecanicsScreen> {
-  final categories = MechanicsManager.instance.mechanics;
+  final mechanics = MechanicsManager.instance.mechanics;
 
   final selectedItem = <bool>[];
   final select = ValueNotifier<bool>(false);
@@ -43,9 +43,9 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
   void initState() {
     super.initState();
 
-    for (int i = 0; i < categories.length; i++) {
+    for (int i = 0; i < mechanics.length; i++) {
       selectedItem.add(
-        widget.selectedIds.contains(categories[i].id!) ? true : false,
+        widget.selectedIds.contains(mechanics[i].id!) ? true : false,
       );
     }
   }
@@ -60,7 +60,7 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
     final selectedIds = <String>[];
     for (int index = 0; index < selectedItem.length; index++) {
       if (selectedItem[index]) {
-        selectedIds.add(categories[index].id!);
+        selectedIds.add(mechanics[index].id!);
       }
     }
     return selectedIds;
@@ -71,8 +71,7 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
     setState(() {});
   }
 
-  void _closeCategoriesPage() {
-    _storeSelectedIds();
+  void _closeMechanicsPage() {
     Navigator.pop(context, _storeSelectedIds());
   }
 
@@ -82,10 +81,10 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categorias'),
+        title: const Text('Mecânicas'),
         centerTitle: true,
         leading: IconButton(
-          onPressed: _closeCategoriesPage,
+          onPressed: _closeMechanicsPage,
           icon: const Icon(Icons.arrow_back_ios_new),
         ),
       ),
@@ -100,7 +99,7 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
                   valueListenable: select,
                   builder: (context, value, _) {
                     return ListView.separated(
-                      itemCount: categories.length,
+                      itemCount: mechanics.length,
                       separatorBuilder: (context, index) =>
                           const Divider(indent: 24, endIndent: 24),
                       itemBuilder: (context, index) => Container(
@@ -111,8 +110,8 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
                               : null,
                         ),
                         child: ListTile(
-                          title: Text(categories[index].name!),
-                          subtitle: Text(categories[index].description ?? ''),
+                          title: Text(mechanics[index].name!),
+                          subtitle: Text(mechanics[index].description ?? ''),
                           onTap: () {
                             selectedItem[index] = !selectedItem[index];
                             select.value = !select.value;
@@ -127,7 +126,7 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
                 alignment: MainAxisAlignment.spaceAround,
                 children: [
                   FilledButton.tonalIcon(
-                    onPressed: _closeCategoriesPage,
+                    onPressed: _closeMechanicsPage,
                     label: const Text('Voltar'),
                     icon: const Icon(Icons.arrow_back),
                   ),

@@ -21,6 +21,76 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/18 - version: 0.3.1+7
+
+feat: Refactor and enhance advertisement and mechanic modules
+
+- **lib/common/models/category.dart** to **lib/common/models/mechanic.dart**
+  - Renamed `CategoryModel` to `MechanicModel`.
+
+- **lib/components/custon_field_controllers/currency_text_controller.dart**
+  - Added `currencyValue` getter to parse the text into a double.
+
+- **lib/features/advertisement/advert_controller.dart**
+  - Replaced `CategoryModel` with `MechanicModel`.
+  - Added `AdvertState` for state management.
+  - Added methods to handle state changes and error handling.
+
+- **lib/features/advertisement/advert_screen.dart**
+  - Updated to reflect new state management.
+  - Added navigation to `BaseScreen` upon successful ad creation.
+
+- **lib/features/advertisement/advert_state.dart** (new)
+  - Added state classes for advertisement management.
+
+- **lib/features/advertisement/widgets/advert_form.dart**
+  - Updated to use `selectedMechIds` for mechanics selection.
+
+- **lib/features/base/base_screen.dart**
+  - Updated navigation to `AdvertScreen` reflecting new changes.
+
+- **lib/features/mecanics/mecanics_screen.dart**
+  - Replaced `categories` with `mechanics`.
+  - Updated route name and method names to reflect mechanics instead of categories.
+
+- **lib/manager/mechanics_manager.dart**
+  - Replaced `CategoryModel` with `MechanicModel`.
+
+- **lib/repository/advert_repository.dart**
+  - Renamed variables to reflect advertisement context.
+  - Updated methods to handle the new advert model.
+
+- **lib/repository/constants.dart**
+  - Updated constants to reflect advertisement context.
+
+- **lib/repository/mechanic_repository.dart**
+  - Renamed methods to reflect mechanics context.
+
+- **pubspec.yaml & pubspec.lock**
+  - Updated dependencies versions.
+  - Bumped project version to `0.3.1+7`.
+
+- **lib/features/new_address/** (new)
+  - **new_address_controller.dart**: Added new address management logic, including form validation and fetching address data from ViaCEP.
+  - **new_address_screen.dart**: Created new screen for managing new addresses, including saving and validating address information.
+  - **new_address_state.dart**: Added state classes for new address management.
+  - **widgets/address_form.dart**: Added new address form for input fields related to address management.
+
+- **lib/features/address/address_controller.dart**
+  - Moved logic related to address state management to `AddressManager`.
+  - Simplified the controller to delegate address operations to `AddressManager`.
+
+- **lib/features/address/address_screen.dart**
+  - Updated screen to utilize `AddressManager` for fetching and managing addresses.
+  - Added buttons for adding and removing addresses.
+
+- **lib/manager/address_manager.dart** (new)
+  - Added a manager for handling address operations, including saving, deleting, and fetching addresses.
+  - Included methods to check for duplicate address names and manage address lists.
+
+These changes collectively refactor the existing advertisement and address modules, introduce better state management, improve the mechanics handling, and streamline address-related operations. Additionally, it includes new features and improvements for handling advertisements and mechanics.
+
+
 ## 2024/07/18 - version: 0.3.0+6
 
 feat: Implement address management with AddressManager and new address screens

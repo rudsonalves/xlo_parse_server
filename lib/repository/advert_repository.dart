@@ -25,7 +25,7 @@ import '../common/models/advert.dart';
 import 'constants.dart';
 
 class AdvertRepository {
-  static Future<AdvertModel?> save(AdvertModel ad) async {
+  static Future<AdvertModel?> save(AdvertModel advert) async {
     List<ParseFile> parseImages = [];
 
     try {
@@ -34,20 +34,20 @@ class AdvertRepository {
         throw Exception('Current user access error');
       }
 
-      parseImages = await _saveImages(ad.images, parseUser);
+      parseImages = await _saveImages(advert.images, parseUser);
 
-      final List<ParseObject> parseMechanics = ad.mechanicsId
-          .map<ParseObject>(
-            (id) => ParseObject(keyMechanicTable)..set(keyMechanicId, id),
-          )
-          .toList();
+      final List<ParseObject> parseMechanics = advert.mechanicsId.map((id) {
+        final parse = ParseObject(keyMechanicTable);
+        parse.objectId = id;
+        return parse;
+      }).toList();
 
-      final parseAddress = ParseObject(keyAddressTable)
-        ..set(keyAdAddress, ad.addressId);
+      final parseAddress = ParseObject(keyAddressTable);
+      parseAddress.objectId = advert.addressId;
 
-      final parseAd = ParseObject(keyAdTable);
-      if (ad.id != null) {
-        parseAd.objectId = ad.id;
+      final parseAd = ParseObject(keyAdvertTable);
+      if (advert.id != null) {
+        parseAd.objectId = advert.id;
       }
 
       final parseAcl = ParseACL(owner: parseUser);
@@ -56,44 +56,32 @@ class AdvertRepository {
 
       parseAd
         ..setACL(parseAcl)
-        ..set<ParseUser>(keyAdOwner, parseUser)
-        ..set<List<ParseFile>>(keyAdImages, parseImages)
-        ..set<String>(keyAdTitle, ad.title)
-        ..set<String>(keyAdDescription, ad.description)
-        ..set<bool>(keyAdHidePhone, ad.hidePhone)
-        ..set<double>(keyAdPrice, ad.price)
-        ..set<String>(keyAdStatus, ad.status.name)
-        ..set<List<ParseObject>>(keyAdMechanics, parseMechanics)
-        ..set<ParseObject>(keyAdAddress, parseAddress);
-      // ..set<int>(keyAdViews, ad.views);
+        ..set<ParseUser>(keyAdvertOwner, parseUser)
+        ..set<String>(keyAdvertTitle, advert.title)
+        ..set<String>(keyAdvertDescription, advert.description)
+        ..set<bool>(keyAdvertHidePhone, advert.hidePhone)
+        ..set<double>(keyAdvertPrice, advert.price)
+        ..set<String>(keyAdvertStatus, advert.status.name)
+        ..set<ParseObject>(keyAdvertAddress, parseAddress)
+        ..set<List<ParseFile>>(keyAdvertImages, parseImages)
+        ..set<List<ParseObject>>(keyAdvertMechanics, parseMechanics);
 
       final response = await parseAd.save();
       if (!response.success) {
+        if (response.count > 0) {
+          for (final item in response.results!) {
+            log('>> ${item.toString()}');
+          }
+        } else {
+          log('parseAd.save error: ${response.error?.message}');
+        }
         throw Exception(response.error);
       }
 
       return _parserServerToAdSale(parseAd);
     } catch (err) {
-      await _deleteOrphanImages(parseImages);
       log(err.toString());
       return null;
-    }
-  }
-
-  static Future<void> _deleteOrphanImages(List<ParseFile> images) async {
-    for (final image in images) {
-      try {
-        final parseFile = ParseFile(null, name: image.name, url: image.url);
-        log('Attempting to delete file with URL: ${parseFile.url} and name: ${parseFile.name}');
-
-        final response = await parseFile.delete();
-        if (!response.success) {
-          throw Exception('Failed to delete image: ${response.error}');
-        }
-      } catch (err) {
-        log('Failed to delete image: ${image.url}');
-        log(err.toString());
-      }
     }
   }
 
@@ -116,19 +104,13 @@ class AdvertRepository {
           parseFile.setACL(acl);
 
           final response = await parseFile.save();
-          log('ParseFile save response: ${response.results}');
           if (!response.success) {
             log('Error saving file: ${response.error}');
             throw Exception(response.error);
           }
 
-          log('Saved file URL: ${parseFile.url}');
-          log('Saved file name: ${parseFile.name}');
-
           if (parseFile.url == null) {
-            const message = 'Failed to get URL after saving the file';
-            log(message);
-            throw Exception(message);
+            throw Exception('Failed to get URL after saving the file');
           }
 
           parseImages.add(parseFile);
@@ -148,22 +130,22 @@ class AdvertRepository {
   static AdvertModel _parserServerToAdSale(ParseObject parseAd) {
     return AdvertModel(
       id: parseAd.objectId,
-      userId: parseAd.get<ParseUser>(keyAdOwner)!.objectId!,
+      userId: parseAd.get<ParseUser>(keyAdvertOwner)!.objectId!,
       images: parseAd
-          .get<List<ParseFile>>(keyAdImages)!
+          .get<List<ParseFile>>(keyAdvertImages)!
           .map((item) => item.url!)
           .toList(),
-      title: parseAd.get<String>(keyAdTitle)!,
-      description: parseAd.get<String>(keyAdDescription)!,
+      title: parseAd.get<String>(keyAdvertTitle)!,
+      description: parseAd.get<String>(keyAdvertDescription)!,
       mechanicsId: parseAd
-          .get<List<ParseObject>>(keyAdMechanics)!
+          .get<List<ParseObject>>(keyAdvertMechanics)!
           .map((item) => item.objectId!)
           .toList(),
-      addressId: parseAd.get<ParseObject>(keyAdAddress)!.objectId!,
-      price: parseAd.get<double>(keyAdPrice)!,
-      hidePhone: parseAd.get<bool>(keyAdHidePhone)!,
+      addressId: parseAd.get<ParseObject>(keyAdvertAddress)!.objectId!,
+      price: parseAd.get<double>(keyAdvertPrice)!,
+      hidePhone: parseAd.get<bool>(keyAdvertHidePhone)!,
       status: AdStatus.values
-          .firstWhere((s) => s.name == parseAd.get<String>(keyAdStatus)!),
+          .firstWhere((s) => s.name == parseAd.get<String>(keyAdvertStatus)!),
     );
   }
 }
