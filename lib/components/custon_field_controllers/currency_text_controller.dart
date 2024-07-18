@@ -50,6 +50,12 @@ class CurrencyTextController extends TextEditingController {
     return text.replaceAll(RegExp(r'[^0-9]'), '');
   }
 
+  double get currencyValue {
+    final cleanedText = _cleanString(text);
+    final value = double.tryParse(cleanedText) ?? 0.0;
+    return value / 100;
+  }
+
   void _onTextChanged() {
     if (_isApplyingMask) return;
 

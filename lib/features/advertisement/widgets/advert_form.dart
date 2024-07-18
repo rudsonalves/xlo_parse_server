@@ -47,9 +47,7 @@ class _AdvertFormState extends State<AdvertForm> {
     final result = await Navigator.pushNamed(
       context,
       MecanicsScreen.routeName,
-      arguments: {
-        'selectedIds': controller.selectedMechanicsIds,
-      },
+      arguments: controller.selectedMechIds,
     ) as List<String>?;
 
     if (result != null) {

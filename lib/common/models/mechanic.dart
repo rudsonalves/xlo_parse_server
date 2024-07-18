@@ -31,7 +31,7 @@ class MechanicModel {
 
   @override
   String toString() {
-    return 'CategoryModel(id: $id,'
+    return 'MechanicModel(id: $id,'
         ' name: $name,'
         ' description: $description,'
         ' createAt: $createAt)';

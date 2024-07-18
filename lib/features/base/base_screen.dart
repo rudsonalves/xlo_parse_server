@@ -80,30 +80,33 @@ class _BaseScreenState extends State<BaseScreen> {
           pageController: controller.pageController,
           changeToPage: _changeToPage),
       body: ListenableBuilder(
-          listenable: controller,
-          builder: (context, _) {
-            return Stack(
-              children: [
-                Positioned.fill(
-                  child: PageView(
-                    controller: controller.pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: const [
-                      HomeScreen(),
-                      AdvertScreen(),
-                      ChatScreen(),
-                      FavoritesScreen(),
-                      AccountScreen(),
-                    ],
-                  ),
+        listenable: controller,
+        builder: (context, _) {
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: PageView(
+                  controller: controller.pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: const [
+                    HomeScreen(),
+                    AdvertScreen(),
+                    ChatScreen(),
+                    FavoritesScreen(),
+                    AccountScreen(),
+                  ],
                 ),
-                if (controller.state is BaseStateLoading)
-                  const Positioned.fill(
+              ),
+              if (controller.state is BaseStateLoading)
+                const Positioned.fill(
+                  child: Center(
                     child: CircularProgressIndicator(),
                   ),
-              ],
-            );
-          }),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

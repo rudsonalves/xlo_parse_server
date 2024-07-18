@@ -17,7 +17,7 @@
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
-import '../common/models/category.dart';
+import '../common/models/mechanic.dart';
 import 'constants.dart';
 
 class MechanicRepository {
@@ -38,14 +38,14 @@ class MechanicRepository {
 
     mechanics.addAll(
       response.results!.map(
-        (objParse) => parseCategory(objParse),
+        (objParse) => parseMechanic(objParse),
       ),
     );
 
     return mechanics;
   }
 
-  static parseCategory(ParseObject parseMechanic) {
+  static parseMechanic(ParseObject parseMechanic) {
     return MechanicModel(
       id: parseMechanic.objectId,
       name: parseMechanic.get(keyMechanicName),
