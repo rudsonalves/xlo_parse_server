@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'common/models/address.dart';
 import 'common/singletons/app_settings.dart';
 import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
@@ -28,6 +29,7 @@ import 'features/chat/chat_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/advertisement/advert_screen.dart';
 import 'features/login/login_screen.dart';
+import 'features/new_address/new_address_screen.dart';
 import 'features/signup/signup_screen.dart';
 
 class MyMaterialApp extends StatefulWidget {
@@ -63,17 +65,30 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
               AddressScreen.routeName: (_) => const AddressScreen(),
             },
             onGenerateRoute: (settings) {
-              if (settings.name == MecanicsScreen.routeName) {
-                return MaterialPageRoute(builder: (context) {
-                  final args = settings.arguments as Map<String, dynamic>;
-                  final selectedIds = args['selectedIds'] as List<String>;
+              switch (settings.name) {
+                case MecanicsScreen.routeName:
+                  return MaterialPageRoute(
+                    builder: (context) {
+                      final selectedIds = settings.arguments as List<String>;
 
-                  return MecanicsScreen(
-                    selectedIds: selectedIds,
+                      return MecanicsScreen(
+                        selectedIds: selectedIds,
+                      );
+                    },
                   );
-                });
+                case NewAddressScreen.routeName:
+                  return MaterialPageRoute(
+                    builder: (context) {
+                      final address = settings.arguments as AddressModel?;
+
+                      return NewAddressScreen(
+                        address: address,
+                      );
+                    },
+                  );
+                default:
+                  return null;
               }
-              return null;
             },
           );
         });

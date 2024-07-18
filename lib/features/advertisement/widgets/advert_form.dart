@@ -59,9 +59,9 @@ class _AdvertFormState extends State<AdvertForm> {
   }
 
   Future<void> _addAddress() async {
-    final addressKey =
+    final addressName =
         await Navigator.pushNamed(context, AddressScreen.routeName) as String;
-    controller.setSelectedAddress(addressKey);
+    controller.setSelectedAddress(addressName);
   }
 
   @override

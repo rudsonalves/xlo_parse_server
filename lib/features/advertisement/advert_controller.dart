@@ -117,10 +117,10 @@ class AdvertController {
     await AdvertRepository.save(ad);
   }
 
-  void setSelectedAddress(String addressKey) {
-    final addresses = currentUser.addresses;
-    if (addresses.containsKey(addressKey)) {
-      final address = currentUser.addresses[addressKey]!;
+  void setSelectedAddress(String addressName) {
+    final addressNames = currentUser.addressNames;
+    if (addressNames.contains(addressName)) {
+      final address = currentUser.addressByName(addressName)!;
       addressController.text = address.addressString();
       _selectedAddressId = address.id!;
     }

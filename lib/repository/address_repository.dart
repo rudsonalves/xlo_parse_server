@@ -23,33 +23,29 @@ import 'package:xlo_mobx/repository/constants.dart';
 import '../common/models/address.dart';
 
 class AddressRepository {
-  static Future<AddressModel?> saveAddress(AddressModel address) async {
+  static Future<AddressModel?> save(AddressModel address) async {
     try {
+      log('Save address');
       final parseAddress = ParseObject(keyAddressTable);
 
+      log('Get parseUser');
       final parseUser = await ParseUser.currentUser() as ParseUser?;
+      log('Get parseUser depois');
       if (parseUser == null) {
         throw Exception('Current user not found');
       }
 
-      final addressInName = await _getAddressByName(parseUser, address.name);
-
-      if (address.id != null && addressInName == null) {
+      log('Check if is a update address');
+      if (address.id != null) {
         parseAddress.objectId = address.id;
-      } else if (address.id == null && addressInName != null) {
-        parseAddress.objectId = addressInName.id;
-      } else if (address.id != null && addressInName != null) {
-        if (address.id != addressInName.id) {
-          throw Exception('An address with this name already exists');
-        } else {
-          parseAddress.objectId = address.id;
-        }
       }
 
+      log('preper parseAcl');
       final parseAcl = ParseACL(owner: parseUser);
       parseAcl.setPublicReadAccess(allowed: true);
       parseAcl.setPublicWriteAccess(allowed: false);
 
+      log('parseAddress');
       parseAddress
         ..set<ParseUser>(keyAddressOwner, parseUser)
         ..set<String>(keyAddressName, address.name)
@@ -62,36 +58,41 @@ class AddressRepository {
         ..set<String>(keyAddressCity, address.city)
         ..setACL(parseAcl);
 
+      log('parseAddress.save');
       final response = await parseAddress.save();
       if (!response.success) {
+        log('parseAddress.save error');
         throw Exception(response.error.toString());
       }
 
+      log('parseAddress.save success');
       return _parseServerToAddress(parseAddress);
     } catch (err) {
       log(err.toString());
-      return null;
+      throw Exception(err);
     }
   }
 
-  static Future<AddressModel?> _getAddressByName(
-    ParseUser user,
-    String name,
-  ) async {
-    final parseAddress = ParseObject(keyAddressTable);
-    final queryBuilder = QueryBuilder<ParseObject>(parseAddress)
-      ..whereEqualTo(keyAddressOwner, user)
-      ..whereEqualTo(keyAddressName, name);
+  static Future<bool> delete(AddressModel address) async {
+    try {
+      if (address.id == null) {
+        log('Address ID is null');
+        throw Exception('Address ID is required to delete the address');
+      }
 
-    final response = await queryBuilder.query();
-    if (!response.success) {
-      log(response.error.toString());
-      return null;
+      final parseAddress = ParseObject(keyAddressTable);
+      parseAddress.objectId = address.id!;
+
+      final response = await parseAddress.delete();
+      if (!response.success) {
+        log('parseAddress.delete error: ${response.error?.message}');
+        return false;
+      }
+      return true;
+    } catch (err) {
+      log('Error deleting address: $err');
+      throw Exception(err);
     }
-
-    if (response.results == null || response.results!.isEmpty) return null;
-
-    return _parseServerToAddress(response.results!.first as ParseObject);
   }
 
   static Future<List<AddressModel>?> getUserAddresses(String userId) async {
@@ -121,7 +122,7 @@ class AddressRepository {
       return addresses;
     } catch (err) {
       log(err.toString());
-      return null;
+      throw Exception(err);
     }
   }
 

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import '../../repository/address_repository.dart';
+import '../../manager/address_manager.dart';
 import '../../repository/user_repository.dart';
 import '../models/address.dart';
 import '../models/user.dart';
@@ -28,9 +28,10 @@ class CurrentUser {
   UserModel? _user;
   UserModel? get user => _user;
 
-  final Map<String, AddressModel> _addresses = {};
-  Map<String, AddressModel> get addresses => _addresses;
-  Iterable<String> get addressNames => _addresses.keys;
+  final addressManager = AddressManager.instance;
+
+  List<AddressModel> get addresses => addressManager.addresses;
+  Iterable<String> get addressNames => addressManager.addressNames;
 
   String get userId => _user!.id!;
   bool get isLogin => _user != null;
@@ -40,20 +41,12 @@ class CurrentUser {
     if (user == null) return;
 
     _user = user;
-    await _loadAddresses();
+    await addressManager.init(user.id!);
   }
 
-  Future<void> _loadAddresses() async {
-    _user = user;
-    _addresses.clear();
+  AddressModel? addressByName(String name) =>
+      addressManager.addressByName(name);
 
-    final addressesList = await AddressRepository.getUserAddresses(user!.id!);
-    if (addressesList != null) {
-      _addresses.addEntries(
-        addressesList.map(
-          (address) => MapEntry(address.name, address),
-        ),
-      );
-    }
-  }
+  Future<void> saveAddress(AddressModel address) async =>
+      addressManager.saveAddress(address);
 }
