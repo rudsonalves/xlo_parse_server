@@ -17,10 +17,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../components/buttons/big_button.dart';
+import '../new_address/new_address_screen.dart';
 import 'address_controller.dart';
-import 'address_state.dart';
-import 'widgets/address_form.dart';
 
 class AddressScreen extends StatefulWidget {
   const AddressScreen({super.key});
@@ -40,73 +38,73 @@ class _AddressScreenState extends State<AddressScreen> {
     controller.init();
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  Future<void> _addAddress() async {
+    await Navigator.pushNamed(context, NewAddressScreen.routeName);
+    if (mounted) {
+      setState(() {});
+    }
   }
 
-  void _saveAddressFrom() {
-    if (controller.valid) {
-      controller.saveAddressFrom();
-      Navigator.pop(context, controller.selectedAddress);
-    }
+  Future<void> _removeAddress() async {
+    await controller.removeAddress();
+    setState(() {});
+  }
+
+  void _backPage() {
+    Navigator.pop(context, controller.selectedAddressName.value);
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Endereço'),
+        title: const Text('Endereços'),
         centerTitle: true,
         // automaticallyImplyLeading: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: _saveAddressFrom,
+          onPressed: _backPage,
         ),
       ),
-      body: ListenableBuilder(
-        listenable: controller,
-        builder: (context, _) {
-          String? errorText;
-          if (controller.state is AddressStateError) {
-            errorText = 'CEP Inválido';
-          }
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 12,
+      floatingActionButton: ButtonBar(
+        children: [
+          FloatingActionButton(
+            onPressed: _addAddress,
+            heroTag: 'fab1',
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(width: 12),
+          FloatingActionButton(
+            onPressed: _removeAddress,
+            heroTag: 'fab2',
+            child: const Icon(Icons.remove),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: ValueListenableBuilder(
+            valueListenable: controller.selectedAddressName,
+            builder: (context, seledtedName, _) {
+              return ListView.builder(
+                itemCount: controller.addressNames.length,
+                itemBuilder: (context, index) {
+                  final address = controller.addresses[index];
+                  return Card(
+                    color: address.name == seledtedName
+                        ? colorScheme.primaryContainer
+                        : colorScheme.primaryContainer.withOpacity(0.4),
+                    child: ListTile(
+                      title: Text(address.name),
+                      subtitle: Text(address.addressString()),
+                      onTap: () => controller.selectAddress(address.name),
                     ),
-                    child: Column(
-                      children: [
-                        AddressForm(
-                          controller: controller,
-                          errorText: errorText,
-                        ),
-                        BigButton(
-                          color: Colors.deepPurpleAccent,
-                          focusNode: controller.buttonFocus,
-                          label: 'Salvar Endereço',
-                          onPress: _saveAddressFrom,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              if (controller.state is AddressStateLoading)
-                const Positioned.fill(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-            ],
-          );
-        },
+                  );
+                },
+              );
+            }),
       ),
     );
   }

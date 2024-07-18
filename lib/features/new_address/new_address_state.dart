@@ -15,12 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-abstract class AddressState {}
+abstract class NewAddressState {}
 
-class AddressStateInitial extends AddressState {}
+class NewAddressStateInitial extends NewAddressState {}
 
-class AddressStateLoading extends AddressState {}
+class NewAddressStateLoading extends NewAddressState {}
 
-class AddressStateSuccess extends AddressState {}
+class NewAddressStateSuccess extends NewAddressState {}
 
-class AddressStateError extends AddressState {}
+class NewAddressStateError extends NewAddressState {}

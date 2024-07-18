@@ -21,6 +21,60 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/18 - version: 0.3.0+6
+
+feat: Implement address management with AddressManager and new address screens
+
+- **lib/common/singletons/current_user.dart**
+  - Replaced `AddressRepository` with `AddressManager` for managing addresses.
+  - Removed `_loadAddresses` method, added `addressByName` and `saveAddress` methods.
+
+- **lib/features/address/address_controller.dart**
+  - Simplified `AddressController` to delegate address management to `AddressManager`.
+  - Removed form state and validation logic, focusing on address selection and removal.
+
+- **lib/features/address/address_screen.dart**
+  - Updated to use new `NewAddressScreen` for adding addresses.
+  - Added floating action buttons for adding and removing addresses.
+
+- **lib/features/advertisement/advert_controller.dart**
+  - Updated to use `CurrentUser.addressByName` for selecting addresses.
+
+- **lib/features/advertisement/widgets/advert_form.dart**
+  - Updated address selection to use `CurrentUser.addressByName`.
+
+- **lib/features/new_address/new_address_controller.dart** (new)
+  - Added new controller for managing new address form state and validation.
+
+- **lib/features/new_address/new_address_screen.dart** (new)
+  - Added new screen for adding and editing addresses.
+  - Integrated `NewAddressController` for form management and submission.
+
+- **lib/features/address/address_state.dart** (renamed to `new_address_state.dart`)
+  - Renamed and updated states to be used by `NewAddressController`.
+
+- **lib/features/address/widgets/address_form.dart** (renamed to `new_address/widgets/address_form.dart`)
+  - Updated to use `NewAddressController` for form state management.
+
+- **lib/manager/address_manager.dart** (new)
+  - Added new manager for handling address CRUD operations and caching.
+  - Implemented methods for saving, deleting, and fetching addresses.
+
+- **lib/my_material_app.dart**
+  - Added route for `NewAddressScreen`.
+  - Updated `onGenerateRoute` to handle new address route.
+
+- **lib/repository/address_repository.dart**
+  - Simplified `saveAddress` method.
+  - Added `delete` method for removing addresses.
+  - Updated error handling and logging.
+
+- **lib/repository/constants.dart**
+  - Updated `keyAddressTable` to `'Addresses'`.
+
+This commit message provides a detailed breakdown of changes made to each file, highlighting the specific updates and improvements in the address management system.
+
+
 ## 2024/07/18 - version: 0.2.3+5
 
 feat: Implement new features for address management and validation

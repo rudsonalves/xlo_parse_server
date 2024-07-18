@@ -19,31 +19,28 @@ import 'package:flutter/material.dart';
 
 import '../../../common/validators/validators.dart';
 import '../../../components/form_fields/custom_form_field.dart';
-import '../../../components/form_fields/dropdown_form_field.dart';
-import '../address_controller.dart';
+import '../new_address_controller.dart';
 
 class AddressForm extends StatefulWidget {
+  final NewAddressController controller;
+  final String? errorText;
+
   const AddressForm({
     super.key,
     required this.controller,
     required this.errorText,
   });
 
-  final AddressController controller;
-  final String? errorText;
-
   @override
   State<AddressForm> createState() => _AddressFormState();
 }
 
 class _AddressFormState extends State<AddressForm> {
-  final List<String> addressType = [];
-  AddressController get controller => widget.controller;
+  NewAddressController get controller => widget.controller;
 
   @override
   void initState() {
     super.initState();
-    addressType.addAll(controller.user.addressNames);
   }
 
   @override
@@ -52,16 +49,14 @@ class _AddressFormState extends State<AddressForm> {
       key: controller.formKey,
       child: Column(
         children: [
-          DropdownFormField(
+          CustomFormField(
             controller: controller.nameController,
-            labelText: 'Tipo de Endereço',
+            labelText: 'Endereço',
             hintText: 'Residencial, Comercial, ...',
             fullBorder: false,
-            stringList: addressType,
             validator: AddressValidator.name,
             nextFocusNode: controller.zipFocus,
             textCapitalization: TextCapitalization.sentences,
-            onSelected: controller.changeAddressType,
           ),
           CustomFormField(
             labelText: 'CEP',
