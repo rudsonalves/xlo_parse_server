@@ -24,6 +24,7 @@ import 'common/theme/util.dart';
 import 'features/account/account_screen.dart';
 import 'features/address/address_screen.dart';
 import 'features/base/base_screen.dart';
+import 'features/filters/filters_screen.dart';
 import 'features/mecanics/mecanics_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/home/home_screen.dart';
@@ -63,6 +64,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
               LoginScreen.routeName: (_) => const LoginScreen(),
               SignUpScreen.routeName: (_) => const SignUpScreen(),
               AddressScreen.routeName: (_) => const AddressScreen(),
+              FiltersScreen.routeName: (_) => const FiltersScreen(),
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {

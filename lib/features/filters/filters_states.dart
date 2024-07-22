@@ -15,20 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:xlo_mobx/repository/ibge_repository.dart';
+abstract class FiltersState {}
 
-import '../common/models/state.dart';
+class FiltersStateInitial extends FiltersState {}
 
-class StateManager {
-  StateManager._();
-  static final _instance = StateManager._();
-  static StateManager get instance => _instance;
+class FiltersStateLoading extends FiltersState {}
 
-  final _upList = <StateBrModel>[];
-  List<StateBrModel> get ufList => _upList;
+class FiltersStateSuccess extends FiltersState {}
 
-  Future<void> init() async {
-    final stateNewList = await IbgeRepository.getStateList();
-    _upList.addAll(stateNewList);
-  }
-}
+class FiltersStateError extends FiltersState {}

@@ -54,13 +54,13 @@ class RegionModel {
   String toString() => 'Regiao(id: $id, sigla: $sigla, nome: $nome)';
 }
 
-class UFModel {
+class StateBrModel {
   final int id;
   final String sigla;
   final String nome;
   // final RegionModel regiao;
 
-  UFModel({
+  StateBrModel({
     required this.id,
     required this.sigla,
     required this.nome,
@@ -76,8 +76,8 @@ class UFModel {
     };
   }
 
-  factory UFModel.fromMap(Map<String, dynamic> map) {
-    return UFModel(
+  factory StateBrModel.fromMap(Map<String, dynamic> map) {
+    return StateBrModel(
       id: map['id'] as int,
       sigla: map['sigla'] as String,
       nome: map['nome'] as String,
@@ -87,11 +87,11 @@ class UFModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UFModel.fromJson(String source) =>
-      UFModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory StateBrModel.fromJson(String source) =>
+      StateBrModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'UF(id: $id, sigla: $sigla, nome: $nome)';
+    return 'State(id: $id, sigla: $sigla, nome: $nome)';
   }
 }

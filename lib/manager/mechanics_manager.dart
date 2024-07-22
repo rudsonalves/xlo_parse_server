@@ -37,4 +37,17 @@ class MechanicsManager {
       throw Exception('Sorry. An error occurred, try later.');
     }
   }
+
+  String? nameFromId(String id) {
+    return _mechanics.firstWhere((item) => item.id == id).name;
+  }
+
+  List<String> namesFromIdList(List<String> ids) {
+    List<String> names = [];
+    for (final id in ids) {
+      names.add(nameFromId(id)!);
+    }
+
+    return names;
+  }
 }

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
 // This file is part of xlo_parse_server.
@@ -15,20 +16,31 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:xlo_mobx/repository/ibge_repository.dart';
+enum AdvertiserOrder { all, particular, commercial }
 
-import '../common/models/state.dart';
+enum SortOrder { date, price }
 
-class StateManager {
-  StateManager._();
-  static final _instance = StateManager._();
-  static StateManager get instance => _instance;
+class FilterModel {
+  final String state;
+  final String city;
+  final SortOrder sortBy;
+  final AdvertiserOrder advertiserOrder;
+  final List<String> mechanicsId;
 
-  final _upList = <StateBrModel>[];
-  List<StateBrModel> get ufList => _upList;
+  FilterModel({
+    required this.state,
+    required this.city,
+    required this.sortBy,
+    required this.advertiserOrder,
+    required this.mechanicsId,
+  });
 
-  Future<void> init() async {
-    final stateNewList = await IbgeRepository.getStateList();
-    _upList.addAll(stateNewList);
+  @override
+  String toString() {
+    return 'FilterModel(state: $state,'
+        ' city: $city,'
+        ' sortBy: $sortBy,'
+        ' advertiserOrder: $advertiserOrder,'
+        ' mechanicsId: $mechanicsId)';
   }
 }
