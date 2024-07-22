@@ -15,9 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'common/models/address.dart';
+import 'common/models/filter.dart';
 import 'common/singletons/app_settings.dart';
 import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
@@ -64,10 +67,18 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
               LoginScreen.routeName: (_) => const LoginScreen(),
               SignUpScreen.routeName: (_) => const SignUpScreen(),
               AddressScreen.routeName: (_) => const AddressScreen(),
-              FiltersScreen.routeName: (_) => const FiltersScreen(),
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {
+                case FiltersScreen.routeName:
+                  return MaterialPageRoute(
+                    builder: (context) {
+                      final filter = settings.arguments as FilterModel?;
+                      log(filter.toString());
+
+                      return FiltersScreen(filter);
+                    },
+                  );
                 case MecanicsScreen.routeName:
                   return MaterialPageRoute(
                     builder: (context) {

@@ -19,7 +19,6 @@ import 'package:flutter/foundation.dart';
 
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
-import '../../manager/mechanics_manager.dart';
 import 'home_state.dart';
 
 class HomeController extends ChangeNotifier {
@@ -28,40 +27,6 @@ class HomeController extends ChangeNotifier {
 
   final app = AppSettings.instance;
   final CurrentUser? user = CurrentUser.instance;
-  final MechanicsManager mechManager = MechanicsManager.instance;
-
-  final List<String> _selectedMechIds = [];
-  List<String> get selectedMechIds => _selectedMechIds;
-
-  String get mechButtonName {
-    if (_selectedMechIds.isEmpty) {
-      return 'Mecânicas';
-    }
-    if (_selectedMechIds.length == 1) {
-      return mechManager.nameFromId(_selectedMechIds.first)!;
-    }
-
-    final mechNames = mechManager.namesFromIdList(_selectedMechIds);
-    return _joinMechNames(mechNames);
-  }
-
-  void updateMachIds(List<String> mechIds) {
-    _selectedMechIds.clear();
-    if (mechIds.isNotEmpty) {
-      _selectedMechIds.addAll(mechIds);
-    }
-  }
-
-  String _joinMechNames(List<String> mechNames) {
-    final buffer = StringBuffer();
-    for (int i = 0; i < mechNames.length; i++) {
-      buffer.write(mechNames[i]);
-      if (i != mechNames.length - 1) {
-        buffer.write(', ');
-      }
-    }
-    return buffer.toString().trim();
-  }
 
   void init() {}
 

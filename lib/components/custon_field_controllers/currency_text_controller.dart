@@ -15,15 +15,24 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CurrencyTextController extends TextEditingController {
   final NumberFormat _formatter;
+  final int decimalDigits;
   bool _isApplyingMask = false;
 
-  CurrencyTextController({String locale = 'pt_BR'})
-      : _formatter = NumberFormat.simpleCurrency(locale: locale) {
+  CurrencyTextController({
+    String locale = 'pt_BR',
+    this.decimalDigits = 2,
+  }) : _formatter = NumberFormat.currency(
+          locale: locale,
+          symbol: '',
+          decimalDigits: decimalDigits,
+        ) {
     addListener(_onTextChanged);
   }
 
@@ -43,7 +52,7 @@ class CurrencyTextController extends TextEditingController {
   String _applyMask(String text) {
     final cleanedText = _cleanString(text);
     final value = double.tryParse(cleanedText) ?? 0.0;
-    return _formatter.format(value / 100);
+    return _formatter.format(value / _getDivisionFactor());
   }
 
   String _cleanString(String text) {
@@ -53,7 +62,7 @@ class CurrencyTextController extends TextEditingController {
   double get currencyValue {
     final cleanedText = _cleanString(text);
     final value = double.tryParse(cleanedText) ?? 0.0;
-    return value / 100;
+    return value / _getDivisionFactor();
   }
 
   void _onTextChanged() {
@@ -73,5 +82,9 @@ class CurrencyTextController extends TextEditingController {
           );
     }
     _isApplyingMask = false;
+  }
+
+  double _getDivisionFactor() {
+    return pow(10, decimalDigits).toDouble();
   }
 }

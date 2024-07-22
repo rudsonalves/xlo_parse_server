@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import '../../common/models/filter.dart';
@@ -28,7 +26,12 @@ import 'widgets/text_form_dropdown.dart';
 import 'widgets/text_title.dart';
 
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key});
+  final FilterModel? filter;
+
+  const FiltersScreen(
+    this.filter, {
+    super.key,
+  });
 
   static const routeName = '/filters';
 
@@ -43,7 +46,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
   void initState() {
     super.initState();
 
-    ctrl.init();
+    ctrl.init(widget.filter);
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (widget.filter != null) {
+    //     ctrl.setInitialValues(widget.filter!);
+    //   }
+    // });
   }
 
   @override
@@ -52,18 +61,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
     ctrl.dispose();
   }
 
-  SortOrder sortBy = SortOrder.date;
-  AdvertiserOrder advertiser = AdvertiserOrder.all;
-
   void _sendFilter() {
-    final filter = FilterModel(
-      state: ctrl.stateController.text,
-      city: ctrl.cityController.text,
-      sortBy: sortBy,
-      advertiserOrder: advertiser,
-      mechanicsId: ctrl.selectedMechIds,
-    );
-    Navigator.pop(context, filter);
+    Navigator.pop(context, ctrl.filter);
   }
 
   Future<void> _selectMechanics() async {
@@ -73,11 +72,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
       arguments: ctrl.selectedMechIds,
     ) as List<String>;
     ctrl.mechUpdateNames(newMechsIds);
-    log(newMechsIds.toString());
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Filtrar Anúncios'),
@@ -104,6 +104,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                         controller: ctrl.stateController,
                         items: ctrl.stateNames,
                         submitItem: ctrl.submitState,
+                        focusNode: ctrl.stateFocus,
                       ),
                       TextFormDropdown(
                         hintText: 'Cidate',
@@ -129,18 +130,80 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                   icon: Icon(Icons.price_change),
                                 ),
                               ],
-                              selected: {sortBy},
+                              selected: {ctrl.sortBy},
                               onSelectionChanged: (selection) {
                                 if (selection.isEmpty) return;
                                 setState(() {
-                                  sortBy = selection.first;
-                                  log(sortBy.name);
+                                  ctrl.sortBy = selection.first;
                                 });
                               },
                             ),
                           ),
                         ],
                       ),
+                      if (ctrl.sortBy == SortOrder.price)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12, bottom: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: ctrl.minPriceController,
+                                  textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    labelText: 'Min',
+                                    prefixText: 'R\$ ',
+                                    hintText: 'Menor preço',
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: TextField(
+                                  controller: ctrl.maxPriceController,
+                                  textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    labelText: 'Max',
+                                    prefixText: 'R\$ ',
+                                    hintText: 'Maior preço',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      AnimatedBuilder(
+                          animation: Listenable.merge([
+                            ctrl.minPriceController,
+                            ctrl.maxPriceController
+                          ]),
+                          builder: (context, _) {
+                            final minPrice =
+                                ctrl.minPriceController.currencyValue;
+                            final maxPrice =
+                                ctrl.maxPriceController.currencyValue;
+                            if (maxPrice > 0 && minPrice > maxPrice) {
+                              return Text(
+                                'Faixa de preço inválida',
+                                style: TextStyle(
+                                  color: colorScheme.error,
+                                ),
+                              );
+                            }
+                            return Container();
+                          }),
                       const TextTitle('Anunciante'),
                       Row(
                         children: [
@@ -164,11 +227,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                   label: Text('Comercial'),
                                 ),
                               ],
-                              selected: {advertiser},
+                              selected: {ctrl.advertiser},
                               onSelectionChanged: (selection) {
                                 if (selection.isEmpty) return;
                                 setState(() {
-                                  advertiser = selection.first;
+                                  ctrl.advertiser = selection.first;
                                 });
                               },
                             ),

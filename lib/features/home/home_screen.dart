@@ -15,12 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
+import '../../common/models/filter.dart';
 import '../filters/filters_screen.dart';
-import '../mecanics/mecanics_screen.dart';
 import 'home_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,6 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
     ctrl.init();
   }
 
+  FilterModel? _filter;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,47 +49,20 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(
-                  child: SegmentedButton(
-                    segments: [
-                      ButtonSegment(
-                        tooltip: ctrl.mechButtonName,
-                        value: 'all',
-                        icon: const Icon(Icons.settings),
-                        label: Text(
-                          ctrl.mechButtonName,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const ButtonSegment(
-                        value: 'filter',
-                        icon: Icon(Icons.filter_alt),
-                        label: Text('Filtro'),
-                      ),
-                    ],
-                    selected: const {},
-                    onSelectionChanged: (p0) async {
-                      switch (p0.first) {
-                        case 'all':
-                          final newMechs = await Navigator.pushNamed(
-                            context,
-                            MecanicsScreen.routeName,
-                            arguments: ctrl.selectedMechIds,
-                          ) as List<String>;
-                          ctrl.updateMachIds(newMechs);
-                        case 'filter':
-                          final result = await Navigator.pushNamed(
-                              context, FiltersScreen.routeName);
-                          log(result.toString());
-                      }
-                      setState(() {});
-                    },
-                    multiSelectionEnabled: false,
-                    showSelectedIcon: false,
-                    emptySelectionAllowed: true,
-                  ),
+                IconButton(
+                  isSelected: _filter != null && !_filter!.isEmpty,
+                  onPressed: () async {
+                    _filter = await Navigator.pushNamed(
+                      context,
+                      FiltersScreen.routeName,
+                      arguments: _filter,
+                    ) as FilterModel?;
+                    setState(() {});
+                  },
+                  selectedIcon: const Icon(Icons.filter_alt_rounded),
+                  icon: const Icon(Icons.filter_alt_outlined),
                 ),
               ],
             ),

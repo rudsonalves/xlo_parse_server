@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
@@ -21,26 +23,66 @@ enum AdvertiserOrder { all, particular, commercial }
 enum SortOrder { date, price }
 
 class FilterModel {
-  final String state;
-  final String city;
-  final SortOrder sortBy;
-  final AdvertiserOrder advertiserOrder;
-  final List<String> mechanicsId;
+  String state;
+  String city;
+  SortOrder sortBy;
+  AdvertiserOrder advertiser;
+  List<String> mechanicsId;
+  int minPrice;
+  int maxPrice;
 
   FilterModel({
-    required this.state,
-    required this.city,
-    required this.sortBy,
-    required this.advertiserOrder,
-    required this.mechanicsId,
-  });
+    this.state = '',
+    this.city = '',
+    this.sortBy = SortOrder.date,
+    this.advertiser = AdvertiserOrder.all,
+    List<String>? mechanicsId,
+    this.minPrice = 0,
+    this.maxPrice = 0,
+  }) : mechanicsId = mechanicsId ?? [];
+
+  bool get isEmpty {
+    return state.isEmpty &&
+        city.isEmpty &&
+        sortBy == SortOrder.date &&
+        advertiser == AdvertiserOrder.all &&
+        mechanicsId.isEmpty &&
+        minPrice == 0 &&
+        maxPrice == 0;
+  }
 
   @override
   String toString() {
     return 'FilterModel(state: $state,'
         ' city: $city,'
         ' sortBy: $sortBy,'
-        ' advertiserOrder: $advertiserOrder,'
-        ' mechanicsId: $mechanicsId)';
+        ' advertiser: $advertiser,'
+        ' mechanicsId: $mechanicsId,'
+        ' minPrice: $minPrice,'
+        ' maxPrice: $maxPrice)';
+  }
+
+  @override
+  bool operator ==(covariant FilterModel other) {
+    if (identical(this, other)) return true;
+
+    return other.state == state &&
+        other.city == city &&
+        other.sortBy == sortBy &&
+        other.advertiser == advertiser &&
+        listEquals(other.mechanicsId, mechanicsId) &&
+        other.minPrice == minPrice &&
+        other.maxPrice == maxPrice;
+  }
+
+  @override
+  int get hashCode {
+    return state.hashCode ^
+        city.hashCode ^
+        sortBy.hashCode ^
+        advertiser.hashCode ^
+        mechanicsId.hashCode ^
+        minPrice.hashCode ^
+        maxPrice.hashCode;
   }
 }
