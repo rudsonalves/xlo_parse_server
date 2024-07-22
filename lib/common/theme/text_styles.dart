@@ -15,20 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:xlo_mobx/repository/ibge_repository.dart';
+import 'package:flutter/material.dart';
 
-import '../common/models/state.dart';
+class TextStyles {
+  TextStyles._();
 
-class StateManager {
-  StateManager._();
-  static final _instance = StateManager._();
-  static StateManager get instance => _instance;
-
-  final _upList = <StateBrModel>[];
-  List<StateBrModel> get ufList => _upList;
-
-  Future<void> init() async {
-    final stateNewList = await IbgeRepository.getStateList();
-    _upList.addAll(stateNewList);
-  }
+  static TextStyle bodyTitle = const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+  );
 }

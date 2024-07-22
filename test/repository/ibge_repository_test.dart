@@ -4,7 +4,7 @@ import 'package:xlo_mobx/repository/ibge_repository.dart';
 void main() {
   group('ibge repository ...', () {
     test('getUFListFromApi', () async {
-      final states = await IbgeRepository.getUFList();
+      final states = await IbgeRepository.getStateList();
       final stateES =
           states.where((item) => item.nome == 'Espírito Santo').toList()[0];
 
@@ -12,7 +12,7 @@ void main() {
     });
 
     test('getCityListFromApi', () async {
-      final states = await IbgeRepository.getUFList();
+      final states = await IbgeRepository.getStateList();
       final stateES =
           states.where((item) => item.nome == 'Espírito Santo').toList()[0];
       final cities = await IbgeRepository.getCityListFromApi(stateES);

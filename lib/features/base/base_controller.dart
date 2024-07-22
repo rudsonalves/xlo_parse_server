@@ -21,6 +21,8 @@ import '../../common/singletons/current_user.dart';
 import 'base_state.dart';
 import '../../common/singletons/app_settings.dart';
 
+const titles = ['XLO', 'Criar Anúncio', 'Chat', 'Favoritos', 'Minha Conta'];
+
 class BaseController extends ChangeNotifier {
   BaseState _state = BaseStateInitial();
 
@@ -29,8 +31,15 @@ class BaseController extends ChangeNotifier {
   final ValueNotifier<String> _pageTitle = ValueNotifier<String>('XLO');
   final currentUser = CurrentUser.instance;
 
+  String? _search;
+  String? get search => _search;
+
+  int _page = 0;
+  int get page => _page;
+
   BaseState get state => _state;
   String get pageTitle => _pageTitle.value;
+  double? get currentPage => pageController.page;
 
   ValueNotifier<String> get titleNotifier => _pageTitle;
   void _changeState(BaseState newState) {
@@ -55,25 +64,20 @@ class BaseController extends ChangeNotifier {
   }
 
   void jumpToPage(int page) {
-    switch (page) {
-      case 0:
-        _pageTitle.value = 'XLO';
-        break;
-      case 1:
-        _pageTitle.value = 'Criar Anúncio';
-        break;
-      case 2:
-        _pageTitle.value = 'Chat';
-        break;
-      case 3:
-        _pageTitle.value = 'Favoritos';
-        break;
-      case 4:
-        _pageTitle.value = 'Minha Conta';
-        break;
-      default:
-        _pageTitle.value = 'XLO';
+    _page = page;
+    if (_page == 0) {
+      _pageTitle.value = _search ?? titles[0];
+    } else {
+      _pageTitle.value = titles[_page];
     }
+
     pageController.jumpToPage(page);
+  }
+
+  void setSearch(String? value) {
+    _search = value;
+    if (_page == 0) {
+      _pageTitle.value = _search ?? titles[0];
+    }
   }
 }

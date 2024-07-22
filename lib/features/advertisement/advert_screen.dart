@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import '../../components/buttons/big_button.dart';
@@ -45,12 +43,10 @@ class _AdvertScreenState extends State<AdvertScreen> {
   }
 
   Future<void> _createAnnounce() async {
-    log('salvondo...');
     if (!controller.formValit) return;
     FocusScope.of(context).unfocus();
     await controller.createAnnounce();
     if (mounted) Navigator.pushNamed(context, BaseScreen.routeName);
-    log('salvo...');
   }
 
   @override

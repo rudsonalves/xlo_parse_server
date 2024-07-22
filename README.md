@@ -21,6 +21,204 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/22 - version: 0.3.3+9
+
+Add functionalities and general refactorings
+
+1. Added Makefile:
+   - Commands to manage Docker (`docker_up` and `docker_down`).
+   - Commands for Flutter clean (`flutter_clean`).
+   - Commands for Git operations (`git_cached`, `git_commit`, and `git_push`).
+
+2. Added `FilterModel` in `lib/common/models/filter.dart`:
+   - Modeling filters for advertisements.
+
+3. Refactored file and class names:
+   - Renamed `lib/common/models/uf.dart` to `lib/common/models/state.dart` and updated class name from `UFModel` to `StateBrModel`.
+
+4. Added `SearchHistory` singleton in `lib/common/singletons/search_history.dart`:
+   - Manages search history with SharedPreferences.
+
+5. Added `TextStyles` in `lib/common/theme/text_styles.dart`:
+   - Defined common text styles for the application.
+
+6. Updated `advert_screen.dart`:
+   - Removed unnecessary logging.
+   - Integrated new state management for advertisement creation.
+
+7. Enhanced `BaseController` and `BaseScreen`:
+   - Added search functionality and integrated `SearchDialog`.
+
+8. Added `SearchDialogController` and `SearchDialog` widget:
+   - Manages search functionality and history display.
+
+9. Added `FiltersController` and `FiltersScreen`:
+   - Allows filtering advertisements by location, sorting, and mechanics.
+
+10. Updated `mechanics_manager.dart`:
+    - Added methods to retrieve mechanics names by IDs.
+
+11. General updates and bug fixes:
+    - Improved state handling and UI updates.
+    - Refactored method names for clarity and consistency.
+
+12. Updated `pubspec.yaml` version to 0.3.2+8.
+
+13. Updated `home_screen.dart`:
+    - Integrated `HomeController` for state management.
+    - Added segmented buttons for mechanics and filter selection.
+    - Implemented navigation to `MecanicsScreen` and `FiltersScreen`.
+
+14. Added `home_controller.dart` and `home_state.dart`:
+    - Managed home screen state and mechanics selection.
+
+15. Updated `main.dart`:
+    - Initialized `SearchHistory` during app startup.
+
+16. Updated `state_manager.dart`:
+    - Renamed methods and classes to match updated state model.
+
+17. Updated `my_material_app.dart`:
+    - Added route for `FiltersScreen`.
+
+18. Updated `ibge_repository.dart`:
+    - Renamed methods and updated to use `StateBrModel`.
+
+19. Added tests for `IbgeRepository` in `ibge_repository_test.dart`:
+    - Ensured correct functionality for state and city retrieval.
+
+20. Refactored `home_screen.dart`:
+    - Integrated `HomeController` for managing the state.
+    - Added segmented buttons for mechanics and filter selection.
+    - Implemented navigation to `MecanicsScreen` and `FiltersScreen`.
+
+21. Added `home_controller.dart` and `home_state.dart`:
+    - Managed the state of the home screen.
+    - Provided functionality for mechanics selection and updating the view based on the selected mechanics.
+
+22. Updated `main.dart`:
+    - Initialized `SearchHistory` during app startup to ensure search functionality is ready when the app launches.
+
+23. Updated `state_manager.dart`:
+    - Renamed methods and classes to align with the updated state model, enhancing code readability and consistency.
+
+24. Updated `my_material_app.dart`:
+    - Added a route for `FiltersScreen` to integrate the new filter functionality into the app's navigation.
+
+25. Updated `ibge_repository.dart`:
+    - Renamed methods to use `StateBrModel` instead of the previous `UFModel`, ensuring consistency with the updated data models.
+
+26. Added tests for `IbgeRepository` in `ibge_repository_test.dart`:
+    - Ensured the correct functionality for state and city retrieval, verifying that the refactored code behaves as expected.
+
+27. Refactored `mechanics_manager.dart`:
+    - Added methods `nameFromId` and `namesFromIdList` for retrieving mechanic names based on their IDs.
+    - Enhanced functionality to manage and retrieve mechanic names, aiding in cleaner code and improved readability.
+
+28. Added `text_styles.dart`:
+    - Defined a centralized `TextStyles` class to manage text styles across the app.
+    - Simplified text styling management and ensured consistency in text appearance.
+
+29. Added `search_controller.dart` and `search_dialog.dart`:
+    - Implemented a custom search controller and dialog for managing search history and suggestions.
+    - Enhanced the search experience by providing users with a history of previous searches and suggestions based on input.
+
+30. Refactored `advert_screen.dart`:
+    - Removed redundant log statements for a cleaner codebase.
+    - Ensured better readability and maintainability of the code.
+
+31. Refactored `base_controller.dart` and `base_screen.dart`:
+    - Integrated search functionality into the base screen.
+    - Improved navigation and state management within the base screen.
+
+32. Refactored `filters_controller.dart` and `filters_screen.dart`:
+    - Enhanced filters management with improved state handling.
+    - Provided a user-friendly interface for selecting filters and mechanics.
+
+33. Updated `Makefile`:
+    - Added common commands for Docker, Flutter, and Git operations.
+    - Simplified development workflows by providing reusable Makefile commands.
+
+34. Updated `pubspec.yaml`:
+    - Bumped the version to `0.3.2+8` to reflect the new features and improvements.
+    - Ensured dependencies are up to date, supporting the latest features and bug fixes.
+
+35. Added `home_controller.dart` and `home_screen.dart`:
+    - Introduced a home controller to manage the state and interactions on the home screen.
+    - Implemented UI elements to allow users to filter and select mechanics easily.
+    - Enhanced user experience by providing a more interactive and responsive home screen.
+
+36. Added `filters_states.dart`:
+    - Defined states for the filters feature to manage loading, success, and error states.
+    - Improved state management, making the filters feature more robust and easier to maintain.
+
+37. Added `search_dialog_bar.dart` and `search_dialog_search_bar.dart`:
+    - Provided additional search dialog implementations for various UI scenarios.
+    - Enhanced search functionality with better UI integration and user experience.
+
+38. Updated `state_manager.dart`:
+    - Refactored to use `StateBrModel` instead of `UFModel`.
+    - Improved clarity and consistency in naming conventions.
+
+39. Updated `ibge_repository.dart`:
+    - Refactored methods to align with the new state model naming conventions.
+    - Ensured consistency and clarity in data retrieval methods.
+
+40. Refactored `my_material_app.dart`:
+    - Added route for the new `FiltersScreen`.
+    - Improved navigation and ensured all new screens are accessible.
+
+41. Updated `ibge_repository_test.dart`:
+    - Refactored tests to align with the new `StateBrModel`.
+    - Ensured tests remain up-to-date and cover the new functionality.
+
+42. Added `text_styles.dart`:
+    - Introduced a centralized file for text styles to ensure consistency across the app.
+    - Made it easier to manage and update text styles in one place.
+
+43. Updated `Makefile`:
+    - Added commands for Docker operations (`docker_up`, `docker_down`), Flutter operations (`flutter_clean`), and Git operations (`git_cached`, `git_commit`, `git_push`).
+    - Simplified and automated common development tasks, improving developer productivity.
+
+44. Updated `search_history.dart`:
+    - Implemented a singleton pattern for managing search history.
+    - Added methods to save and retrieve search history using `SharedPreferences`.
+    - Enhanced search functionality by providing users with suggestions based on their search history.
+
+45. Updated `advert_screen.dart`:
+    - Removed unnecessary imports and log statements.
+    - Improved readability and maintainability of the code.
+
+46. Updated `base_controller.dart`:
+    - Added constants for page titles and methods to manage page navigation and search functionality.
+    - Improved the controller's responsibility to manage state and UI updates more effectively.
+
+47. Updated `base_screen.dart`:
+    - Introduced a method for handling search dialog interactions.
+    - Enhanced the app bar to dynamically display the search bar or title based on the current page.
+    - Improved user experience by integrating a search functionality directly into the app bar.
+
+48. Updated `home_screen.dart`:
+    - Added segmented buttons for mechanics and filter selection.
+    - Integrated new mechanics and filter selection features into the home screen.
+
+49. Updated `mechanics_manager.dart`:
+    - Added methods to retrieve mechanic names by their IDs.
+    - Improved data handling for mechanics, making it easier to work with mechanic-related data.
+
+50. Updated `state_manager.dart`:
+    - Continued to refine state management by ensuring alignment with the new state model.
+
+51. Updated `main.dart`:
+    - Added initialization for the `SearchHistory` singleton.
+    - Ensured all necessary initializations are done before the app runs.
+
+52. Incremented `pubspec.yaml` version to 0.3.2+8:
+    - Reflecting all the changes and additions made in this update cycle.
+
+This commit encompasses multiple additions and refactorings across the project to enhance functionality, improve code clarity, and manage state more effectively. These changes improve the overall structure, enhance user experience with better search and filter functionalities, and maintain consistency across the application. These updates further improve the app's maintainability, performance, and user experience, ensuring that the app remains robust and user-friendly. The comprehensive updates aim to improve the app’s overall architecture, enhance user experience, and maintain a clean and maintainable codebase. The addition of new models, controllers, and screens reflects ongoing efforts to provide robust and user-friendly features. These updates continue to improve the app’s structure, usability, and developer experience by refining existing features, introducing new functionalities, and ensuring consistency across the codebase.
+
+
 ## 2024/07/18 - version: 0.3.1+7
 
 feat: Refactor and enhance advertisement and mechanic modules

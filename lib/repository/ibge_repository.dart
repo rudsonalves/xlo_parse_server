@@ -21,12 +21,12 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/models/city.dart';
-import '../common/models/uf.dart';
+import '../common/models/state.dart';
 
 const sharedUFList = 'UFList';
 
 class IbgeRepository {
-  static Future<List<UFModel>> getUFList() async {
+  static Future<List<StateBrModel>> getStateList() async {
     final prefs = await SharedPreferences.getInstance();
 
     if (!prefs.containsKey(sharedUFList)) {
@@ -52,8 +52,8 @@ class IbgeRepository {
 
   static _converToUFModelList(List<dynamic> data) {
     return data
-        .map<UFModel>(
-          (item) => UFModel.fromMap(item as Map<String, dynamic>),
+        .map<StateBrModel>(
+          (item) => StateBrModel.fromMap(item as Map<String, dynamic>),
         )
         .toList()
       ..sort(
@@ -61,7 +61,7 @@ class IbgeRepository {
       );
   }
 
-  static Future<List<CityModel>> getCityListFromApi(UFModel uf) async {
+  static Future<List<CityModel>> getCityListFromApi(StateBrModel uf) async {
     final urlCityLocal =
         'https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf.id}/municipios/';
 
