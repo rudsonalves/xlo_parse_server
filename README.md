@@ -21,6 +21,77 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/18 - version: 0.3.4+10
+
+Add enhancements and refactor filter and home functionalities
+
+1. lib/common/models/filter.dart
+   - Imported `foundation.dart` for `listEquals`.
+   - Added `minPrice` and `maxPrice` to `FilterModel`.
+   - Modified the constructor to initialize `state`, `city`, `sortBy`, `advertiser`, `mechanicsId`, `minPrice`, and `maxPrice` with default values.
+   - Added `isEmpty` getter to check if the filter is empty.
+   - Overrode `toString`, `==`, and `hashCode` to include `minPrice` and `maxPrice`.
+
+2. lib/components/custon_field_controllers/currency_text_controller.dart
+   - Added `decimalDigits` parameter to control the number of decimal places.
+   - Updated `_formatter` to use `currency` instead of `simpleCurrency`.
+   - Updated `_applyMask` and `currencyValue` methods to use `_getDivisionFactor`.
+   - Added `_getDivisionFactor` method to calculate the division factor based on `decimalDigits`.
+
+3. lib/features/filters/filters_controller.dart
+   - Imported `filter.dart` and `currency_text_controller.dart`.
+   - Added `minPriceController` and `maxPriceController` for handling price input.
+   - Updated `init` method to accept an optional `FilterModel`.
+   - Added `setInitialValues` method to set initial values for the filter.
+   - Updated `submitState` and `submitCity` methods to handle exceptions.
+   - Updated `mechUpdateNames` method to use `_joinMechNames`.
+   - Removed unnecessary log statements.
+
+4. lib/features/filters/filters_screen.dart
+   - Updated constructor to accept a `FilterModel`.
+   - Updated `initState` to call `ctrl.init` with the provided filter.
+   - Updated `_sendFilter` method to use `ctrl.filter`.
+   - Added UI components for min and max price input.
+   - Added validation for price range.
+
+5. lib/features/filters/widgets/text_form_dropdown.dart
+   - Added `focusNode` parameter to `TextFormDropdown`.
+
+6. lib/features/home/home_controller.dart
+   - Removed unused methods and properties related to mechanics.
+
+7. lib/features/home/home_screen.dart
+   - Updated the filter button to pass the current filter to the `FiltersScreen`.
+   - Removed mechanics-related UI components.
+
+8. lib/features/new_address/new_address_screen.dart
+   - Removed commented-out code.
+
+9. lib/my_material_app.dart
+   - Updated `onGenerateRoute` to pass the `FilterModel` to the `FiltersScreen`.
+
+10. lib/features/filters/filters_screen.dart
+    - Enhanced the `FiltersScreen` UI to include new fields for price range filtering.
+    - Added input validation for the price range to ensure logical consistency between min and max prices.
+    - Adjusted the `FilterModel` handling to accommodate new fields and ensure existing filter states are preserved during navigation and state changes.
+
+11. lib/features/home/home_controller.dart
+    - Simplified the `HomeController` by removing mechanics-related methods and properties, focusing it solely on managing the home screen state.
+
+12. lib/features/home/home_screen.dart
+    - Enhanced the filter button functionality to display the current filter state.
+    - Simplified the UI by removing mechanics-related buttons, focusing the user interface on the primary filtering functionality.
+
+13. lib/features/new_address/new_address_screen.dart
+    - Cleaned up the code by removing commented-out lines, ensuring a cleaner and more maintainable codebase.
+
+14. lib/my_material_app.dart
+    - Updated the routing logic to correctly pass and handle `FilterModel` instances when navigating to the `FiltersScreen`.
+    - Included additional logging for debugging purposes, ensuring better traceability of filter state throughout the application.
+
+These updates collectively enhance the app's structure and overall architecture, improve user experience through better search and filter functionalities, and maintain consistency across the application codebase. The changes reflect ongoing efforts to provide robust and user-friendly features while ensuring a clean, maintainable, and high-performance application.
+
+
 ## 2024/07/22 - version: 0.3.3+9
 
 Add functionalities and general refactorings

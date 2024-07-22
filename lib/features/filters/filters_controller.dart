@@ -20,7 +20,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import '../../common/models/city.dart';
+import '../../common/models/filter.dart';
 import '../../common/models/state.dart';
+import '../../components/custon_field_controllers/currency_text_controller.dart';
 import '../../manager/mechanics_manager.dart';
 import '../../repository/ibge_repository.dart';
 import 'filters_states.dart';
@@ -51,7 +53,16 @@ class FiltersController extends ChangeNotifier {
   final stateController = TextEditingController();
   final cityController = TextEditingController();
   final mechsController = TextEditingController();
+  final minPriceController = CurrencyTextController(decimalDigits: 0);
+  final maxPriceController = CurrencyTextController(decimalDigits: 0);
 
+  final _filter = FilterModel();
+  SortOrder get sortBy => _filter.sortBy;
+  AdvertiserOrder get advertiser => _filter.advertiser;
+  set sortBy(SortOrder sortBy) => _filter.sortBy = sortBy;
+  set advertiser(AdvertiserOrder advertiser) => _filter.advertiser = advertiser;
+
+  final stateFocus = FocusNode();
   final cityFocus = FocusNode();
   final orderByFocus = FocusNode();
 
@@ -60,23 +71,56 @@ class FiltersController extends ChangeNotifier {
     stateController.dispose();
     cityController.dispose();
     mechsController.dispose();
+    minPriceController.dispose();
+    maxPriceController.dispose();
 
+    stateFocus.dispose();
     cityFocus.dispose();
     orderByFocus.dispose();
 
     super.dispose();
   }
 
-  Future<void> init() async {
+  Future<void> init(FilterModel? filter) async {
     await _startResources();
+    if (filter != null) setInitialValues(filter);
   }
+
+  void setInitialValues(FilterModel filter) {
+    final minPrice = filter.minPrice;
+    final maxPrice = filter.maxPrice;
+    minPriceController.text = minPrice > 0 ? minPrice.toString().trim() : '';
+    maxPriceController.text = maxPrice > 0 ? maxPrice.toString().trim() : '';
+    stateController.text = filter.state;
+    cityController.text = filter.city;
+    _filter.sortBy = filter.sortBy;
+    _filter.advertiser = filter.advertiser;
+    _selectedMechIds.clear();
+    _selectedMechIds.addAll(filter.mechanicsId);
+
+    if (filter.state.isNotEmpty) {
+      submitState(filter.state);
+    }
+    if (filter.city.isNotEmpty) {
+      submitCity(filter.city);
+    }
+  }
+
+  FilterModel? get filter => FilterModel(
+        state: stateController.text.trim(),
+        city: cityController.text.trim(),
+        sortBy: _filter.sortBy,
+        advertiser: _filter.advertiser,
+        mechanicsId: selectedMechIds,
+        minPrice: minPriceController.currencyValue.toInt(),
+        maxPrice: maxPriceController.currencyValue.toInt(),
+      );
 
   void mechUpdateNames(List<String> mechIds) {
     _selectedMechIds.clear();
     _selectedMechIds.addAll(mechIds);
     final mechNames = mechManager.namesFromIdList(_selectedMechIds);
     mechsController.text = _joinMechNames(mechNames);
-    log(mechsController.text);
   }
 
   String _joinMechNames(List<String> mechNames) {
@@ -95,7 +139,13 @@ class FiltersController extends ChangeNotifier {
       _selectedState = null;
       return;
     }
-    selectState(_stateList.firstWhere((s) => s.nome == stateName));
+
+    try {
+      final selected = _stateList.firstWhere((s) => s.nome == stateName);
+      selectState(selected);
+    } catch (err) {
+      _selectedState = null;
+    }
   }
 
   void submitCity(String cityName) {
@@ -103,7 +153,12 @@ class FiltersController extends ChangeNotifier {
       _selectedCity = null;
       return;
     }
-    _selectedCity = _cityList.firstWhere((c) => c.nome == cityName);
+
+    try {
+      _selectedCity = _cityList.firstWhere((c) => c.nome == cityName);
+    } catch (err) {
+      _selectedCity = null;
+    }
   }
 
   void _changeState(FiltersState newState) {
@@ -117,7 +172,6 @@ class FiltersController extends ChangeNotifier {
       _changeState(FiltersStateLoading());
       _selectedState = value;
       await _getCity();
-      log(value.toString());
       _changeState(FiltersStateSuccess());
     } catch (err) {
       log(err.toString());
@@ -128,7 +182,6 @@ class FiltersController extends ChangeNotifier {
   void selectCity(String? value) {
     if (value != null) {
       _selectedCity = _cityList.firstWhere((city) => city.nome == value);
-      log(value);
     }
   }
 

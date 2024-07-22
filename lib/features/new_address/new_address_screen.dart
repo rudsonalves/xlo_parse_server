@@ -75,7 +75,6 @@ class _AddressScreenState extends State<NewAddressScreen> {
       appBar: AppBar(
         title: const Text('Endereço'),
         centerTitle: true,
-        // automaticallyImplyLeading: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: _backPage,

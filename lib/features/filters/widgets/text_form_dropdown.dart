@@ -22,6 +22,7 @@ class TextFormDropdown extends StatelessWidget {
   final String? hintText;
   final TextEditingController controller;
   final void Function(String value) submitItem;
+  final FocusNode? focusNode;
 
   const TextFormDropdown({
     super.key,
@@ -29,6 +30,7 @@ class TextFormDropdown extends StatelessWidget {
     this.hintText,
     required this.controller,
     required this.submitItem,
+    this.focusNode,
   });
 
   @override
@@ -46,6 +48,7 @@ class TextFormDropdown extends StatelessWidget {
           return Column(
             children: [
               TextFormField(
+                focusNode: focusNode,
                 controller: controller,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
