@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import 'advert.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
@@ -18,15 +20,13 @@ import 'package:flutter/foundation.dart';
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-enum AdvertiserOrder { all, particular, commercial }
-
 enum SortOrder { date, price }
 
 class FilterModel {
   String state;
   String city;
   SortOrder sortBy;
-  AdvertiserOrder advertiser;
+  ProductCondition condition;
   List<String> mechanicsId;
   int minPrice;
   int maxPrice;
@@ -35,7 +35,7 @@ class FilterModel {
     this.state = '',
     this.city = '',
     this.sortBy = SortOrder.date,
-    this.advertiser = AdvertiserOrder.all,
+    this.condition = ProductCondition.all,
     List<String>? mechanicsId,
     this.minPrice = 0,
     this.maxPrice = 0,
@@ -45,7 +45,7 @@ class FilterModel {
     return state.isEmpty &&
         city.isEmpty &&
         sortBy == SortOrder.date &&
-        advertiser == AdvertiserOrder.all &&
+        condition == ProductCondition.all &&
         mechanicsId.isEmpty &&
         minPrice == 0 &&
         maxPrice == 0;
@@ -56,7 +56,7 @@ class FilterModel {
     return 'FilterModel(state: $state,'
         ' city: $city,'
         ' sortBy: $sortBy,'
-        ' advertiser: $advertiser,'
+        ' advertiser: $condition,'
         ' mechanicsId: $mechanicsId,'
         ' minPrice: $minPrice,'
         ' maxPrice: $maxPrice)';
@@ -69,7 +69,7 @@ class FilterModel {
     return other.state == state &&
         other.city == city &&
         other.sortBy == sortBy &&
-        other.advertiser == advertiser &&
+        other.condition == condition &&
         listEquals(other.mechanicsId, mechanicsId) &&
         other.minPrice == minPrice &&
         other.maxPrice == maxPrice;
@@ -80,7 +80,7 @@ class FilterModel {
     return state.hashCode ^
         city.hashCode ^
         sortBy.hashCode ^
-        advertiser.hashCode ^
+        condition.hashCode ^
         mechanicsId.hashCode ^
         minPrice.hashCode ^
         maxPrice.hashCode;

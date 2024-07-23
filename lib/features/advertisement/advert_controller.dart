@@ -57,9 +57,11 @@ class AdvertController extends ChangeNotifier {
 
   String _selectedAddressId = '';
   String get selectedAddressId => _selectedAddressId;
+  ProductCondition _condition = ProductCondition.used;
 
   List<MechanicModel> get mechanics => mechanicsManager.mechanics;
   List<String> get mechanicsNames => mechanicsManager.mechanicsNames;
+  ProductCondition get condition => _condition;
 
   List<String> get selectedMechIds => _selectedMechIds;
   List<String> get selectedMachNames => mechanics
@@ -128,6 +130,7 @@ class AdvertController extends ChangeNotifier {
         addressId: _selectedAddressId,
         price: priceController.currencyValue,
         hidePhone: hidePhone.value,
+        condition: _condition,
       );
       await AdvertRepository.save(ad);
       _changeState(AdvertStateSuccess());
@@ -135,6 +138,10 @@ class AdvertController extends ChangeNotifier {
       log(err.toString());
       _changeState(AdvertStateError());
     }
+  }
+
+  void setCondition(ProductCondition condition) {
+    _condition = condition;
   }
 
   void setSelectedAddress(String addressName) {

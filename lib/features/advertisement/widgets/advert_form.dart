@@ -16,6 +16,7 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/common/models/advert.dart';
 
 import '../../../common/validators/validators.dart';
 import '../../../components/form_fields/custom_form_field.dart';
@@ -36,7 +37,7 @@ class AdvertForm extends StatefulWidget {
 }
 
 class _AdvertFormState extends State<AdvertForm> {
-  AdvertController get controller => widget.controller;
+  AdvertController get ctrl => widget.controller;
 
   @override
   void initState() {
@@ -47,11 +48,11 @@ class _AdvertFormState extends State<AdvertForm> {
     final result = await Navigator.pushNamed(
       context,
       MecanicsScreen.routeName,
-      arguments: controller.selectedMechIds,
+      arguments: ctrl.selectedMechIds,
     ) as List<String>?;
 
     if (result != null) {
-      controller.setMechanicsIds(result);
+      ctrl.setMechanicsIds(result);
       if (mounted) FocusScope.of(context).nextFocus();
     }
   }
@@ -59,17 +60,17 @@ class _AdvertFormState extends State<AdvertForm> {
   Future<void> _addAddress() async {
     final addressName =
         await Navigator.pushNamed(context, AddressScreen.routeName) as String;
-    controller.setSelectedAddress(addressName);
+    ctrl.setSelectedAddress(addressName);
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: controller.formKey,
+      key: ctrl.formKey,
       child: Column(
         children: [
           CustomFormField(
-            controller: controller.titleController,
+            controller: ctrl.titleController,
             labelText: 'Título *',
             fullBorder: false,
             floatingLabelBehavior: null,
@@ -77,7 +78,7 @@ class _AdvertFormState extends State<AdvertForm> {
             validator: Validator.title,
           ),
           CustomFormField(
-            controller: controller.descriptionController,
+            controller: ctrl.descriptionController,
             labelText: 'Descrição *',
             fullBorder: false,
             maxLines: null,
@@ -85,12 +86,36 @@ class _AdvertFormState extends State<AdvertForm> {
             textCapitalization: TextCapitalization.sentences,
             validator: Validator.description,
           ),
+          Row(
+            children: [
+              Expanded(
+                child: SegmentedButton<ProductCondition>(
+                  segments: const [
+                    ButtonSegment(
+                        value: ProductCondition.used,
+                        label: Text('Usado'),
+                        icon: Icon(Icons.history)),
+                    ButtonSegment(
+                        value: ProductCondition.sealed,
+                        label: Text('Selado'),
+                        icon: Icon(Icons.new_releases))
+                  ],
+                  selected: {ctrl.condition},
+                  onSelectionChanged: (p0) {
+                    setState(() {
+                      ctrl.setCondition(p0.first);
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
           InkWell(
             onTap: _addMecanics,
             child: AbsorbPointer(
               child: CustomFormField(
                 labelText: 'Mecânicas *',
-                controller: controller.mechanicsController,
+                controller: ctrl.mechanicsController,
                 fullBorder: false,
                 maxLines: null,
                 floatingLabelBehavior: null,
@@ -105,7 +130,7 @@ class _AdvertFormState extends State<AdvertForm> {
             child: AbsorbPointer(
               child: CustomFormField(
                 labelText: 'Endereço *',
-                controller: controller.addressController,
+                controller: ctrl.addressController,
                 fullBorder: false,
                 maxLines: null,
                 floatingLabelBehavior: null,
@@ -117,7 +142,7 @@ class _AdvertFormState extends State<AdvertForm> {
           ),
           CustomFormField(
             labelText: 'Preço *',
-            controller: controller.priceController,
+            controller: ctrl.priceController,
             fullBorder: false,
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
@@ -127,13 +152,13 @@ class _AdvertFormState extends State<AdvertForm> {
           Row(
             children: [
               ValueListenableBuilder(
-                valueListenable: controller.hidePhone,
+                valueListenable: ctrl.hidePhone,
                 builder: (context, value, _) {
                   return Checkbox(
                     value: value,
                     onChanged: (value) {
                       if (value != null) {
-                        controller.hidePhone.value = value;
+                        ctrl.hidePhone.value = value;
                       }
                     },
                   );

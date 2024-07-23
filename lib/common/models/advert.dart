@@ -15,7 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-enum AdStatus { pending, active, sold, closed }
+enum AdvertStatus { pending, active, sold, closed }
+
+enum ProductCondition { all, used, sealed }
 
 class AdvertModel {
   String? id;
@@ -27,7 +29,8 @@ class AdvertModel {
   String addressId;
   double price;
   bool hidePhone;
-  AdStatus status;
+  AdvertStatus status;
+  ProductCondition condition;
   int views;
   DateTime createdAt;
 
@@ -40,8 +43,9 @@ class AdvertModel {
     required this.mechanicsId,
     required this.addressId,
     required this.price,
+    this.condition = ProductCondition.all,
     this.hidePhone = false,
-    this.status = AdStatus.pending,
+    this.status = AdvertStatus.pending,
     this.views = 0,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
@@ -58,6 +62,7 @@ class AdvertModel {
         ' price: $price,'
         ' hidePhone: $hidePhone,'
         ' status: $status,'
+        ' condition: $condition,'
         ' views: $views,'
         ' createdAt: $createdAt)';
   }

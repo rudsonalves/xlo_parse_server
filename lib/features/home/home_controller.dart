@@ -16,7 +16,9 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
+import '../../common/models/filter.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import 'home_state.dart';
@@ -27,6 +29,9 @@ class HomeController extends ChangeNotifier {
 
   final app = AppSettings.instance;
   final CurrentUser? user = CurrentUser.instance;
+
+  FilterModel? filter;
+  String? get search => app.search;
 
   void init() {}
 

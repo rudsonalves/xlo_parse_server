@@ -31,8 +31,7 @@ class BaseController extends ChangeNotifier {
   final ValueNotifier<String> _pageTitle = ValueNotifier<String>('XLO');
   final currentUser = CurrentUser.instance;
 
-  String? _search;
-  String? get search => _search;
+  String? get search => app.search;
 
   int _page = 0;
   int get page => _page;
@@ -66,7 +65,7 @@ class BaseController extends ChangeNotifier {
   void jumpToPage(int page) {
     _page = page;
     if (_page == 0) {
-      _pageTitle.value = _search ?? titles[0];
+      _pageTitle.value = app.search ?? titles[0];
     } else {
       _pageTitle.value = titles[_page];
     }
@@ -75,9 +74,9 @@ class BaseController extends ChangeNotifier {
   }
 
   void setSearch(String? value) {
-    _search = value;
+    app.search = value;
     if (_page == 0) {
-      _pageTitle.value = _search ?? titles[0];
+      _pageTitle.value = app.search ?? titles[0];
     }
   }
 }

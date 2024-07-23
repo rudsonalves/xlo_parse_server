@@ -21,7 +21,88 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
-## 2024/07/18 - version: 0.3.4+10
+## 2024/07/23 - version: 0.3.5+11
+
+Introduced `ProductCondition` Enum and Refactored `Advert` Models.
+
+1. `lib/common/models/advert.dart`
+   - Renamed `AdStatus` to `AdvertStatus`.
+   - Added new `ProductCondition` enum.
+   - Updated `AdvertModel` to include `condition` property with default value `ProductCondition.all`.
+   - Modified constructor to initialize `condition`.
+   - Updated `toString` method to include `condition`.
+
+2. `lib/common/models/filter.dart`
+   - Imported `advert.dart`.
+   - Removed `AdvertiserOrder` enum.
+   - Updated `FilterModel` to include `condition` property with default value `ProductCondition.all`.
+   - Modified constructor to initialize `condition`.
+   - Updated `isEmpty`, `toString`, `==`, and `hashCode` methods to include `condition`.
+
+3. `lib/common/models/user.dart`
+   - Commented out `UserType` enum.
+   - Removed `type` property from `UserModel` and related methods.
+
+4. `lib/common/singletons/app_settings.dart`
+   - Added `search` property to `AppSettings`.
+
+5. `lib/features/advertisement/advert_controller.dart`
+   - Added `_condition` property with default value `ProductCondition.used`.
+   - Added getter for `condition`.
+   - Updated `saveAdvert` method to include `condition`.
+   - Added `setCondition` method.
+
+6. `lib/features/advertisement/widgets/advert_form.dart`
+   - Imported `advert.dart`.
+   - Updated variable name `controller` to `ctrl`.
+   - Added UI components to select product condition.
+   - Updated form fields to use `ctrl`.
+
+7. `lib/features/base/base_controller.dart`
+   - Updated `search` property to use `app.search`.
+   - Updated `setSearch` method to use `app.search`.
+
+8. `lib/features/filters/filters_controller.dart`
+   - Imported `advert.dart`.
+   - Updated `advertiser` property and related methods to use `condition`.
+
+9. `lib/features/filters/filters_screen.dart`
+   - Imported `advert.dart`.
+   - Updated UI components to select product condition instead of advertiser.
+
+10. `lib/features/home/home_controller.dart`
+    - Imported `filter.dart`.
+    - Added `filter` property to `HomeController`.
+    - Updated `search` property to use `app.search`.
+
+11. `lib/features/home/home_screen.dart`
+    - Imported `advert_repository.dart`.
+    - Updated floating action button to perform search using `AdvertRepository`.
+
+12. `lib/repository/advert_repository.dart`
+    - Added `getAdvertisements` method to fetch ads based on filter and search criteria.
+    - Updated `save` method to include `condition`.
+    - Updated `_parserServerToAdSale` method to parse `condition`.
+
+13. `lib/repository/constants.dart`
+    - Added `keyAdvertCondition` constant.
+
+14. `lib/repository/user_repository.dart`
+    - Commented out `type` property setting and retrieval in `UserRepository`.
+
+15. `lib/features/home/home_screen.dart`
+    - Updated the floating action button to fetch advertisements using the new `filter` property in `HomeController`.
+    - Updated the navigation to the `FiltersScreen` to pass and receive the updated `filter` property.
+
+16. `lib/repository/advert_repository.dart`
+    - Added filtering logic in `getAdvertisements` to consider `ProductCondition`.
+    - Ensured all advertisement-related operations include the new `condition` property.
+    - Updated parsing logic to correctly handle `condition` values from the server.
+
+These changes enhance the flexibility of the advertisement system by allowing users to filter ads based on the condition of the product. This refactoring also simplifies the advertisement model by consolidating advertiser-related properties into the condition. Introduces the `ProductCondition` enum and refactors several models and controllers to support this new property, enhancing the filtering capabilities of advertisements. 
+
+
+## 2024/07/22 - version: 0.3.4+10
 
 Add enhancements and refactor filter and home functionalities
 

@@ -22,9 +22,81 @@ import 'package:path/path.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../common/models/advert.dart';
+import '../common/models/filter.dart';
 import 'constants.dart';
 
 class AdvertRepository {
+  static Future<List<AdvertModel>?> getAdvertisements({
+    required FilterModel? filter,
+    required String? search,
+  }) async {
+    search = search ?? '';
+    filter = filter ?? FilterModel();
+    final queryBuilder = QueryBuilder<ParseObject>(ParseObject(keyAdvertTable));
+
+    queryBuilder.setLimit(20);
+    queryBuilder.whereEqualTo(keyAdvertStatus, AdvertStatus.pending.index);
+
+    // Filter by search String
+    if (search.trim().isEmpty) {
+      queryBuilder.whereContains(
+        keyAdvertTitle,
+        search.trim(),
+        caseSensitive: false,
+      );
+    }
+
+    // Filter by machanics
+    if (filter.mechanicsId.isNotEmpty) {
+      for (final mechId in filter.mechanicsId) {
+        final mechParse = ParseObject(keyMechanicTable)
+          ..set(keyMechanicId, mechId);
+        queryBuilder.whereEqualTo(keyAdvertMechanics, mechParse.toPointer());
+      }
+    }
+
+    switch (filter.sortBy) {
+      case SortOrder.price:
+        // Filter by price
+        queryBuilder.orderByAscending(keyAdvertPrice);
+        break;
+      case SortOrder.date:
+      default:
+        // Filter by date
+        queryBuilder.orderByAscending(keyAdvertCreatedAt);
+    }
+
+    // Filter minPrice
+    if (filter.minPrice > 0) {
+      queryBuilder.whereGreaterThanOrEqualsTo(keyAdvertPrice, filter.minPrice);
+    }
+
+    // Filter maxPrice
+    if (filter.maxPrice > 0) {
+      queryBuilder.whereLessThanOrEqualTo(keyAdvertPrice, filter.maxPrice);
+    }
+
+    // Filter by
+    if (filter.condition != ProductCondition.all) {
+      queryBuilder.whereEqualTo(keyAdvertCondition, filter.condition.index);
+    }
+
+    final response = await queryBuilder.query();
+    if (!response.success) {
+      log(response.error.toString());
+      return null;
+    }
+
+    if (response.results == null) {
+      log('Search return a empty list');
+      return null;
+    }
+
+    return response.results!
+        .map((ad) => _parserServerToAdSale(ad as ParseObject))
+        .toList();
+  }
+
   static Future<AdvertModel?> save(AdvertModel advert) async {
     List<ParseFile> parseImages = [];
 
@@ -61,7 +133,8 @@ class AdvertRepository {
         ..set<String>(keyAdvertDescription, advert.description)
         ..set<bool>(keyAdvertHidePhone, advert.hidePhone)
         ..set<double>(keyAdvertPrice, advert.price)
-        ..set<String>(keyAdvertStatus, advert.status.name)
+        ..set<int>(keyAdvertStatus, advert.status.index)
+        ..set<int>(keyAdvertCondition, advert.condition.index)
         ..set<ParseObject>(keyAdvertAddress, parseAddress)
         ..set<List<ParseFile>>(keyAdvertImages, parseImages)
         ..set<List<ParseObject>>(keyAdvertMechanics, parseMechanics);
@@ -131,21 +204,22 @@ class AdvertRepository {
     return AdvertModel(
       id: parseAd.objectId,
       userId: parseAd.get<ParseUser>(keyAdvertOwner)!.objectId!,
-      images: parseAd
-          .get<List<ParseFile>>(keyAdvertImages)!
-          .map((item) => item.url!)
+      images: (parseAd.get<List<dynamic>>(keyAdvertImages) as List<dynamic>)
+          .map((item) => (item as ParseFile).url!)
           .toList(),
       title: parseAd.get<String>(keyAdvertTitle)!,
       description: parseAd.get<String>(keyAdvertDescription)!,
-      mechanicsId: parseAd
-          .get<List<ParseObject>>(keyAdvertMechanics)!
-          .map((item) => item.objectId!)
-          .toList(),
+      mechanicsId:
+          (parseAd.get<List<dynamic>>(keyAdvertMechanics) as List<dynamic>)
+              .map((item) => (item as ParseObject).objectId!)
+              .toList(),
       addressId: parseAd.get<ParseObject>(keyAdvertAddress)!.objectId!,
-      price: parseAd.get<double>(keyAdvertPrice)!,
+      price: parseAd.get<num>(keyAdvertPrice)!.toDouble(),
       hidePhone: parseAd.get<bool>(keyAdvertHidePhone)!,
-      status: AdStatus.values
-          .firstWhere((s) => s.name == parseAd.get<String>(keyAdvertStatus)!),
+      status: AdvertStatus.values
+          .firstWhere((s) => s.index == parseAd.get<int>(keyAdvertStatus)!),
+      condition: ProductCondition.values
+          .firstWhere((c) => c.index == parseAd.get<int>(keyAdvertCondition)),
     );
   }
 }
