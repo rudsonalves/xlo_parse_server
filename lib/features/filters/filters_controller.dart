@@ -19,6 +19,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
+import '../../common/models/advert.dart';
 import '../../common/models/city.dart';
 import '../../common/models/filter.dart';
 import '../../common/models/state.dart';
@@ -58,9 +59,9 @@ class FiltersController extends ChangeNotifier {
 
   final _filter = FilterModel();
   SortOrder get sortBy => _filter.sortBy;
-  AdvertiserOrder get advertiser => _filter.advertiser;
+  ProductCondition get advertiser => _filter.condition;
   set sortBy(SortOrder sortBy) => _filter.sortBy = sortBy;
-  set advertiser(AdvertiserOrder advertiser) => _filter.advertiser = advertiser;
+  set advertiser(ProductCondition advertiser) => _filter.condition = advertiser;
 
   final stateFocus = FocusNode();
   final cityFocus = FocusNode();
@@ -94,7 +95,7 @@ class FiltersController extends ChangeNotifier {
     stateController.text = filter.state;
     cityController.text = filter.city;
     _filter.sortBy = filter.sortBy;
-    _filter.advertiser = filter.advertiser;
+    _filter.condition = filter.condition;
     _selectedMechIds.clear();
     _selectedMechIds.addAll(filter.mechanicsId);
 
@@ -110,7 +111,7 @@ class FiltersController extends ChangeNotifier {
         state: stateController.text.trim(),
         city: cityController.text.trim(),
         sortBy: _filter.sortBy,
-        advertiser: _filter.advertiser,
+        condition: _filter.condition,
         mechanicsId: selectedMechIds,
         minPrice: minPriceController.currencyValue.toInt(),
         maxPrice: maxPriceController.currencyValue.toInt(),

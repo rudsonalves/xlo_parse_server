@@ -52,4 +52,5 @@ const keyAdvertMechanics = 'mechanic';
 const keyAdvertImages = 'images';
 const keyAdvertAddress = 'address';
 const keyAdvertViews = 'views';
+const keyAdvertCondition = 'condition';
 const keyAdvertCreatedAt = 'createdAt';

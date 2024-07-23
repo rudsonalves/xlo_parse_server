@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../common/models/advert.dart';
 import '../../common/models/filter.dart';
 import '../../components/buttons/big_button.dart';
 import '../mecanics/mecanics_screen.dart';
@@ -204,27 +205,27 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             }
                             return Container();
                           }),
-                      const TextTitle('Anunciante'),
+                      const TextTitle('Estado do produto'),
                       Row(
                         children: [
                           Expanded(
-                            child: SegmentedButton<AdvertiserOrder>(
+                            child: SegmentedButton<ProductCondition>(
                               multiSelectionEnabled: false,
                               segments: const [
                                 ButtonSegment(
-                                  value: AdvertiserOrder.all,
+                                  value: ProductCondition.all,
                                   icon: Icon(Icons.people_alt_outlined),
                                   label: Text('Todos'),
                                 ),
                                 ButtonSegment(
-                                  value: AdvertiserOrder.particular,
+                                  value: ProductCondition.used,
                                   icon: Icon(Icons.person),
-                                  label: Text('Particular'),
+                                  label: Text('Usado'),
                                 ),
                                 ButtonSegment(
-                                  value: AdvertiserOrder.commercial,
+                                  value: ProductCondition.sealed,
                                   icon: Icon(Icons.store),
-                                  label: Text('Comercial'),
+                                  label: Text('Lacrado'),
                                 ),
                               ],
                               selected: {ctrl.advertiser},

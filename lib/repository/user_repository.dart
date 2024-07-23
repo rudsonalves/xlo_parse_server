@@ -27,7 +27,7 @@ class UserRepository {
     parseUser.set<String>(keyUserName, user.email);
     parseUser.set<String>(keyUserNickname, user.name!);
     parseUser.set<String>(keyUserPhone, user.phone!);
-    parseUser.set<int>(keyUserType, user.type.index);
+    // parseUser.set<int>(keyUserType, user.type.index);
 
     final response = await parseUser.signUp();
     if (!response.success) {
@@ -76,7 +76,7 @@ class UserRepository {
       name: parseUser.get<String>(keyUserNickname),
       email: parseUser.username!,
       phone: parseUser.get<String>(keyUserPhone),
-      type: UserType.values[parseUser.get(keyUserType)],
+      // type: UserType.values[parseUser.get(keyUserType)],
       createdAt: parseUser.createdAt,
     );
   }

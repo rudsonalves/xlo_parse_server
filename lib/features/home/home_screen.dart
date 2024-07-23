@@ -15,7 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/repository/advert_repository.dart';
 
 import '../../common/models/filter.dart';
 import '../filters/filters_screen.dart';
@@ -39,11 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
     ctrl.init();
   }
 
-  FilterModel? _filter;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.search),
+        onPressed: () async {
+          final result = await AdvertRepository.getAdvertisements(
+              filter: ctrl.filter ?? FilterModel(), search: ctrl.search);
+          log(result.toString());
+        },
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -52,12 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                  isSelected: _filter != null && !_filter!.isEmpty,
+                  isSelected: ctrl.filter != null && !ctrl.filter!.isEmpty,
                   onPressed: () async {
-                    _filter = await Navigator.pushNamed(
+                    ctrl.filter = await Navigator.pushNamed(
                       context,
                       FiltersScreen.routeName,
-                      arguments: _filter,
+                      arguments: ctrl.filter,
                     ) as FilterModel?;
                     setState(() {});
                   },

@@ -18,7 +18,7 @@ import 'dart:convert';
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-enum UserType { particular, professional }
+// enum UserType { particular, professional }
 
 class UserModel {
   String? id;
@@ -26,7 +26,7 @@ class UserModel {
   String email;
   String? phone;
   String? password;
-  UserType type;
+  // UserType type;
   DateTime? createAt;
 
   UserModel({
@@ -35,7 +35,7 @@ class UserModel {
     required this.email,
     this.phone,
     this.password,
-    this.type = UserType.particular,
+    // this.type = UserType.particular,
     DateTime? createdAt,
   }) : createAt = createdAt ?? DateTime.now();
 
@@ -55,7 +55,7 @@ class UserModel {
       email: user.email,
       phone: user.phone,
       password: user.password,
-      type: user.type,
+      // type: user.type,
       createdAt: user.createAt,
     );
   }
@@ -67,7 +67,7 @@ class UserModel {
       'email': email,
       'phone': phone,
       'password': password,
-      'type': type.name,
+      // 'type': type.name,
       'createdAt': createAt?.millisecondsSinceEpoch,
     };
   }
@@ -79,7 +79,7 @@ class UserModel {
       email: map['email'] as String,
       phone: map['phone'] != null ? map['phone'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
-      type: UserType.values[map['type']],
+      // type: UserType.values[map['type']],
       createdAt: map['createdAt'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['createAt'] as int)
           : null,

@@ -28,6 +28,8 @@ class AppSettings {
   ValueNotifier<Brightness> get brightness => _brightness;
   bool get isDark => _brightness.value == Brightness.dark;
 
+  String? search;
+
   // Future<void> init() async {}
 
   void toggleBrightnessMode() {
