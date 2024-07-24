@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../common/theme/text_styles.dart';
+import '../../../common/theme/app_text_style.dart';
 
 class TextTitle extends StatelessWidget {
   final String title;
@@ -35,7 +35,7 @@ class TextTitle extends StatelessWidget {
       padding: const EdgeInsets.only(top: 12, bottom: 8),
       child: Text(
         title,
-        style: TextStyles.bodyTitle.copyWith(
+        style: AppTextStyle.font18SemiBold.copyWith(
           color: colorScheme.primary,
         ),
       ),

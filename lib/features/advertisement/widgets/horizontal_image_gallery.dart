@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -82,7 +81,6 @@ class _HotizontalImageGalleryState extends State<HotizontalImageGallery> {
     );
 
     if (croppedFile != null) {
-      log(croppedFile.path);
       widget.addImage(croppedFile.path);
     }
   }

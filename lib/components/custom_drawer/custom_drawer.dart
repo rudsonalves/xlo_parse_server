@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../features/login/login_screen.dart';
+import '../../repository/user_repository.dart';
 import 'widgets/custom_drawer_header.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -109,6 +110,14 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               changeToPage(4);
               Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Sair'),
+            selected: pageController.page == 4,
+            onTap: () async {
+              await UserRepository.logout();
             },
           ),
         ],

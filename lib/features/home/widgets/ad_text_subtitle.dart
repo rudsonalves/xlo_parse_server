@@ -16,29 +16,24 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/common/theme/app_text_style.dart';
 
-class AppSettings {
-  AppSettings._();
-  static final _instance = AppSettings._();
-  static AppSettings get instance => _instance;
+class AdTextSubtitle extends StatelessWidget {
+  final String text;
 
-  final ValueNotifier<Brightness> _brightness =
-      ValueNotifier<Brightness>(Brightness.dark);
+  const AdTextSubtitle(
+    this.text, {
+    super.key,
+  });
 
-  ValueNotifier<Brightness> get brightness => _brightness;
-  bool get isDark => _brightness.value == Brightness.dark;
-
-  void toggleBrightnessMode() {
-    _brightness.value = _brightness.value == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
-  }
-
-  void setBrightnessMode(Brightness brightness) {
-    _brightness.value = brightness;
-  }
-
-  void dispose() {
-    _brightness.dispose();
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      maxLines: 2,
+      style: AppTextStyle.font16,
+      overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.start,
+    );
   }
 }

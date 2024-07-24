@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import '../../common/parse_server/errors_mensages.dart';
@@ -66,7 +64,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ' Verifique a sua caixa de mensagem (${user.email}) para'
               ' confirmar seu cadastro.',
         );
-        log('user: $user');
         if (mounted) Navigator.pop(context);
         return;
       } catch (err) {

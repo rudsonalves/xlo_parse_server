@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
+import '../../common/models/filter.dart';
 import '../../components/custom_drawer/custom_drawer.dart';
 import '../account/account_screen.dart';
 import '../chat/chat_screen.dart';
 import '../favorites/favorites_screen.dart';
+import '../filters/filters_screen.dart';
 import '../home/home_screen.dart';
 import '../advertisement/advert_screen.dart';
 import 'base_controller.dart';
@@ -39,28 +39,28 @@ class BaseScreen extends StatefulWidget {
 }
 
 class _BaseScreenState extends State<BaseScreen> {
-  final controller = BaseController();
+  final ctrl = BaseController();
 
   @override
   void initState() {
     super.initState();
-    controller.init();
+    ctrl.init();
   }
 
   void _changeToPage(int page) {
-    controller.jumpToPage(page);
+    ctrl.jumpToPage(page);
   }
 
   Widget get titleWidget {
-    if (controller.page == 0) {
-      return (controller.search != null && controller.search!.isNotEmpty)
+    if (ctrl.page == 0) {
+      return (ctrl.searchString.isNotEmpty)
           ? GestureDetector(
               onTap: _openSearchDialog,
               child: LayoutBuilder(
                 builder: (context, constraints) => SizedBox(
                   width: constraints.biggest.width,
                   child: Text(
-                    controller.search!,
+                    ctrl.searchString,
                     style: const TextStyle(
                       fontSize: 16,
                     ),
@@ -68,9 +68,9 @@ class _BaseScreenState extends State<BaseScreen> {
                 ),
               ),
             )
-          : Text(controller.titleNotifier.value);
+          : Text(ctrl.titleNotifier.value);
     } else {
-      return Text(controller.titleNotifier.value);
+      return Text(ctrl.titleNotifier.value);
     }
   }
 
@@ -80,16 +80,27 @@ class _BaseScreenState extends State<BaseScreen> {
       delegate: SearchDialog(),
     );
 
-    // String? result = await showDialog<String?>(
-    //   context: context,
-    //   builder: (_) => SearchDialog(search: controller.search),
-    // );
-
     if (result != null && result.isEmpty) {
       result = null;
     }
-    log('BS $result');
-    controller.setSearch(result);
+    ctrl.setSearch(result ?? '');
+  }
+
+  Future<void> _cleanSearch() async {
+    ctrl.setSearch('');
+  }
+
+  Future<void> _filterSearch() async {
+    ctrl.filter = await Navigator.pushNamed(
+          context,
+          FiltersScreen.routeName,
+          arguments: ctrl.filter,
+        ) as FilterModel? ??
+        FilterModel();
+  }
+
+  Future<void> _filterClean() async {
+    ctrl.filter = FilterModel();
   }
 
   @override
@@ -98,9 +109,9 @@ class _BaseScreenState extends State<BaseScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: ValueListenableBuilder(
-          valueListenable: controller.titleNotifier,
-          builder: (context, _, __) {
+        title: ListenableBuilder(
+          listenable: ctrl.titleNotifier,
+          builder: (context, _) {
             return titleWidget;
           },
         ),
@@ -108,21 +119,61 @@ class _BaseScreenState extends State<BaseScreen> {
         elevation: 5,
         actions: [
           ListenableBuilder(
-            listenable: controller.titleNotifier,
+            listenable: ctrl.titleNotifier,
             builder: (context, _) {
-              return (controller.page == 0)
-                  ? IconButton(
-                      onPressed: _openSearchDialog,
-                      icon: const Icon(
-                        Icons.search,
-                      ),
+              return (ctrl.page == 0)
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        InkWell(
+                          onTap: _openSearchDialog,
+                          onLongPress: _cleanSearch,
+                          borderRadius: BorderRadius.circular(50),
+                          child: Ink(
+                            decoration: const ShapeDecoration(
+                              shape: CircleBorder(),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                ctrl.searchString.isEmpty
+                                    ? Icons.search
+                                    : Icons.search_off,
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: _filterSearch,
+                          onLongPress: _filterClean,
+                          borderRadius: BorderRadius.circular(50),
+                          child: Ink(
+                            decoration: const ShapeDecoration(
+                              shape: CircleBorder(),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListenableBuilder(
+                                listenable: ctrl.searchFilter.filterNotifier,
+                                builder: (context, _) {
+                                  return Icon(
+                                    ctrl.filter == FilterModel()
+                                        ? Icons.filter_alt_outlined
+                                        : Icons.filter_alt_rounded,
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     )
                   : Container();
             },
           ),
           IconButton(
-            isSelected: controller.app.isDark,
-            onPressed: controller.app.toggleBrightnessMode,
+            isSelected: ctrl.app.isDark,
+            onPressed: ctrl.app.toggleBrightnessMode,
             icon: const Icon(Icons.light_mode),
             selectedIcon: const Icon(Icons.dark_mode),
           ),
@@ -130,16 +181,16 @@ class _BaseScreenState extends State<BaseScreen> {
       ),
       drawer: CustomDrawer(
           colorScheme: colorScheme,
-          pageController: controller.pageController,
+          pageController: ctrl.pageController,
           changeToPage: _changeToPage),
       body: ListenableBuilder(
-        listenable: controller,
+        listenable: ctrl,
         builder: (context, _) {
           return Stack(
             children: [
               Positioned.fill(
                 child: PageView(
-                  controller: controller.pageController,
+                  controller: ctrl.pageController,
                   physics: const NeverScrollableScrollPhysics(),
                   children: const [
                     HomeScreen(),
@@ -150,7 +201,7 @@ class _BaseScreenState extends State<BaseScreen> {
                   ],
                 ),
               ),
-              if (controller.state is BaseStateLoading)
+              if (ctrl.state is BaseStateLoading)
                 const Positioned.fill(
                   child: Center(
                     child: CircularProgressIndicator(),
@@ -160,88 +211,6 @@ class _BaseScreenState extends State<BaseScreen> {
           );
         },
       ),
-    );
-  }
-}
-
-class DataSearch extends SearchDelegate<String> {
-  final cities = [
-    'City 1',
-    'City 2',
-    'City 3',
-    // Add as many city names as you need
-  ];
-
-  final recentCities = [
-    'City 1',
-    'City 2',
-  ];
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          query = '';
-        },
-        icon: const Icon(Icons.clear),
-      ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
-      ),
-      onPressed: () {
-        close(context, '');
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return SizedBox(
-      width: 100.0,
-      height: 100.0,
-      child: Card(
-        color: Colors.red,
-        child: Center(
-          child: Text(query),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final suggestionList = query.isEmpty
-        ? recentCities
-        : cities.where((c) => c.startsWith(query)).toList();
-
-    return ListView.builder(
-      itemBuilder: (context, index) => ListTile(
-        onTap: () {
-          showResults(context);
-        },
-        leading: const Icon(Icons.location_city),
-        title: RichText(
-          text: TextSpan(
-            text: suggestionList[index].substring(0, query.length),
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold),
-            children: [
-              TextSpan(
-                text: suggestionList[index].substring(query.length),
-                style: const TextStyle(color: Colors.grey),
-              ),
-            ],
-          ),
-        ),
-      ),
-      itemCount: suggestionList.length,
     );
   }
 }

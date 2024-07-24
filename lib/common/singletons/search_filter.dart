@@ -17,11 +17,28 @@
 
 import 'package:flutter/material.dart';
 
-class TextStyles {
-  TextStyles._();
+import '../models/filter.dart';
 
-  static TextStyle bodyTitle = const TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-  );
+class SearchFilter {
+  SearchFilter._();
+  static final _instance = SearchFilter._();
+  static SearchFilter get instance => _instance;
+
+  final _search = ValueNotifier<String>('');
+
+  String get searchString => _search.value;
+  set searchString(String value) => _search.value = value;
+  ValueNotifier<String> get search => _search;
+
+  final _filter = FilterModel();
+  final _filterNotifier = ValueNotifier<bool>(false);
+  FilterModel get filter => _filter;
+  ValueNotifier<bool> get filterNotifier => _filterNotifier;
+
+  void updateFilter(FilterModel newFilter) {
+    if (newFilter != _filter) {
+      _filter.setFilter(newFilter);
+      _filterNotifier.value = !_filterNotifier.value;
+    }
+  }
 }

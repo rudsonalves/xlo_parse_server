@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
@@ -17,8 +15,6 @@ import 'dart:convert';
 //
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
-
-// enum UserType { particular, professional }
 
 class UserModel {
   String? id;
@@ -59,35 +55,4 @@ class UserModel {
       createdAt: user.createAt,
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'password': password,
-      // 'type': type.name,
-      'createdAt': createAt?.millisecondsSinceEpoch,
-    };
-  }
-
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      id: map['id'] != null ? map['id'] as String : null,
-      name: map['name'] != null ? map['name'] as String : null,
-      email: map['email'] as String,
-      phone: map['phone'] != null ? map['phone'] as String : null,
-      password: map['password'] != null ? map['password'] as String : null,
-      // type: UserType.values[map['type']],
-      createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createAt'] as int)
-          : null,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

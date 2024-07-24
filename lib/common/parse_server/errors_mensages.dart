@@ -15,11 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 class ParserServerErrors {
   static String message(Object err) {
-    log(err.toString());
     final code = _getErroCode(err.toString());
 
     switch (code) {
