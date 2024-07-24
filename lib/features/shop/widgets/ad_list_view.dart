@@ -18,13 +18,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../home_controller.dart';
+import '../shop_controller.dart';
 import 'ad_text_info.dart';
 import 'ad_text_price.dart';
 import 'ad_text_title.dart';
 
 class AdListView extends StatefulWidget {
-  final HomeController ctrl;
+  final ShopController ctrl;
   const AdListView({
     super.key,
     required this.ctrl,
@@ -36,7 +36,7 @@ class AdListView extends StatefulWidget {
 
 class _AdListViewState extends State<AdListView> {
   final _scrollController = ScrollController();
-  late final HomeController ctrl;
+  late final ShopController ctrl;
   double scrollPosition = 0;
 
   @override

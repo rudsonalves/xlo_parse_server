@@ -25,11 +25,11 @@ import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../common/singletons/search_filter.dart';
 import '../../repository/advert_repository.dart';
-import 'home_state.dart';
+import 'shop_state.dart';
 
-class HomeController extends ChangeNotifier {
-  HomeState _state = HomeStateInitial();
-  HomeState get state => _state;
+class ShopController extends ChangeNotifier {
+  ShopState _state = ShopStateInitial();
+  ShopState get state => _state;
 
   final app = AppSettings.instance;
   final CurrentUser? user = CurrentUser.instance;
@@ -57,14 +57,14 @@ class HomeController extends ChangeNotifier {
     searchFilter.search.addListener(getAds);
   }
 
-  void _changeState(HomeState newState) {
+  void _changeState(ShopState newState) {
     _state = newState;
     notifyListeners();
   }
 
   Future<void> getAds() async {
     try {
-      _changeState(HomeStateLoading());
+      _changeState(ShopeStateLoading());
       final result = await AdvertRepository.get(
         filter: filter,
         search: searchFilter.searchString,
@@ -75,10 +75,10 @@ class HomeController extends ChangeNotifier {
         _ads.addAll(result);
         _getMorePages = AdvertRepository.maxAdsPerList == result.length;
       }
-      _changeState(HomeStateSuccess());
+      _changeState(ShopeStateSuccess());
     } catch (err) {
       log(err.toString());
-      _changeState(HomeStateError());
+      _changeState(ShopeStateError());
     }
   }
 
@@ -86,7 +86,7 @@ class HomeController extends ChangeNotifier {
     if (!_getMorePages) return;
     _adPage++;
     try {
-      _changeState(HomeStateLoading());
+      _changeState(ShopeStateLoading());
       final result = await AdvertRepository.get(
         filter: filter,
         search: searchFilter.searchString,
@@ -98,10 +98,10 @@ class HomeController extends ChangeNotifier {
       } else {
         _getMorePages = false;
       }
-      _changeState(HomeStateSuccess());
+      _changeState(ShopeStateSuccess());
     } catch (err) {
       log(err.toString());
-      _changeState(HomeStateError());
+      _changeState(ShopeStateError());
     }
   }
 }

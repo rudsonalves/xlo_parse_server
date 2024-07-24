@@ -19,17 +19,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'common/models/address.dart';
+import 'common/models/advert.dart';
 import 'common/models/filter.dart';
 import 'common/singletons/app_settings.dart';
 import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
 import 'features/account/account_screen.dart';
 import 'features/address/address_screen.dart';
+import 'features/product/product_screen.dart';
 import 'features/base/base_screen.dart';
 import 'features/filters/filters_screen.dart';
 import 'features/mecanics/mecanics_screen.dart';
 import 'features/chat/chat_screen.dart';
-import 'features/home/home_screen.dart';
+import 'features/shop/shop_screen.dart';
 import 'features/advertisement/advert_screen.dart';
 import 'features/login/login_screen.dart';
 import 'features/new_address/new_address_screen.dart';
@@ -71,7 +73,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             locale: const Locale('pt', 'BR'),
             routes: {
               BaseScreen.routeName: (_) => const BaseScreen(),
-              HomeScreen.routeName: (_) => const HomeScreen(),
+              ShopScreen.routeName: (_) => const ShopScreen(),
               AdvertScreen.routeName: (_) => const AdvertScreen(),
               ChatScreen.routeName: (_) => const ChatScreen(),
               AccountScreen.routeName: (_) => const AccountScreen(),
@@ -81,6 +83,14 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {
+                case ProductScreen.routeName:
+                  return MaterialPageRoute(
+                    builder: (context) {
+                      final advert = settings.arguments as AdvertModel;
+
+                      return ProductScreen(advert: advert);
+                    },
+                  );
                 case FiltersScreen.routeName:
                   return MaterialPageRoute(
                     builder: (context) {

@@ -15,12 +15,22 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-abstract class HomeState {}
+import 'package:flutter/material.dart';
 
-class HomeStateInitial extends HomeState {}
+import '../../common/models/advert.dart';
 
-class HomeStateLoading extends HomeState {}
+class ProductScreen extends StatelessWidget {
+  final AdvertModel advert;
 
-class HomeStateSuccess extends HomeState {}
+  const ProductScreen({
+    super.key,
+    required this.advert,
+  });
 
-class HomeStateError extends HomeState {}
+  static const routeName = 'single-advert';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
+  }
+}

@@ -19,21 +19,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/theme/app_text_style.dart';
-import 'home_controller.dart';
-import 'home_state.dart';
+import 'shop_controller.dart';
+import 'shop_state.dart';
 import 'widgets/ad_list_view.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class ShopScreen extends StatefulWidget {
+  const ShopScreen({super.key});
 
   static const routeName = '/shop';
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ShopScreen> createState() => _ShopScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final ctrl = HomeController();
+class _ShopScreenState extends State<ShopScreen> {
+  final ctrl = ShopController();
   final _scrollController = ScrollController();
 
   @override
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   // state HomeState Success
                   // empty search
-                  if (ctrl.ads.isEmpty && ctrl.state is HomeStateSuccess)
+                  if (ctrl.ads.isEmpty && ctrl.state is ShopeStateSuccess)
                     Center(
                       child: Column(
                         children: [
@@ -95,9 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                  if (ctrl.ads.isNotEmpty && ctrl.state is HomeStateSuccess)
+                  if (ctrl.ads.isNotEmpty && ctrl.state is ShopeStateSuccess)
                     AdListView(ctrl: ctrl),
-                  if (ctrl.state is HomeStateError)
+                  if (ctrl.state is ShopeStateError)
                     Positioned.fill(
                       child: Container(
                         color: colorScheme.surface.withOpacity(0.7),
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   // state HomeState Loading
-                  if (ctrl.state is HomeStateLoading)
+                  if (ctrl.state is ShopeStateLoading)
                     Positioned.fill(
                       child: Container(
                         color: colorScheme.surface.withOpacity(.7),
