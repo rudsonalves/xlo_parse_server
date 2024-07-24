@@ -19,65 +19,95 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../common/models/address.dart';
 import '../common/models/advert.dart';
+import '../common/models/mechanic.dart';
 import '../common/models/user.dart';
 import 'constants.dart';
 
+/// This class provides static methods to convert Parse objects to application
+/// models.
 class ParseToModel {
   ParseToModel._();
 
-  static UserModel user(ParseUser parseUser) {
+  /// Converts a ParseUser object to a UserModel.
+  ///
+  /// [parse] - The ParseUser object to convert.
+  /// Returns a UserModel representing the ParseUser.
+  static UserModel user(ParseUser parse) {
     return UserModel(
-      id: parseUser.objectId,
-      name: parseUser.get<String>(keyUserNickname),
-      email: parseUser.username!,
-      phone: parseUser.get<String>(keyUserPhone),
-      createdAt: parseUser.createdAt,
+      id: parse.objectId,
+      name: parse.get<String>(keyUserNickname),
+      email: parse.username!,
+      phone: parse.get<String>(keyUserPhone),
+      createdAt: parse.createdAt,
     );
   }
 
-  static AddressModel address(ParseObject parseAddress) {
+  /// Converts a ParseObject representing an address to an AddressModel.
+  ///
+  /// [parse] - The ParseObject to convert.
+  /// Returns an AddressModel representing the ParseObject.
+  static AddressModel address(ParseObject parse) {
     return AddressModel(
-      id: parseAddress.objectId,
-      name: parseAddress.get<String>(keyAddressName)!,
-      zipCode: parseAddress.get<String>(keyAddressZipCode)!,
-      userId: parseAddress.get<ParseUser>(keyAddressOwner)!.objectId!,
-      street: parseAddress.get<String>(keyAddressStreet)!,
-      number: parseAddress.get<String>(keyAddressNumber)!,
-      complement: parseAddress.get<String?>(keyAddressComplement),
-      neighborhood: parseAddress.get<String>(keyAddressNeighborhood)!,
-      state: parseAddress.get<String>(keyAddressState)!,
-      city: parseAddress.get<String>(keyAddressCity)!,
+      id: parse.objectId,
+      name: parse.get<String>(keyAddressName)!,
+      zipCode: parse.get<String>(keyAddressZipCode)!,
+      userId: parse.get<ParseUser>(keyAddressOwner)!.objectId!,
+      street: parse.get<String>(keyAddressStreet)!,
+      number: parse.get<String>(keyAddressNumber)!,
+      complement: parse.get<String?>(keyAddressComplement),
+      neighborhood: parse.get<String>(keyAddressNeighborhood)!,
+      state: parse.get<String>(keyAddressState)!,
+      city: parse.get<String>(keyAddressCity)!,
     );
   }
 
-  static AdvertModel? advert(ParseObject ad) {
-    final parseAddress = ad.get<ParseObject?>(keyAdvertAddress);
+  /// Converts a ParseObject representing an advertisement to an AdvertModel.
+  ///
+  /// [parse] - The ParseObject to convert.
+  /// Returns an AdvertModel representing the ParseObject if the address and
+  /// user are not null, otherwise returns null.
+  static AdvertModel? advert(ParseObject parse) {
+    final parseAddress = parse.get<ParseObject?>(keyAdvertAddress);
     if (parseAddress == null) return null;
     AddressModel? address = ParseToModel.address(parseAddress);
 
-    final parseUser = ad.get<ParseUser?>(keyAdvertOwner);
+    final parseUser = parse.get<ParseUser?>(keyAdvertOwner);
     if (parseUser == null) return null;
     final user = ParseToModel.user(parseUser);
 
     return AdvertModel(
-      id: ad.objectId,
+      id: parse.objectId,
       owner: user,
-      title: ad.get<String>(keyAdvertTitle)!,
-      description: ad.get<String>(keyAdvertDescription)!,
-      price: ad.get<num>(keyAdvertPrice)!.toDouble(),
-      hidePhone: ad.get<bool>(keyAdvertHidePhone)!,
-      images: (ad.get<List<dynamic>>(keyAdvertImages) as List<dynamic>)
+      title: parse.get<String>(keyAdvertTitle)!,
+      description: parse.get<String>(keyAdvertDescription)!,
+      price: parse.get<num>(keyAdvertPrice)!.toDouble(),
+      hidePhone: parse.get<bool>(keyAdvertHidePhone)!,
+      images: (parse.get<List<dynamic>>(keyAdvertImages) as List<dynamic>)
           .map((item) => (item as ParseFile).url!)
           .toList(),
-      mechanicsId: (ad.get<List<dynamic>>(keyAdvertMechanics) as List<dynamic>)
-          .map((item) => (item as ParseObject).objectId!)
-          .toList(),
+      mechanicsId:
+          (parse.get<List<dynamic>>(keyAdvertMechanics) as List<dynamic>)
+              .map((item) => (item as ParseObject).objectId!)
+              .toList(),
       address: address,
       status: AdvertStatus.values
-          .firstWhere((s) => s.index == ad.get<int>(keyAdvertStatus)!),
+          .firstWhere((s) => s.index == parse.get<int>(keyAdvertStatus)!),
       condition: ProductCondition.values
-          .firstWhere((c) => c.index == ad.get<int>(keyAdvertCondition)!),
-      views: ad.get<int>(keyAdvertViews, defaultValue: 0)!,
+          .firstWhere((c) => c.index == parse.get<int>(keyAdvertCondition)!),
+      views: parse.get<int>(keyAdvertViews, defaultValue: 0)!,
+    );
+  }
+
+  /// Converts a ParseObject representing a mechanic to a MechanicModel.
+  ///
+  /// [parse] - The ParseObject to convert.
+  /// Returns a MechanicModel representing the ParseObject.
+  static mechanic(ParseObject parse) {
+    return MechanicModel(
+      id: parse.objectId,
+      name: parse.get(keyMechanicName),
+      description: parse.get(keyMechanicDescription),
+      createAt: parse.createdAt,
     );
   }
 }

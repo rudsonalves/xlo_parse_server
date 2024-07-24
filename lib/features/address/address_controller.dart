@@ -47,7 +47,7 @@ class AddressController extends ChangeNotifier {
     if (name.isNotEmpty &&
         addressNames.isNotEmpty &&
         addressNames.contains(name)) {
-      await addressManager.deleteAddress(name);
+      await addressManager.delete(name);
       _selectedAddressName.value = '';
     }
   }

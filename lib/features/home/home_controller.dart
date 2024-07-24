@@ -65,7 +65,7 @@ class HomeController extends ChangeNotifier {
   Future<void> getAds() async {
     try {
       _changeState(HomeStateLoading());
-      final result = await AdvertRepository.getAdvertisements(
+      final result = await AdvertRepository.get(
         filter: filter,
         search: searchFilter.searchString,
         page: _adPage,
@@ -87,7 +87,7 @@ class HomeController extends ChangeNotifier {
     _adPage++;
     try {
       _changeState(HomeStateLoading());
-      final result = await AdvertRepository.getAdvertisements(
+      final result = await AdvertRepository.get(
         filter: filter,
         search: searchFilter.searchString,
         page: _adPage,

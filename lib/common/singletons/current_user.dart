@@ -45,8 +45,8 @@ class CurrentUser {
   }
 
   AddressModel? addressByName(String name) =>
-      addressManager.addressByName(name);
+      addressManager.getByUserName(name);
 
   Future<void> saveAddress(AddressModel address) async =>
-      addressManager.saveAddress(address);
+      addressManager.save(address);
 }

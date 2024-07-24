@@ -26,10 +26,20 @@ import '../common/models/filter.dart';
 import 'constants.dart';
 import 'parse_to_model.dart';
 
+/// This class provides methods to interact with the Parse Server
+/// to retrieve and save advertisements.
 class AdvertRepository {
   static const maxAdsPerList = 20;
 
-  static Future<List<AdvertModel>?> getAdvertisements({
+  /// Fetches a list of advertisements from the Parse Server based on the
+  /// provided filters and search string.
+  ///
+  /// [filter] - The filter model to apply to the search.
+  /// [search] - The search string to filter advertisements by title.
+  /// [page] - The page number to retrieve, used for pagination.
+  /// Returns a list of `AdvertModel` if the query is successful, otherwise
+  /// returns `null`.
+  static Future<List<AdvertModel>?> get({
     required FilterModel filter,
     required String search,
     int page = 0,
@@ -95,7 +105,7 @@ class AdvertRepository {
       }
 
       if (response.results == null) {
-        throw Exception('Search return a empty list');
+        throw Exception('search return a empty list');
       }
 
       List<AdvertModel> ads = [];
@@ -106,11 +116,17 @@ class AdvertRepository {
 
       return ads;
     } catch (err) {
-      log('AdvertRepository.getAdvertisements: $err');
+      final message = 'AdvertRepository.getAdvertisements: $err';
+      log(message);
       return null;
     }
   }
 
+  /// Saves an advertisement to the Parse Server.
+  ///
+  /// [advert] - The advertisement model to save.
+  /// Returns the saved `AdvertModel` if successful, otherwise throws an
+  /// exception.
   static Future<AdvertModel?> save(AdvertModel advert) async {
     try {
       final parseUser = await ParseUser.currentUser() as ParseUser?;
@@ -165,11 +181,18 @@ class AdvertRepository {
 
       return ParseToModel.advert(parseAd);
     } catch (err) {
-      log(err.toString());
-      return null;
+      final message = 'AdvertRepository.save: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
+  /// Saves the images to the Parse Server.
+  ///
+  /// [imagesPaths] - The list of image paths to save.
+  /// [parseUser] - The current Parse user.
+  /// Returns a list of `ParseFile` representing the saved images.
+  /// Throws an exception if the save operation fails.
   static Future<List<ParseFile>> _saveImages(
     List<String> imagesPaths,
     ParseUser parseUser,
@@ -195,7 +218,7 @@ class AdvertRepository {
           }
 
           if (parseFile.url == null) {
-            throw Exception('Failed to get URL after saving the file');
+            throw Exception('failed to get URL after saving the file');
           }
 
           parseImages.add(parseFile);
@@ -207,7 +230,7 @@ class AdvertRepository {
 
       return parseImages;
     } catch (err) {
-      log('Exception in _saveImages: $err');
+      log('exception in _saveImages: $err');
       throw Exception(err);
     }
   }
