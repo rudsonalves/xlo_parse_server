@@ -19,22 +19,28 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../common/models/user.dart';
 import 'constants.dart';
+import 'parse_to_model.dart';
 
 class UserRepository {
   static Future<UserModel> signUp(UserModel user) async {
     final parseUser = ParseUser(user.email, user.password, user.email);
 
-    parseUser.set<String>(keyUserName, user.email);
-    parseUser.set<String>(keyUserNickname, user.name!);
-    parseUser.set<String>(keyUserPhone, user.phone!);
-    // parseUser.set<int>(keyUserType, user.type.index);
+    final parseAcl = ParseACL(owner: parseUser);
+    parseAcl.setPublicReadAccess(allowed: true);
+    parseAcl.setPublicWriteAccess(allowed: false);
+
+    parseUser
+      ..setACL(parseAcl)
+      ..set<String>(keyUserName, user.email)
+      ..set<String>(keyUserNickname, user.name!)
+      ..set<String>(keyUserPhone, user.phone!);
 
     final response = await parseUser.signUp();
     if (!response.success) {
-      throw Exception(response.error);
+      throw Exception('Error signing up: ${response.error?.message}');
     }
 
-    final newUser = _parseServerToUser(parseUser);
+    final newUser = ParseToModel.user(parseUser);
 
     parseUser.logout();
 
@@ -50,7 +56,13 @@ class UserRepository {
       throw Exception(response.error);
     }
 
-    return _parseServerToUser(parseUser);
+    return ParseToModel.user(parseUser);
+  }
+
+  static Future<void> logout() async {
+    final user = await ParseUser.currentUser() as ParseUser;
+
+    user.logout();
   }
 
   static Future<UserModel?> getCurrentUser() async {
@@ -62,22 +74,11 @@ class UserRepository {
         parseCurrentUser.sessionToken!);
 
     if (parseResponse != null && parseResponse.success) {
-      return _parseServerToUser(parseCurrentUser);
+      return ParseToModel.user(parseCurrentUser);
     } else {
       // Invalid session. Logout
       await parseCurrentUser.logout();
       return null;
     }
-  }
-
-  static UserModel _parseServerToUser(ParseUser parseUser) {
-    return UserModel(
-      id: parseUser.objectId,
-      name: parseUser.get<String>(keyUserNickname),
-      email: parseUser.username!,
-      phone: parseUser.get<String>(keyUserPhone),
-      // type: UserType.values[parseUser.get(keyUserType)],
-      createdAt: parseUser.createdAt,
-    );
   }
 }

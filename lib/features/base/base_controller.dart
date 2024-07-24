@@ -16,7 +16,9 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/common/singletons/search_filter.dart';
 
+import '../../common/models/filter.dart';
 import '../../common/singletons/current_user.dart';
 import 'base_state.dart';
 import '../../common/singletons/app_settings.dart';
@@ -30,8 +32,14 @@ class BaseController extends ChangeNotifier {
   final app = AppSettings.instance;
   final ValueNotifier<String> _pageTitle = ValueNotifier<String>('XLO');
   final currentUser = CurrentUser.instance;
+  final searchFilter = SearchFilter.instance;
 
-  String? get search => app.search;
+  String get searchString => searchFilter.searchString;
+
+  FilterModel get filter => searchFilter.filter;
+  set filter(FilterModel newFilter) {
+    searchFilter.updateFilter(newFilter);
+  }
 
   int _page = 0;
   int get page => _page;
@@ -65,7 +73,9 @@ class BaseController extends ChangeNotifier {
   void jumpToPage(int page) {
     _page = page;
     if (_page == 0) {
-      _pageTitle.value = app.search ?? titles[0];
+      _pageTitle.value = searchFilter.searchString.isEmpty
+          ? titles[0]
+          : searchFilter.searchString;
     } else {
       _pageTitle.value = titles[_page];
     }
@@ -73,10 +83,12 @@ class BaseController extends ChangeNotifier {
     pageController.jumpToPage(page);
   }
 
-  void setSearch(String? value) {
-    app.search = value;
+  void setSearch(String value) {
+    searchFilter.searchString = value;
     if (_page == 0) {
-      _pageTitle.value = app.search ?? titles[0];
+      _pageTitle.value = searchFilter.searchString.isEmpty
+          ? titles[0]
+          : searchFilter.searchString;
     }
   }
 }

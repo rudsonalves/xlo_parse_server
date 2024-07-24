@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,7 +46,6 @@ class SearchHistory {
       _history.clear();
       _history.addAll(prefs.getStringList(keySearchHistory) ?? []);
     }
-    log(_history.toString());
   }
 
   Future<void> saveHistory(String? value) async {
@@ -69,7 +66,6 @@ class SearchHistory {
 
     // save history
     await prefs.setStringList(keySearchHistory, _history);
-    log(_history.toString());
   }
 
   Iterable<String> searchInHistory(String value) {

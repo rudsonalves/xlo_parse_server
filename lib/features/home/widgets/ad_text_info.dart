@@ -16,29 +16,28 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/common/utils/extensions.dart';
 
-class AppSettings {
-  AppSettings._();
-  static final _instance = AppSettings._();
-  static AppSettings get instance => _instance;
+import '../../../common/theme/app_text_style.dart';
 
-  final ValueNotifier<Brightness> _brightness =
-      ValueNotifier<Brightness>(Brightness.dark);
+class AdTextInfo extends StatelessWidget {
+  final DateTime date;
+  final String city;
+  final String state;
 
-  ValueNotifier<Brightness> get brightness => _brightness;
-  bool get isDark => _brightness.value == Brightness.dark;
+  const AdTextInfo({
+    super.key,
+    required this.date,
+    required this.city,
+    required this.state,
+  });
 
-  void toggleBrightnessMode() {
-    _brightness.value = _brightness.value == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
-  }
-
-  void setBrightnessMode(Brightness brightness) {
-    _brightness.value = brightness;
-  }
-
-  void dispose() {
-    _brightness.dispose();
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '${date.formatDate()} - $city - $state',
+      style: AppTextStyle.font12,
+      textAlign: TextAlign.start,
+    );
   }
 }

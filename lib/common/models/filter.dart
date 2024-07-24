@@ -85,4 +85,14 @@ class FilterModel {
         minPrice.hashCode ^
         maxPrice.hashCode;
   }
+
+  void setFilter(FilterModel f) {
+    state = f.state;
+    city = f.city;
+    sortBy = f.sortBy;
+    condition = f.condition;
+    mechanicsId = f.mechanicsId;
+    minPrice = f.minPrice;
+    maxPrice = f.maxPrice;
+  }
 }

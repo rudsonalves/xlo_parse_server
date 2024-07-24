@@ -16,7 +16,6 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -43,10 +42,8 @@ class _SearchDialogState extends State<SearchDialog> {
   }
 
   Future<void> _submitted(String? value, [bool isSearchBar = false]) async {
-    log(value.toString());
     ctrl.search.closeView(value);
     await ctrl.saveHistory(value);
-    log('Returning: "$value"');
     if (!isSearchBar) {
       if (mounted) Navigator.pop(context, value);
     }

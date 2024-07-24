@@ -16,8 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -87,37 +85,9 @@ class SearchDialog extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // log('Do the search');
-    // final result = <String>[query];
-    // final colorScheme = Theme.of(context).colorScheme;
-
-    // if (result.length < 2) {
     WidgetsBinding.instance.addPostFrameCallback((_) => close(context, query));
     searchHistory.saveHistory(query);
     return Container();
-    // }
-
-    // return SizedBox(
-    //   width: 200,
-    //   height: 300,
-    //   child: Card(
-    //     color: colorScheme.secondaryContainer,
-    //     child: ListView(
-    //       children: result
-    //           .map<Widget>(
-    //             (item) => ListTile(
-    //               title: Text(item),
-    //               onTap: () {
-    //                 log('Selected: $query');
-    //                 query = item;
-    //                 close(context, query);
-    //               },
-    //             ),
-    //           )
-    //           .toList(),
-    //     ),
-    //   ),
-    // );
   }
 
   @override
@@ -139,8 +109,6 @@ class SearchDialog extends SearchDelegate<String> {
           title: Text(selected[index]),
           onTap: () {
             query = selected[index];
-            // buildResults(context);
-            // close(context, query);
           },
         ),
       ),
@@ -149,12 +117,6 @@ class SearchDialog extends SearchDelegate<String> {
 
   @override
   void close(BuildContext context, String result) {
-    log('SD $query');
     super.close(context, query);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

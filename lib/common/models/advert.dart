@@ -15,33 +15,36 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'address.dart';
+import 'user.dart';
+
 enum AdvertStatus { pending, active, sold, closed }
 
 enum ProductCondition { all, used, sealed }
 
 class AdvertModel {
   String? id;
-  String userId;
-  List<String> images;
-  String title;
+  UserModel owner;
   String description;
-  List<String> mechanicsId;
-  String addressId;
-  double price;
   bool hidePhone;
+  double price;
   AdvertStatus status;
+  String title;
+  List<String> mechanicsId;
+  AddressModel address;
+  List<String> images;
   ProductCondition condition;
   int views;
   DateTime createdAt;
 
   AdvertModel({
     this.id,
-    required this.userId,
+    required this.owner,
     required this.images,
     required this.title,
     required this.description,
     required this.mechanicsId,
-    required this.addressId,
+    required this.address,
     required this.price,
     this.condition = ProductCondition.all,
     this.hidePhone = false,
@@ -53,12 +56,12 @@ class AdvertModel {
   @override
   String toString() {
     return 'AdModel(id: $id,'
-        ' userId: $userId,'
+        ' owner: $owner,'
         ' images: ${images.toString()},'
         ' title: $title,'
         ' description: $description,'
         ' mechanics: $mechanicsId,'
-        ' address: $addressId,'
+        ' address: $address,'
         ' price: $price,'
         ' hidePhone: $hidePhone,'
         ' status: $status,'

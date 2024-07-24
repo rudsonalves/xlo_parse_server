@@ -122,12 +122,13 @@ class AdvertController extends ChangeNotifier {
       if (!formValit) return;
 
       final ad = AdvertModel(
-        userId: currentUser.userId,
+        owner: currentUser.user!,
         images: _images,
         title: titleController.text,
         description: descriptionController.text,
         mechanicsId: _selectedMechIds,
-        addressId: _selectedAddressId,
+        address: currentUser.addresses
+            .firstWhere((address) => address.id == _selectedAddressId),
         price: priceController.currencyValue,
         hidePhone: hidePhone.value,
         condition: _condition,

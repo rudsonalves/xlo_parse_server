@@ -15,9 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'common/models/address.dart';
 import 'common/models/filter.dart';
@@ -58,6 +57,18 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             theme: value == Brightness.light ? theme.light() : theme.dark(),
             debugShowCheckedModeBanner: false,
             initialRoute: BaseScreen.routeName,
+            localizationsDelegates: const [
+              // Adicione este delegate para suporte às localizações
+              // AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en', ''), // Inglês
+              Locale('pt', 'BR'), // Português do Brasil
+            ],
+            locale: const Locale('pt', 'BR'),
             routes: {
               BaseScreen.routeName: (_) => const BaseScreen(),
               HomeScreen.routeName: (_) => const HomeScreen(),
@@ -74,7 +85,6 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
                   return MaterialPageRoute(
                     builder: (context) {
                       final filter = settings.arguments as FilterModel?;
-                      log(filter.toString());
 
                       return FiltersScreen(filter);
                     },

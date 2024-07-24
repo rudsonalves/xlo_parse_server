@@ -18,34 +18,29 @@
 import 'dart:developer';
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'package:xlo_mobx/repository/constants.dart';
 
 import '../common/models/address.dart';
+import 'constants.dart';
+import 'parse_to_model.dart';
 
 class AddressRepository {
   static Future<AddressModel?> save(AddressModel address) async {
     try {
-      log('Save address');
       final parseAddress = ParseObject(keyAddressTable);
 
-      log('Get parseUser');
       final parseUser = await ParseUser.currentUser() as ParseUser?;
-      log('Get parseUser depois');
       if (parseUser == null) {
         throw Exception('Current user not found');
       }
 
-      log('Check if is a update address');
       if (address.id != null) {
         parseAddress.objectId = address.id;
       }
 
-      log('preper parseAcl');
       final parseAcl = ParseACL(owner: parseUser);
       parseAcl.setPublicReadAccess(allowed: true);
       parseAcl.setPublicWriteAccess(allowed: false);
 
-      log('parseAddress');
       parseAddress
         ..set<ParseUser>(keyAddressOwner, parseUser)
         ..set<String>(keyAddressName, address.name)
@@ -58,15 +53,13 @@ class AddressRepository {
         ..set<String>(keyAddressCity, address.city)
         ..setACL(parseAcl);
 
-      log('parseAddress.save');
       final response = await parseAddress.save();
       if (!response.success) {
         log('parseAddress.save error');
         throw Exception(response.error.toString());
       }
 
-      log('parseAddress.save success');
-      return _parseServerToAddress(parseAddress);
+      return ParseToModel.address(parseAddress);
     } catch (err) {
       log(err.toString());
       throw Exception(err);
@@ -116,7 +109,7 @@ class AddressRepository {
 
       if (response.results == null || response.results!.isEmpty) return [];
       addresses = response.results!
-          .map((parse) => _parseServerToAddress(parse as ParseObject))
+          .map((parse) => ParseToModel.address(parse as ParseObject))
           .toList();
 
       return addresses;
@@ -124,20 +117,5 @@ class AddressRepository {
       log(err.toString());
       throw Exception(err);
     }
-  }
-
-  static AddressModel _parseServerToAddress(ParseObject parseAddress) {
-    return AddressModel(
-      id: parseAddress.objectId,
-      name: parseAddress.get<String>(keyAddressName)!,
-      zipCode: parseAddress.get<String>(keyAddressZipCode)!,
-      userId: parseAddress.get<ParseUser>(keyAddressOwner)!.objectId!,
-      street: parseAddress.get<String>(keyAddressStreet)!,
-      number: parseAddress.get<String>(keyAddressNumber)!,
-      complement: parseAddress.get<String?>(keyAddressComplement),
-      neighborhood: parseAddress.get<String>(keyAddressNeighborhood)!,
-      state: parseAddress.get<String>(keyAddressState)!,
-      city: parseAddress.get<String>(keyAddressCity)!,
-    );
   }
 }

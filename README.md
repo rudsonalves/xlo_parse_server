@@ -21,7 +21,193 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
-## 2024/07/23 - version: 0.3.5+11
+## 2024/07/12 - version: 0.4.1+13
+
+Updated various project files to enhance functionality and improve maintainability.
+
+1. **android/app/build.gradle**
+   - Updated `flutterVersionCode` and `flutterVersionName` initialization to include default values.
+   - Changed `namespace` and `applicationId`.
+   - Added lint options for Java compilation.
+   - Added dependency for `ucrop` library.
+
+2. **android/app/src/main/AndroidManifest.xml**
+   - Added `package` attribute to the manifest tag.
+
+3. **android/app/src/main/kotlin/com/example/xlo_parse_server/MainActivity.kt**
+   - Updated package name.
+
+4. **android/build.gradle**
+   - Added Kotlin version and dependencies.
+   - Updated Gradle plugin version.
+
+5. **android/gradle.properties**
+   - Added lint option for deprecation warnings.
+   - Suppressed unsupported compile SDK warning.
+
+6. **android/gradle/wrapper/gradle-wrapper.properties**
+   - Updated Gradle distribution URL.
+
+7. **lib/common/app_info.dart**
+   - Created a new file to handle application information and utilities such as URL launching and copying.
+
+8. **lib/common/models/address.dart**
+   - Removed unused imports and JSON conversion methods.
+
+9. **lib/common/models/advert.dart**
+   - Updated model structure to use `UserModel` for owner and `AddressModel` for address.
+   - Reorganized fields.
+
+10. **lib/common/models/filter.dart**
+    - Added `setFilter` method to update filter model.
+
+11. **lib/common/models/user.dart**
+    - Removed unused imports and JSON conversion methods.
+
+12. **lib/common/parse_server/errors_mensages.dart**
+    - Removed logging.
+
+13. **lib/common/singletons/app_settings.dart**
+    - Removed unused fields and methods.
+
+14. **lib/common/singletons/search_filter.dart**
+    - Created a new singleton to manage search filter state.
+
+15. **lib/common/singletons/search_history.dart**
+    - Removed logging.
+
+16. **lib/common/theme/app_text_style.dart**
+    - Created a new file to manage application text styles.
+
+17. **lib/common/theme/text_styles.dart** renamed to **lib/common/utils/extensions.dart**
+    - Renamed file and converted to manage number and datetime extensions.
+
+18. **lib/components/custom_drawer/custom_drawer.dart**
+    - Added a new logout option in the drawer menu.
+
+19. **lib/features/advertisement/advert_controller.dart**
+    - Updated model usage for creating advertisements.
+
+20. **lib/features/advertisement/widgets/horizontal_image_gallery.dart**
+    - Removed logging.
+
+21. **lib/features/base/base_controller.dart**
+    - Integrated `SearchFilter` singleton.
+    - Updated search handling methods.
+
+22. **lib/features/base/base_screen.dart**
+    - Integrated `SearchFilter` and added actions for search and filter management.
+
+23. **lib/features/base/widgets/search_controller.dart**
+    - Removed logging.
+
+24. **lib/features/base/widgets/search_dialog.dart**
+    - Removed commented code and logging.
+
+25. **lib/features/base/widgets/search_dialog_bar.dart**
+    - Removed logging.
+
+26. **lib/features/filters/widgets/text_title.dart**
+    - Updated import to use new text styles.
+
+27. **lib/features/home/home_controller.dart**
+    - Integrated `SearchFilter` and updated advertisement fetching logic.
+
+28. **lib/features/home/home_screen.dart**
+    - Integrated `AdListView` for displaying advertisements.
+
+29. **lib/features/home/widgets/ad_list_view.dart**
+    - Created a new widget to manage advertisement list view.
+
+30. **lib/features/home/widgets/ad_text_info.dart**
+    - Created a new widget for displaying advertisement info.
+
+31. **lib/features/home/widgets/ad_text_price.dart**
+    - Created a new widget for displaying advertisement price.
+
+32. **lib/features/home/widgets/ad_text_subtitle.dart**
+    - Created a new widget for displaying advertisement subtitle.
+
+33. **lib/features/home/widgets/ad_text_title.dart**
+    - Created a new widget for displaying advertisement title.
+
+34. **lib/features/signup/signup_screen.dart**
+    - Removed logging.
+
+35. **lib/my_material_app.dart**
+    - Added localization support.
+    - Removed logging.
+
+36. **lib/repository/address_repository.dart**
+    - Refactored to use `ParseToModel` for model conversion.
+    - Removed redundant logging.
+
+37. **lib/repository/advert_repository.dart**
+    - Refactored to use `ParseToModel` for model conversion.
+    - Added pagination support for fetching advertisements.
+
+38. **lib/repository/parse_to_model.dart**
+    - Created a new utility class for converting Parse objects to models.
+
+39. **lib/repository/user_repository.dart**
+    - Refactored to use `ParseToModel` for model conversion.
+    - Added logout method.
+
+40. **linux/flutter/generated_plugin_registrant.cc**
+    - Added URL launcher plugin registration.
+
+41. **linux/flutter/generated_plugins.cmake**
+    - Added URL launcher plugin.
+
+42. **macos/Flutter/GeneratedPluginRegistrant.swift**
+    - Added URL launcher and SQLite plugins registration.
+
+43. **pubspec.lock**
+    - Updated dependencies and added new ones for cached network image, URL launcher, SQLite, and localization support.
+
+44. **pubspec.yaml**
+    - Updated version and added new dependencies for cached network image, URL launcher, and localization support.
+
+45. **windows/flutter/generated_plugin_registrant.cc**
+    - Added URL launcher plugin registration.
+
+46. **windows/flutter/generated_plugins.cmake**
+    - Added URL launcher plugin.
+
+47. **lib/common/models/address.dart**
+    - Removed redundant methods `toMap`, `fromMap`, `toJson`, and `fromJson`.
+
+48. **lib/common/models/advert.dart**
+    - Consolidated imports and refactored field organization for better readability and maintainability.
+
+49. **lib/common/models/user.dart**
+    - Removed redundant methods `toMap`, `fromMap`, `toJson`, and `fromJson`.
+
+50. **lib/common/parse_server/errors_mensages.dart**
+    - Streamlined the error message handling by removing the unnecessary logging of errors.
+
+51. **lib/features/home/home_screen.dart**
+    - Updated the `HomeScreen` layout and integrated the `AdListView` to improve user experience and performance.
+
+52. **lib/repository/address_repository.dart**
+    - Improved exception handling and removed redundant code for better code quality.
+
+53. **lib/repository/advert_repository.dart**
+    - Added pagination and improved the handling of search and filter functionality to enhance the user experience.
+
+54. **lib/repository/user_repository.dart**
+    - Enhanced user management with a logout method and improved exception handling.
+
+55. **pubspec.lock**
+    - Added `intl_utils` and updated various dependencies to ensure compatibility and leverage new features.
+
+56. **pubspec.yaml**
+    - Added dependencies for `intl_utils` to facilitate localization and formatting utilities.
+
+This commit finalizes the enhancements to the project by ensuring all necessary changes are included and properly documented. The updates improve the application's functionality, maintainability, and user experience by integrating new dependencies, refactoring code, and enhancing existing features.
+
+
+## 2024/07/23 - version: 0.3.5+12
 
 Introduced `ProductCondition` Enum and Refactored `Advert` Models.
 

@@ -24,89 +24,101 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import '../common/models/advert.dart';
 import '../common/models/filter.dart';
 import 'constants.dart';
+import 'parse_to_model.dart';
 
 class AdvertRepository {
+  static const maxAdsPerList = 20;
+
   static Future<List<AdvertModel>?> getAdvertisements({
-    required FilterModel? filter,
-    required String? search,
+    required FilterModel filter,
+    required String search,
+    int page = 0,
   }) async {
-    search = search ?? '';
-    filter = filter ?? FilterModel();
     final queryBuilder = QueryBuilder<ParseObject>(ParseObject(keyAdvertTable));
 
-    queryBuilder.setLimit(20);
-    queryBuilder.whereEqualTo(keyAdvertStatus, AdvertStatus.pending.index);
+    try {
+      queryBuilder.setAmountToSkip(page * maxAdsPerList);
+      queryBuilder.setLimit(maxAdsPerList);
 
-    // Filter by search String
-    if (search.trim().isEmpty) {
-      queryBuilder.whereContains(
-        keyAdvertTitle,
-        search.trim(),
-        caseSensitive: false,
-      );
-    }
+      queryBuilder.includeObject([keyAdvertOwner, keyAdvertAddress]);
 
-    // Filter by machanics
-    if (filter.mechanicsId.isNotEmpty) {
-      for (final mechId in filter.mechanicsId) {
-        final mechParse = ParseObject(keyMechanicTable)
-          ..set(keyMechanicId, mechId);
-        queryBuilder.whereEqualTo(keyAdvertMechanics, mechParse.toPointer());
+      queryBuilder.whereEqualTo(keyAdvertStatus, AdvertStatus.active.index);
+
+      // Filter by search String
+      if (search.trim().isNotEmpty) {
+        queryBuilder.whereContains(
+          keyAdvertTitle,
+          search.trim(),
+          caseSensitive: false,
+        );
       }
-    }
 
-    switch (filter.sortBy) {
-      case SortOrder.price:
-        // Filter by price
-        queryBuilder.orderByAscending(keyAdvertPrice);
-        break;
-      case SortOrder.date:
-      default:
-        // Filter by date
-        queryBuilder.orderByAscending(keyAdvertCreatedAt);
-    }
+      // Filter by machanics
+      if (filter.mechanicsId.isNotEmpty) {
+        for (final mechId in filter.mechanicsId) {
+          final mechParse = ParseObject(keyMechanicTable)
+            ..set(keyMechanicId, mechId);
+          queryBuilder.whereEqualTo(keyAdvertMechanics, mechParse.toPointer());
+        }
+      }
 
-    // Filter minPrice
-    if (filter.minPrice > 0) {
-      queryBuilder.whereGreaterThanOrEqualsTo(keyAdvertPrice, filter.minPrice);
-    }
+      switch (filter.sortBy) {
+        case SortOrder.price:
+          // Filter by price
+          queryBuilder.orderByAscending(keyAdvertPrice);
+          break;
+        case SortOrder.date:
+        default:
+          // Filter by date
+          queryBuilder.orderByAscending(keyAdvertCreatedAt);
+      }
 
-    // Filter maxPrice
-    if (filter.maxPrice > 0) {
-      queryBuilder.whereLessThanOrEqualTo(keyAdvertPrice, filter.maxPrice);
-    }
+      // Filter minPrice
+      if (filter.minPrice > 0) {
+        queryBuilder.whereGreaterThanOrEqualsTo(
+            keyAdvertPrice, filter.minPrice);
+      }
 
-    // Filter by
-    if (filter.condition != ProductCondition.all) {
-      queryBuilder.whereEqualTo(keyAdvertCondition, filter.condition.index);
-    }
+      // Filter maxPrice
+      if (filter.maxPrice > 0) {
+        queryBuilder.whereLessThanOrEqualTo(keyAdvertPrice, filter.maxPrice);
+      }
 
-    final response = await queryBuilder.query();
-    if (!response.success) {
-      log(response.error.toString());
+      // Filter by
+      if (filter.condition != ProductCondition.all) {
+        queryBuilder.whereEqualTo(keyAdvertCondition, filter.condition.index);
+      }
+
+      final response = await queryBuilder.query();
+      if (!response.success) {
+        throw Exception(response.error.toString());
+      }
+
+      if (response.results == null) {
+        throw Exception('Search return a empty list');
+      }
+
+      List<AdvertModel> ads = [];
+      for (final ParseObject ad in response.results!) {
+        final adModel = ParseToModel.advert(ad);
+        if (adModel != null) ads.add(adModel);
+      }
+
+      return ads;
+    } catch (err) {
+      log('AdvertRepository.getAdvertisements: $err');
       return null;
     }
-
-    if (response.results == null) {
-      log('Search return a empty list');
-      return null;
-    }
-
-    return response.results!
-        .map((ad) => _parserServerToAdSale(ad as ParseObject))
-        .toList();
   }
 
   static Future<AdvertModel?> save(AdvertModel advert) async {
-    List<ParseFile> parseImages = [];
-
     try {
       final parseUser = await ParseUser.currentUser() as ParseUser?;
       if (parseUser == null) {
         throw Exception('Current user access error');
       }
 
-      parseImages = await _saveImages(advert.images, parseUser);
+      List<ParseFile> parseImages = await _saveImages(advert.images, parseUser);
 
       final List<ParseObject> parseMechanics = advert.mechanicsId.map((id) {
         final parse = ParseObject(keyMechanicTable);
@@ -115,7 +127,7 @@ class AdvertRepository {
       }).toList();
 
       final parseAddress = ParseObject(keyAddressTable);
-      parseAddress.objectId = advert.addressId;
+      parseAddress.objectId = advert.address.id;
 
       final parseAd = ParseObject(keyAdvertTable);
       if (advert.id != null) {
@@ -151,7 +163,7 @@ class AdvertRepository {
         throw Exception(response.error);
       }
 
-      return _parserServerToAdSale(parseAd);
+      return ParseToModel.advert(parseAd);
     } catch (err) {
       log(err.toString());
       return null;
@@ -198,28 +210,5 @@ class AdvertRepository {
       log('Exception in _saveImages: $err');
       throw Exception(err);
     }
-  }
-
-  static AdvertModel _parserServerToAdSale(ParseObject parseAd) {
-    return AdvertModel(
-      id: parseAd.objectId,
-      userId: parseAd.get<ParseUser>(keyAdvertOwner)!.objectId!,
-      images: (parseAd.get<List<dynamic>>(keyAdvertImages) as List<dynamic>)
-          .map((item) => (item as ParseFile).url!)
-          .toList(),
-      title: parseAd.get<String>(keyAdvertTitle)!,
-      description: parseAd.get<String>(keyAdvertDescription)!,
-      mechanicsId:
-          (parseAd.get<List<dynamic>>(keyAdvertMechanics) as List<dynamic>)
-              .map((item) => (item as ParseObject).objectId!)
-              .toList(),
-      addressId: parseAd.get<ParseObject>(keyAdvertAddress)!.objectId!,
-      price: parseAd.get<num>(keyAdvertPrice)!.toDouble(),
-      hidePhone: parseAd.get<bool>(keyAdvertHidePhone)!,
-      status: AdvertStatus.values
-          .firstWhere((s) => s.index == parseAd.get<int>(keyAdvertStatus)!),
-      condition: ProductCondition.values
-          .firstWhere((c) => c.index == parseAd.get<int>(keyAdvertCondition)),
-    );
   }
 }

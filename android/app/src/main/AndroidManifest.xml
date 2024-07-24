@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="br.dev.rralves.xlo_parse_server">
     <application
         android:label="xlo_parse_server"
         android:name="${applicationName}"

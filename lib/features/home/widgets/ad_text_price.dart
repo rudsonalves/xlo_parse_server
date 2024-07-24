@@ -17,28 +17,26 @@
 
 import 'package:flutter/material.dart';
 
-class AppSettings {
-  AppSettings._();
-  static final _instance = AppSettings._();
-  static AppSettings get instance => _instance;
+import '../../../common/utils/extensions.dart';
+import '../../../common/theme/app_text_style.dart';
 
-  final ValueNotifier<Brightness> _brightness =
-      ValueNotifier<Brightness>(Brightness.dark);
+class AdTextPrice extends StatelessWidget {
+  final double value;
+  const AdTextPrice(
+    this.value, {
+    super.key,
+  });
 
-  ValueNotifier<Brightness> get brightness => _brightness;
-  bool get isDark => _brightness.value == Brightness.dark;
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-  void toggleBrightnessMode() {
-    _brightness.value = _brightness.value == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
-  }
-
-  void setBrightnessMode(Brightness brightness) {
-    _brightness.value = brightness;
-  }
-
-  void dispose() {
-    _brightness.dispose();
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Text(
+        value.formatMoney(),
+        style: AppTextStyle.font16Bold.copyWith(color: colorScheme.primary),
+      ),
+    );
   }
 }
