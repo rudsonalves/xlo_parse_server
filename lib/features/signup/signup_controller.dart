@@ -70,8 +70,9 @@ class SignupController extends ChangeNotifier {
         phone: phoneController.text,
         password: passwordController.text,
       );
+      final newUser = await UserRepository.signUp(user);
       _changeState(SignUpStateSuccess());
-      return await UserRepository.signUp(user);
+      return newUser;
     } catch (err) {
       _changeState(SignUpStateError());
       throw Exception(err);

@@ -23,14 +23,21 @@ import '../common/models/address.dart';
 import 'constants.dart';
 import 'parse_to_model.dart';
 
+/// This class provides methods to interact with the Parse Server
+/// to manage addresses associated with the user.
 class AddressRepository {
+  /// Saves an address to the Parse Server.
+  ///
+  /// [address] - The address model to save.
+  /// Returns the saved `AddressModel` if successful, otherwise throws an
+  /// exception.
   static Future<AddressModel?> save(AddressModel address) async {
     try {
       final parseAddress = ParseObject(keyAddressTable);
 
       final parseUser = await ParseUser.currentUser() as ParseUser?;
       if (parseUser == null) {
-        throw Exception('Current user not found');
+        throw Exception('current user not found. Make a login');
       }
 
       if (address.id != null) {
@@ -61,16 +68,20 @@ class AddressRepository {
 
       return ParseToModel.address(parseAddress);
     } catch (err) {
-      log(err.toString());
-      throw Exception(err);
+      final message = 'AddressRepository.save: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
+  /// Deletes an address from the Parse Server.
+  ///
+  /// [address] - The address model to delete.
+  /// Returns `true` if successful, otherwise returns `false`.
   static Future<bool> delete(AddressModel address) async {
     try {
       if (address.id == null) {
-        log('Address ID is null');
-        throw Exception('Address ID is required to delete the address');
+        throw Exception('address ID is required to delete the address');
       }
 
       final parseAddress = ParseObject(keyAddressTable);
@@ -78,16 +89,21 @@ class AddressRepository {
 
       final response = await parseAddress.delete();
       if (!response.success) {
-        log('parseAddress.delete error: ${response.error?.message}');
-        return false;
+        throw Exception(response.error?.message ?? 'unknown error');
       }
       return true;
     } catch (err) {
-      log('Error deleting address: $err');
-      throw Exception(err);
+      final message = 'AddressRepository.delete: $err';
+      log(message);
+      return false;
     }
   }
 
+  /// Fetches the list of addresses associated with the current user.
+  ///
+  /// [userId] - The ID of the user whose addresses are to be fetched.
+  /// Returns a list of `AddressModel` if successful, otherwise throws an
+  /// exception.
   static Future<List<AddressModel>?> getUserAddresses(String userId) async {
     try {
       List<AddressModel>? addresses;
@@ -96,7 +112,7 @@ class AddressRepository {
 
       final parseUser = await ParseUser.currentUser() as ParseUser?;
       if (parseUser == null) {
-        throw Exception('Current user not found');
+        throw Exception('current user not found. Make login again.');
       }
 
       final queryBuilder = QueryBuilder<ParseObject>(parseAddress)
@@ -114,7 +130,8 @@ class AddressRepository {
 
       return addresses;
     } catch (err) {
-      log(err.toString());
+      final message = 'AddressRepository.getUserAddresses: $err';
+      log(message);
       throw Exception(err);
     }
   }

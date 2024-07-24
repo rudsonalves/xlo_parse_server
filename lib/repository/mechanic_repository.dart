@@ -15,42 +15,48 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:developer';
+
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../common/models/mechanic.dart';
 import 'constants.dart';
+import 'parse_to_model.dart';
 
+/// This class provides methods to interact with the Parse Server
+/// to retrieve a list of mechanics.
 class MechanicRepository {
-  static Future<List<MechanicModel>?> getList() async {
-    final mechanics = <MechanicModel>[];
+  /// Fetches a list of mechanics from the Parse Server.
+  ///
+  /// Returns a list of `MechanicModel` if the query is successful,
+  /// otherwise create an error.
+  static Future<List<MechanicModel>> getList() async {
+    try {
+      final mechanics = <MechanicModel>[];
 
-    final parseMechanics = ParseObject(keyMechanicTable);
-    final queryBuilder = QueryBuilder<ParseObject>(parseMechanics)
-      ..orderByAscending(
-        keyMechanicName,
+      final parseMechanics = ParseObject(keyMechanicTable);
+      final queryBuilder = QueryBuilder<ParseObject>(parseMechanics)
+        ..orderByAscending(
+          keyMechanicName,
+        );
+
+      final response = await queryBuilder.query();
+
+      if (!response.success) {
+        throw Exception(response.error?.message ?? 'unknown error');
+      }
+
+      mechanics.addAll(
+        response.results!.map(
+          (objParse) => ParseToModel.mechanic(objParse),
+        ),
       );
 
-    final response = await queryBuilder.query();
-
-    if (!response.success) {
-      throw Exception('${response.error!.code} - ${response.error}');
+      return mechanics;
+    } catch (err) {
+      final message = 'MechanicRepository.getList: $err';
+      log(message);
+      throw Exception(message);
     }
-
-    mechanics.addAll(
-      response.results!.map(
-        (objParse) => parseMechanic(objParse),
-      ),
-    );
-
-    return mechanics;
-  }
-
-  static parseMechanic(ParseObject parseMechanic) {
-    return MechanicModel(
-      id: parseMechanic.objectId,
-      name: parseMechanic.get(keyMechanicName),
-      description: parseMechanic.get(keyMechanicDescription),
-      createAt: parseMechanic.createdAt,
-    );
   }
 }

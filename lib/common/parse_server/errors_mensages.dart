@@ -16,8 +16,8 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 class ParserServerErrors {
-  static String message(Object err) {
-    final code = _getErroCode(err.toString());
+  static String message(String err) {
+    final code = _getErroCode(err);
 
     switch (code) {
       case 101:
@@ -46,6 +46,14 @@ class ParserServerErrors {
       }
     }
 
-    return int.tryParse(code.trim()) ?? -1;
+    int icode = int.tryParse(code.trim()) ?? -1;
+
+    if (icode == -1) {
+      if (errStr.contains('Account already exists for this username.')) {
+        icode = 203;
+      }
+    }
+
+    return icode;
   }
 }

@@ -21,7 +21,78 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
-## 2024/07/12 - version: 0.4.1+13
+## 2024/07/24 - version: 0.4.2+14
+
+# Commit Message
+
+Refactored Parse Server integration for improved error handling and code maintainability. Changes made:
+
+1. **lib/common/parse_server/errors_mensages.dart**
+   - Modified `ParserServerErrors.message` to accept a `String` parameter.
+   - Added logic to identify specific error messages.
+
+2. **lib/common/singletons/current_user.dart**
+   - Updated method names in `CurrentUser` to align with `AddressManager`.
+
+3. **lib/components/custom_drawer/custom_drawer.dart**
+   - Ensured drawer closes after logout.
+
+4. **lib/features/address/address_controller.dart**
+   - Updated method calls to match `AddressManager` changes.
+
+5. **lib/features/home/home_controller.dart**
+   - Changed method calls in `HomeController` to use `AdvertRepository.get`.
+
+6. **lib/features/login/login_screen.dart**
+   - Adjusted error message handling to pass `String`.
+
+7. **lib/features/signup/signup_controller.dart**
+   - Separated user signup and state change logic.
+
+8. **lib/features/signup/signup_screen.dart**
+   - Updated error handling to pass `String`.
+
+9. **lib/manager/address_manager.dart**
+   - Added comments and updated methods for address operations.
+
+10. **lib/manager/mechanics_manager.dart**
+    - Added logging and improved error handling.
+
+11. **lib/manager/state_manager.dart**
+    - Added comments for clarity.
+
+12. **lib/repository/address_repository.dart**
+    - Enhanced logging and exception messages.
+    - Updated methods to ensure consistency and clarity.
+
+13. **lib/repository/advert_repository.dart**
+    - Improved logging and error handling.
+    - Added method comments for better understanding.
+
+14. **lib/repository/ibge_repository.dart**
+    - Enhanced logging and exception handling.
+    - Added method comments for clarity.
+
+15. **lib/repository/mechanic_repository.dart**
+    - Improved logging and error handling.
+    - Removed redundant parsing method.
+
+16. **lib/repository/parse_to_model.dart**
+    - Added comments to methods for better understanding.
+    - Updated parsing logic for `AdvertModel`.
+
+17. **lib/repository/user_repository.dart**
+    - Enhanced logging and error handling.
+    - Added `_checksPermissions` method to handle ACL settings.
+
+18. **lib/repository/viacep_repository.dart**
+    - Enhanced logging and error handling.
+    - Updated method to clean CEP and handle exceptions.
+
+This commit refactors various parts of the code related to Parse Server integration. It improves error handling, logging, and overall code maintainability by adding comments and ensuring consistent method usage.
+
+
+## 2024/07/24 - version: 0.4.1+13
 
 Updated various project files to enhance functionality and improve maintainability.
 

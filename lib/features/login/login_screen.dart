@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await SimpleMessage.open(
           context,
           title: 'Ocorreu um Error',
-          message: ParserServerErrors.message(err),
+          message: ParserServerErrors.message(err.toString()),
           type: MessageType.error,
         );
 

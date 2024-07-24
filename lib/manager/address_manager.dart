@@ -19,6 +19,7 @@
 import '../common/models/address.dart';
 import '../repository/address_repository.dart';
 
+/// Custom exception to handle duplicate address names.
 class DuplicateNameException implements Exception {
   DuplicateNameException();
 
@@ -27,6 +28,8 @@ class DuplicateNameException implements Exception {
       'This address can\'t be updated because it has a duplicate name.';
 }
 
+/// Manager class to handle address operations such as initialization, fetching,
+/// saving, and deleting addresses.
 class AddressManager {
   AddressManager._();
   static final _instance = AddressManager._();
@@ -36,11 +39,17 @@ class AddressManager {
   List<AddressModel> get addresses => _addresses;
   Iterable<String> get addressNames => _addresses.map((e) => e.name);
 
+  /// Initializes the address list for the given user ID.
+  ///
+  /// [userId] - The ID of the user.
   Future<void> init(String userId) async {
-    await getUserAddresses(userId);
+    await getFromUserId(userId);
   }
 
-  Future<void> getUserAddresses(String userId) async {
+  /// Fetches and sets the addresses for the given user ID.
+  ///
+  /// [userId] - The ID of the user.
+  Future<void> getFromUserId(String userId) async {
     _addresses.clear();
     final addrs = await AddressRepository.getUserAddresses(userId);
     if (addrs != null && addrs.isNotEmpty) {
@@ -48,7 +57,10 @@ class AddressManager {
     }
   }
 
-  Future<void> deleteAddress(String name) async {
+  /// Deletes the address with the given name.
+  ///
+  /// [name] - The name of the address to be deleted.
+  Future<void> delete(String name) async {
     final index = _indexWhereName(name);
     if (index != -1) {
       final address = _addresses[index];
@@ -57,7 +69,11 @@ class AddressManager {
     }
   }
 
-  Future<void> saveAddress(AddressModel address) async {
+  /// Saves the given address. Throws `DuplicateNameException` if an address
+  /// with the same name already exists.
+  ///
+  /// [address] - The address to be saved.
+  Future<void> save(AddressModel address) async {
     final index = _indexWhereName(address.name);
     if (address.id != null && index == -1) {
       // is update
@@ -81,17 +97,31 @@ class AddressManager {
     }
   }
 
-  AddressModel? addressByName(String name) {
+  /// Returns the address with the given name.
+  ///
+  /// [name] - The name of the address.
+  /// Returns the address if found, otherwise returns null.
+  AddressModel? getByUserName(String name) {
     final index = _indexWhereName(name);
     return index != -1 ? _addresses[index] : null;
   }
 
+  /// Returns the index of the address with the given name in the `_addresses`
+  /// list.
+  ///
+  /// [name] - The name of the address.
+  /// Returns the index if found, otherwise returns -1.
   int _indexWhereName(String name) {
     return _addresses.indexWhere(
       (addr) => addr.name == name,
     );
   }
 
+  /// Returns the index of the address with the given ID in the `_addresses`
+  /// list.
+  ///
+  /// [id] - The ID of the address.
+  /// Returns the index if found, otherwise returns -1.
   int _indexWhereId(String id) {
     return _addresses.indexWhere(
       (addr) => addr.id == id,

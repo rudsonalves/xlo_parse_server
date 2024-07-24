@@ -52,8 +52,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       try {
         final user = await _controller.signupUser();
         if (user == null || user.id == null) {
-          throw Exception(
-              '-1	Error code indicating that an unknown error or an error unrelated to Parse occurred.');
+          throw Exception('-1	Error code indicating that an unknown error or an'
+              ' error unrelated to Parse occurred.');
         }
 
         if (!mounted) return;
@@ -71,7 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         await SimpleMessage.open(
           context,
           title: 'Ocorreu um Error',
-          message: ParserServerErrors.message(err as Error),
+          message: ParserServerErrors.message(err.toString()),
           type: MessageType.error,
         );
 

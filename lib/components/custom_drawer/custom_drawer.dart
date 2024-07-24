@@ -118,6 +118,7 @@ class CustomDrawer extends StatelessWidget {
             selected: pageController.page == 4,
             onTap: () async {
               await UserRepository.logout();
+              if (context.mounted) Navigator.pop(context);
             },
           ),
         ],
