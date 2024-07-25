@@ -21,6 +21,81 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/25 - version: 0.5.0+15
+
+This commit introduces enhancements to the Product and Shop screens, adds a new ReadMoreText component, and adjusts the theme colors.
+
+1. lib/common/theme/app_text_style.dart
+   - Added new text styles: `font24`, `font24SemiBold`, and `font24Bold`.
+
+2. lib/common/theme/theme.dart
+   - Updated various color definitions for better UI consistency: `primaryContainer`, `secondary`, `primaryFixed`, `tertiaryFixedDim`, `onPrimaryFixedVariant`, `surfaceContainer`, and others.
+
+3. lib/components/custom_drawer/custom_drawer.dart
+   - Changed the icon for 'Inserir Anúncio' from `Icons.edit` to `Icons.camera`.
+
+4. lib/components/custom_drawer/widgets/custom_drawer_header.dart
+   - Wrapped texts in `FittedBox` for better scaling and to ensure the text fits within the designated area.
+
+5. lib/components/customs_text/read_more_text.dart
+   - Added the new `ReadMoreText` component for handling expandable text with 'read more' and 'show less' functionality.
+
+6. lib/features/base/base_screen.dart
+   - Updated `PageView` children to include `ShopScreen(_changeToPage)` and modified the `ShopScreen` instantiation.
+
+7. lib/features/product/product_screen.dart
+   - Converted `ProductScreen` to a `StatefulWidget` to manage animations for floating action buttons.
+   - Added a floating action button for contacting the advertiser via phone or chat.
+   - Introduced various product detail widgets: `PriceProduct`, `TitleProduct`, `DescriptionProduct`, `LocationProduct`, and `UserCard`.
+
+8. lib/features/product/widgets/description_product.dart
+   - Created `DescriptionProduct` widget using the `ReadMoreText` component.
+
+9. lib/features/product/widgets/duo_segmented_button.dart
+   - Created `DuoSegmentedButton` widget for segmented button functionality.
+
+10. lib/features/product/widgets/image_carousel.dart
+    - Created `ImageCarousel` widget for displaying product images using `carousel_slider`.
+
+11. lib/features/product/widgets/location_product.dart
+    - Created `LocationProduct` widget for displaying product location details.
+
+12. lib/features/product/widgets/price_product.dart
+    - Created `PriceProduct` widget for displaying product price.
+
+13. lib/features/product/widgets/sub_title_product.dart
+    - Created `SubTitleProduct` widget for displaying subtitles in product details.
+
+14. lib/features/product/widgets/title_product.dart
+    - Created `TitleProduct` widget for displaying the product title.
+
+15. lib/features/product/widgets/user_card_product.dart
+    - Created `UserCard` widget for displaying user information related to the product.
+
+16. lib/features/shop/shop_screen.dart
+    - Updated `ShopScreen` to manage animations for floating action buttons.
+    - Added a floating action button to navigate to the advertisement screen.
+
+17. lib/features/shop/widgets/ad_list_view.dart
+    - Updated `AdListView` to use the shared `ScrollController` for handling list view scroll behavior.
+    - Added `InkWell` to navigate to the `ProductScreen` on ad click.
+
+18. lib/features/shop/widgets/ad_text_price.dart
+    - Removed unnecessary padding and updated text style for ad price.
+
+19. lib/features/shop/widgets/ad_text_title.dart
+    - Removed unnecessary padding and updated text style for ad title.
+
+20. lib/my_material_app.dart
+    - Changed default text theme from "Nunito Sans" to "Comfortaa".
+    - Updated route handling for `ShopScreen` to pass a callback for page changes.
+
+21. pubspec.yaml and pubspec.lock
+    - Added dependency for `carousel_slider` version `4.2.1`.
+
+These changes enhance the user experience by improving the UI consistency, adding new functionalities, and optimizing existing components.
+
+
 ## 2024/07/24 - version: 0.4.2+14
 
 # Commit Message

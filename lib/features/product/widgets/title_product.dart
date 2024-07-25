@@ -17,23 +17,24 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../common/utils/extensions.dart';
 import '../../../common/theme/app_text_style.dart';
 
-class AdTextPrice extends StatelessWidget {
-  final double value;
-  const AdTextPrice(
-    this.value, {
+class TitleProduct extends StatelessWidget {
+  final String title;
+
+  const TitleProduct({
     super.key,
+    required this.title,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Text(
-      value.formatMoney(),
-      style: AppTextStyle.font16Bold.copyWith(color: colorScheme.primary),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Text(
+        title,
+        style: AppTextStyle.font16SemiBold,
+      ),
     );
   }
 }

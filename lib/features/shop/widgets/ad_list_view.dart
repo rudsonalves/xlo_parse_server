@@ -18,6 +18,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../product/product_screen.dart';
 import '../shop_controller.dart';
 import 'ad_text_info.dart';
 import 'ad_text_price.dart';
@@ -25,9 +26,12 @@ import 'ad_text_title.dart';
 
 class AdListView extends StatefulWidget {
   final ShopController ctrl;
+  final ScrollController scrollController;
+
   const AdListView({
     super.key,
     required this.ctrl,
+    required this.scrollController,
   });
 
   @override
@@ -35,7 +39,7 @@ class AdListView extends StatefulWidget {
 }
 
 class _AdListViewState extends State<AdListView> {
-  final _scrollController = ScrollController();
+  late ScrollController _scrollController;
   late final ShopController ctrl;
   double scrollPosition = 0;
 
@@ -44,8 +48,8 @@ class _AdListViewState extends State<AdListView> {
     super.initState();
 
     ctrl = widget.ctrl;
-
-    _scrollController.addListener(_scrollListener);
+    _scrollController = widget.scrollController;
+    _scrollController.addListener(_scrollListener2);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (ctrl.ads.isEmpty) return;
@@ -53,7 +57,13 @@ class _AdListViewState extends State<AdListView> {
     });
   }
 
-  void _scrollListener() {
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener2);
+    super.dispose();
+  }
+
+  void _scrollListener2() {
     if (_scrollController.position.atEdge) {
       final isTop = _scrollController.position.pixels == 0;
       if (!isTop) {
@@ -88,32 +98,41 @@ class _AdListViewState extends State<AdListView> {
       itemCount: ctrl.ads.length,
       itemBuilder: (context, index) => SizedBox(
         height: 150,
-        child: Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          clipBehavior: Clip.antiAlias,
-          color: colorScheme.primaryContainer.withOpacity(0.35),
-          child: Row(
-            children: [
-              showImage(ctrl.ads[index].images[0]),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AdTextTitle(ctrl.ads[index].title),
-                      AdTextPrice(ctrl.ads[index].price),
-                      AdTextInfo(
-                        date: ctrl.ads[index].createdAt,
-                        city: ctrl.ads[index].address.city,
-                        state: ctrl.ads[index].address.state,
-                      ),
-                    ],
+        child: InkWell(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              ProductScreen.routeName,
+              arguments: ctrl.ads[index],
+            );
+          },
+          child: Card(
+            margin: const EdgeInsets.only(bottom: 12),
+            clipBehavior: Clip.antiAlias,
+            color: colorScheme.surfaceContainer,
+            child: Row(
+              children: [
+                showImage(ctrl.ads[index].images[0]),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AdTextTitle(ctrl.ads[index].title),
+                        AdTextPrice(ctrl.ads[index].price),
+                        AdTextInfo(
+                          date: ctrl.ads[index].createdAt,
+                          city: ctrl.ads[index].address.city,
+                          state: ctrl.ads[index].address.state,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

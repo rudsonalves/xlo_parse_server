@@ -77,7 +77,7 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.edit),
+            leading: const Icon(Icons.camera),
             title: const Text('Inserir Anúncio'),
             selected: pageController.page == 1,
             onTap: () {

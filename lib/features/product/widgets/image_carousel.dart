@@ -15,25 +15,40 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import '../../../common/utils/extensions.dart';
-import '../../../common/theme/app_text_style.dart';
+import '../../../common/models/advert.dart';
 
-class AdTextPrice extends StatelessWidget {
-  final double value;
-  const AdTextPrice(
-    this.value, {
+class ImageCarousel extends StatelessWidget {
+  final AdvertModel advert;
+
+  const ImageCarousel({
     super.key,
+    required this.advert,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Text(
-      value.formatMoney(),
-      style: AppTextStyle.font16Bold.copyWith(color: colorScheme.primary),
+    return Container(
+      margin: const EdgeInsets.only(top: 8),
+      color: colorScheme.surfaceContainer,
+      child: CarouselSlider(
+        items: advert.images
+            .map((url) => CachedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.fill,
+                ))
+            .toList(),
+        options: CarouselOptions(
+          height: 280,
+          enlargeCenterPage: true,
+          viewportFraction: 0.6,
+        ),
+      ),
     );
   }
 }

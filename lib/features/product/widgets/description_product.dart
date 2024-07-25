@@ -17,23 +17,35 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../common/utils/extensions.dart';
-import '../../../common/theme/app_text_style.dart';
+import '../../../components/customs_text/read_more_text.dart';
+import 'sub_title_product.dart';
 
-class AdTextPrice extends StatelessWidget {
-  final double value;
-  const AdTextPrice(
-    this.value, {
+class DescriptionProduct extends StatelessWidget {
+  final String description;
+
+  const DescriptionProduct({
     super.key,
+    required this.description,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Text(
-      value.formatMoney(),
-      style: AppTextStyle.font16Bold.copyWith(color: colorScheme.primary),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SubTitleProduct(subtile: 'Descrição'),
+        ReadMoreText(
+          description,
+          trimMode: TrimMode.line,
+          trimLines: 5,
+          trimExpandedText: '  [ver menos]',
+          trimCollapsedText: '  [ver mais]',
+          colorClickableText: colorScheme.primary,
+        ),
+      ],
     );
   }
 }

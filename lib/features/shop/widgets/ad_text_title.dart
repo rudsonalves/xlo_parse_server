@@ -31,15 +31,12 @@ class AdTextTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
-        text,
-        maxLines: 3,
-        style: AppTextStyle.font18SemiBold.copyWith(color: colorScheme.primary),
-        overflow: TextOverflow.ellipsis,
-        textAlign: TextAlign.start,
-      ),
+    return Text(
+      text,
+      maxLines: 3,
+      style: AppTextStyle.font18SemiBold.copyWith(color: colorScheme.primary),
+      overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.start,
     );
   }
 }

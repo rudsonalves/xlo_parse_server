@@ -49,7 +49,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = createTextTheme(context, "Nunito Sans", "Poppins");
+    TextTheme textTheme = createTextTheme(context, "Comfortaa", "Poppins");
     MaterialTheme theme = MaterialTheme(textTheme);
 
     return ValueListenableBuilder(
@@ -73,7 +73,6 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             locale: const Locale('pt', 'BR'),
             routes: {
               BaseScreen.routeName: (_) => const BaseScreen(),
-              ShopScreen.routeName: (_) => const ShopScreen(),
               AdvertScreen.routeName: (_) => const AdvertScreen(),
               ChatScreen.routeName: (_) => const ChatScreen(),
               AccountScreen.routeName: (_) => const AccountScreen(),
@@ -83,6 +82,16 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {
+                case ShopScreen.routeName:
+                  return MaterialPageRoute(
+                    builder: (context) {
+                      final changeToPage =
+                          settings.arguments as void Function(int);
+
+                      return ShopScreen(changeToPage);
+                    },
+                  );
+
                 case ProductScreen.routeName:
                   return MaterialPageRoute(
                     builder: (context) {
