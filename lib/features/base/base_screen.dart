@@ -192,12 +192,12 @@ class _BaseScreenState extends State<BaseScreen> {
                 child: PageView(
                   controller: ctrl.pageController,
                   physics: const NeverScrollableScrollPhysics(),
-                  children: const [
-                    ShopScreen(),
-                    AdvertScreen(),
-                    ChatScreen(),
-                    FavoritesScreen(),
-                    AccountScreen(),
+                  children: [
+                    ShopScreen(_changeToPage),
+                    const AdvertScreen(),
+                    const ChatScreen(),
+                    const FavoritesScreen(),
+                    const AccountScreen(),
                   ],
                 ),
               ),

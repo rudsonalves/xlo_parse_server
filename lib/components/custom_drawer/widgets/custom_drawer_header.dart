@@ -52,18 +52,24 @@ class CustomDrawerHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  currentUser.isLogin
-                      ? Utils.title(currentUser.user!.name!)
-                      : 'Acessar sua conta agora!',
-                  style: const TextStyle(
-                    fontSize: 20,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    currentUser.isLogin
+                        ? Utils.title(currentUser.user!.name!)
+                        : 'Acessar sua conta agora!',
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 6),
-                Text(currentUser.isLogin
-                    ? currentUser.user!.email
-                    : 'Click aqui!'),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(currentUser.isLogin
+                      ? currentUser.user!.email
+                      : 'Click aqui!'),
+                ),
               ],
             ),
           ),

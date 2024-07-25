@@ -20,6 +20,21 @@ import 'package:flutter/material.dart';
 class AppTextStyle {
   AppTextStyle._();
 
+  static TextStyle font24 = const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
+  );
+
+  static TextStyle font24SemiBold = const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+  );
+
+  static TextStyle font24Bold = const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+  );
+
   static TextStyle font20 = const TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w400,

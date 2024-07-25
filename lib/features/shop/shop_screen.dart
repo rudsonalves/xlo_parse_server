@@ -17,6 +17,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../common/theme/app_text_style.dart';
 import 'shop_controller.dart';
@@ -24,7 +25,12 @@ import 'shop_state.dart';
 import 'widgets/ad_list_view.dart';
 
 class ShopScreen extends StatefulWidget {
-  const ShopScreen({super.key});
+  final void Function(int page) changeToPage;
+
+  const ShopScreen(
+    this.changeToPage, {
+    super.key,
+  });
 
   static const routeName = '/shop';
 
@@ -32,19 +38,48 @@ class ShopScreen extends StatefulWidget {
   State<ShopScreen> createState() => _ShopScreenState();
 }
 
-class _ShopScreenState extends State<ShopScreen> {
+class _ShopScreenState extends State<ShopScreen>
+    with SingleTickerProviderStateMixin {
   final ctrl = ShopController();
   final _scrollController = ScrollController();
+  late AnimationController _animationController;
+  late Animation<Offset> _fabAnimation;
 
   @override
   void initState() {
     super.initState();
     ctrl.init();
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _fabAnimation = Tween<Offset>(
+      begin: const Offset(0, 1.5),
+      end: const Offset(0, 0),
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      _animationController.forward();
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      _animationController.reverse();
+    }
   }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    _animationController.dispose();
     ctrl.dispose();
     super.dispose();
   }
@@ -70,6 +105,17 @@ class _ShopScreenState extends State<ShopScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      floatingActionButton: SlideTransition(
+        position: _fabAnimation,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            widget.changeToPage(1);
+          },
+          backgroundColor: colorScheme.primaryContainer.withOpacity(0.65),
+          icon: const Icon(Icons.camera),
+          label: const Text('Adicionar anúncio'),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListenableBuilder(
@@ -80,23 +126,38 @@ class _ShopScreenState extends State<ShopScreen> {
                   // state HomeState Success
                   // empty search
                   if (ctrl.ads.isEmpty && ctrl.state is ShopeStateSuccess)
-                    Center(
-                      child: Column(
-                        children: [
-                          const Icon(
-                            Icons.warning_amber,
-                            color: Colors.amber,
-                            size: 80,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Card(
+                            color:
+                                colorScheme.primaryContainer.withOpacity(.45),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.warning_amber,
+                                    color: Colors.amber,
+                                    size: 80,
+                                  ),
+                                  Text(
+                                    'Nenhum anúncio encontrado',
+                                    style: AppTextStyle.font18Bold,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          Text(
-                            'Nenhum anúncio encontrado',
-                            style: AppTextStyle.font18Bold,
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   if (ctrl.ads.isNotEmpty && ctrl.state is ShopeStateSuccess)
-                    AdListView(ctrl: ctrl),
+                    AdListView(
+                      ctrl: ctrl,
+                      scrollController: _scrollController,
+                    ),
                   if (ctrl.state is ShopeStateError)
                     Positioned.fill(
                       child: Container(
