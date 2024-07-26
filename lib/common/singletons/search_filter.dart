@@ -20,9 +20,7 @@ import 'package:flutter/material.dart';
 import '../models/filter.dart';
 
 class SearchFilter {
-  SearchFilter._();
-  static final _instance = SearchFilter._();
-  static SearchFilter get instance => _instance;
+  SearchFilter();
 
   final _search = ValueNotifier<String>('');
 
@@ -40,5 +38,10 @@ class SearchFilter {
       _filter.setFilter(newFilter);
       _filterNotifier.value = !_filterNotifier.value;
     }
+  }
+
+  dispose() {
+    _search.dispose();
+    _filterNotifier.dispose();
   }
 }

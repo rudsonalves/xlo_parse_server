@@ -25,6 +25,7 @@ import '../../common/models/mechanic.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
+import '../../get_it.dart';
 import '../../manager/mechanics_manager.dart';
 import '../../repository/advert_repository.dart';
 import 'advert_state.dart';
@@ -39,8 +40,8 @@ class AdvertController extends ChangeNotifier {
     notifyListeners();
   }
 
-  final app = AppSettings.instance;
-  final currentUser = CurrentUser.instance;
+  final app = getIt<AppSettings>();
+  final currentUser = getIt<CurrentUser>();
   final mechanicsManager = MechanicsManager.instance;
 
   final formKey = GlobalKey<FormState>();

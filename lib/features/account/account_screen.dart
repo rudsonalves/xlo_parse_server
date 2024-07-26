@@ -17,13 +17,103 @@
 
 import 'package:flutter/material.dart';
 
-class AccountScreen extends StatelessWidget {
+import '../../common/singletons/current_user.dart';
+import '../../get_it.dart';
+import '../base/base_controller.dart';
+import '../my_ads/my_ads_screen.dart';
+import '../product/widgets/title_product.dart';
+
+class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
 
   static const routeName = '/account';
 
   @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  final currentUser = getIt<CurrentUser>();
+
+  @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.red);
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: Text(currentUser.user!.name!),
+                subtitle: Text(currentUser.user!.email),
+                trailing: IconButton(
+                  icon: const Icon(Icons.power_settings_new_rounded),
+                  onPressed: () {
+                    currentUser.logout();
+                    getIt<BaseController>().jumpToPage(0);
+                  },
+                ),
+              ),
+              const Divider(),
+              const TitleProduct(title: 'Compras'),
+              ListTile(
+                leading: const Icon(Icons.favorite),
+                title: const Text('Favoritos'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.message),
+                title: const Text('Perguntas'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.shopping_bag),
+                title: const Text('Minhas Compras'),
+                onTap: () {},
+              ),
+              const Divider(),
+              const TitleProduct(title: 'Vendas'),
+              ListTile(
+                leading: const Icon(Icons.text_snippet),
+                title: const Text('Resumo'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.discount),
+                title: const Text('Anúncios'),
+                onTap: () {
+                  Navigator.pushNamed(context, MyAdsScreen.routeName);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.forum_outlined),
+                title: const Text('Perguntas'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.store),
+                title: const Text('Vendas'),
+                onTap: () {},
+              ),
+              const Divider(),
+              const TitleProduct(title: 'Configurações'),
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text('Meus Dados'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.contact_mail_rounded),
+                title: const Text('Meus Endereços'),
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

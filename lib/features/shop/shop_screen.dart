@@ -18,19 +18,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:xlo_mobx/get_it.dart';
 
 import '../../common/theme/app_text_style.dart';
+import '../base/base_controller.dart';
 import 'shop_controller.dart';
 import 'shop_state.dart';
 import 'widgets/ad_list_view.dart';
 
 class ShopScreen extends StatefulWidget {
-  final void Function(int page) changeToPage;
-
-  const ShopScreen(
-    this.changeToPage, {
-    super.key,
-  });
+  const ShopScreen({super.key});
 
   static const routeName = '/shop';
 
@@ -109,7 +106,7 @@ class _ShopScreenState extends State<ShopScreen>
         position: _fabAnimation,
         child: FloatingActionButton.extended(
           onPressed: () {
-            widget.changeToPage(1);
+            getIt<BaseController>().jumpToPage(1);
           },
           backgroundColor: colorScheme.primaryContainer.withOpacity(0.65),
           icon: const Icon(Icons.camera),

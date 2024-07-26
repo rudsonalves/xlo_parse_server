@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
+import 'package:xlo_mobx/common/models/user.dart';
 
 import '../common/models/advert.dart';
 import '../common/models/filter.dart';
@@ -30,6 +31,50 @@ import 'parse_to_model.dart';
 /// to retrieve and save advertisements.
 class AdvertRepository {
   static const maxAdsPerList = 20;
+
+  /// Fetches a list of advertisements from an user.
+  ///
+  /// [user] - The user to apply to the search.
+  /// Returns a list of `AdvertModel` if the query is successful, otherwise
+  /// returns `null`.
+  static Future<List<AdvertModel>?> getMyAds(UserModel usr, int status) async {
+    try {
+      final query = QueryBuilder<ParseObject>(ParseObject(keyAdvertTable));
+
+      final parseUser = await ParseUser.currentUser() as ParseUser?;
+      if (parseUser == null) {
+        throw Exception('current user not found. Make login again.');
+      }
+
+      query
+        ..setLimit(100)
+        ..whereEqualTo(keyAdvertOwner, parseUser.toPointer())
+        ..whereEqualTo(keyAdvertStatus, status)
+        ..orderByDescending(keyAdvertCreatedAt)
+        ..includeObject([keyAdvertOwner, keyAdvertAddress]);
+
+      final response = await query.query();
+      if (!response.success) {
+        throw Exception(response.error.toString());
+      }
+
+      if (response.results == null) {
+        throw Exception('search return a empty list');
+      }
+
+      List<AdvertModel> ads = [];
+      for (final ParseObject p in response.results!) {
+        final adModel = ParseToModel.advert(p);
+        if (adModel != null) ads.add(adModel);
+      }
+
+      return ads;
+    } catch (err) {
+      final message = 'AdvertRepository.getMyAds: $err';
+      log(message);
+      return null;
+    }
+  }
 
   /// Fetches a list of advertisements from the Parse Server based on the
   /// provided filters and search string.
@@ -44,19 +89,19 @@ class AdvertRepository {
     required String search,
     int page = 0,
   }) async {
-    final queryBuilder = QueryBuilder<ParseObject>(ParseObject(keyAdvertTable));
+    final query = QueryBuilder<ParseObject>(ParseObject(keyAdvertTable));
 
     try {
-      queryBuilder.setAmountToSkip(page * maxAdsPerList);
-      queryBuilder.setLimit(maxAdsPerList);
+      query.setAmountToSkip(page * maxAdsPerList);
+      query.setLimit(maxAdsPerList);
 
-      queryBuilder.includeObject([keyAdvertOwner, keyAdvertAddress]);
+      query.includeObject([keyAdvertOwner, keyAdvertAddress]);
 
-      queryBuilder.whereEqualTo(keyAdvertStatus, AdvertStatus.active.index);
+      query.whereEqualTo(keyAdvertStatus, AdvertStatus.active.index);
 
       // Filter by search String
       if (search.trim().isNotEmpty) {
-        queryBuilder.whereContains(
+        query.whereContains(
           keyAdvertTitle,
           search.trim(),
           caseSensitive: false,
@@ -68,38 +113,37 @@ class AdvertRepository {
         for (final mechId in filter.mechanicsId) {
           final mechParse = ParseObject(keyMechanicTable)
             ..set(keyMechanicId, mechId);
-          queryBuilder.whereEqualTo(keyAdvertMechanics, mechParse.toPointer());
+          query.whereEqualTo(keyAdvertMechanics, mechParse.toPointer());
         }
       }
 
       switch (filter.sortBy) {
         case SortOrder.price:
           // Filter by price
-          queryBuilder.orderByAscending(keyAdvertPrice);
+          query.orderByAscending(keyAdvertPrice);
           break;
         case SortOrder.date:
         default:
           // Filter by date
-          queryBuilder.orderByAscending(keyAdvertCreatedAt);
+          query.orderByDescending(keyAdvertCreatedAt);
       }
 
       // Filter minPrice
       if (filter.minPrice > 0) {
-        queryBuilder.whereGreaterThanOrEqualsTo(
-            keyAdvertPrice, filter.minPrice);
+        query.whereGreaterThanOrEqualsTo(keyAdvertPrice, filter.minPrice);
       }
 
       // Filter maxPrice
       if (filter.maxPrice > 0) {
-        queryBuilder.whereLessThanOrEqualTo(keyAdvertPrice, filter.maxPrice);
+        query.whereLessThanOrEqualTo(keyAdvertPrice, filter.maxPrice);
       }
 
-      // Filter by
+      // Filter by product condition
       if (filter.condition != ProductCondition.all) {
-        queryBuilder.whereEqualTo(keyAdvertCondition, filter.condition.index);
+        query.whereEqualTo(keyAdvertCondition, filter.condition.index);
       }
 
-      final response = await queryBuilder.query();
+      final response = await query.query();
       if (!response.success) {
         throw Exception(response.error.toString());
       }
@@ -116,7 +160,7 @@ class AdvertRepository {
 
       return ads;
     } catch (err) {
-      final message = 'AdvertRepository.getAdvertisements: $err';
+      final message = 'AdvertRepository.get: $err';
       log(message);
       return null;
     }
