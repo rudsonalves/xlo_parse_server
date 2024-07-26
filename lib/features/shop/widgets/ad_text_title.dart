@@ -33,7 +33,7 @@ class AdTextTitle extends StatelessWidget {
 
     return Text(
       text,
-      maxLines: 3,
+      maxLines: 2,
       style: AppTextStyle.font18SemiBold.copyWith(color: colorScheme.primary),
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.start,

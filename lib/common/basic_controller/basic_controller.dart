@@ -42,4 +42,6 @@ abstract class BasicController extends ChangeNotifier {
   Future<void> getAds();
 
   Future<void> getMoreAds();
+
+  Future<bool> updateAdStatus(AdvertModel ad);
 }

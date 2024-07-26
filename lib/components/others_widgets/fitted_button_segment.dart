@@ -17,22 +17,17 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../common/utils/extensions.dart';
-import '../../../common/theme/app_text_style.dart';
-
-class AdTextPrice extends StatelessWidget {
-  final double value;
-  const AdTextPrice(
-    this.value, {
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    // final colorScheme = Theme.of(context).colorScheme;
-    return Text(
-      value.formatMoney(),
-      style: AppTextStyle.font20,
-    );
-  }
+class FittedButtonSegment<T> extends ButtonSegment<T> {
+  FittedButtonSegment({
+    Key? key,
+    required super.value,
+    required String label,
+    required IconData iconData,
+  }) : super(
+          label: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(label),
+          ),
+          icon: Icon(iconData),
+        );
 }

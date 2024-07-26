@@ -24,7 +24,7 @@ import '../../get_it.dart';
 import 'base_state.dart';
 import '../../common/singletons/app_settings.dart';
 
-const titles = ['XLO', 'Criar Anúncio', 'Chat', 'Favoritos', 'Minha Conta'];
+const titles = ['XLO', 'Adicionar Anúncio', 'Chat', 'Favoritos', 'Minha Conta'];
 
 class BaseController extends ChangeNotifier {
   BaseState _state = BaseStateInitial();

@@ -17,21 +17,41 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/common/models/advert.dart';
 
-import '../../product/product_screen.dart';
-import '../shop_controller.dart';
-import 'ad_text_info.dart';
-import 'ad_text_price.dart';
-import 'ad_text_title.dart';
+import '../../../common/basic_controller/basic_controller.dart';
+import '../../../features/product/product_screen.dart';
+import 'widgets/ad_card_view.dart';
+import 'widgets/dismissible_ad.dart';
 
 class AdListView extends StatefulWidget {
-  final ShopController ctrl;
+  final BasicController ctrl;
   final ScrollController scrollController;
+  final Widget? itemButton;
+  final bool enableDismissible;
+  final Color? colorLeft;
+  final Color? colorRight;
+  final IconData? iconLeft;
+  final IconData? iconRight;
+  final String? labelLeft;
+  final String? labelRight;
+  final AdvertStatus? statusLeft;
+  final AdvertStatus? statusRight;
 
   const AdListView({
     super.key,
     required this.ctrl,
     required this.scrollController,
+    this.itemButton,
+    this.enableDismissible = false,
+    this.colorLeft,
+    this.colorRight,
+    this.iconLeft,
+    this.iconRight,
+    this.labelLeft,
+    this.labelRight,
+    this.statusLeft,
+    this.statusRight,
   });
 
   @override
@@ -40,7 +60,7 @@ class AdListView extends StatefulWidget {
 
 class _AdListViewState extends State<AdListView> {
   late ScrollController _scrollController;
-  late final ShopController ctrl;
+  late final BasicController ctrl;
   double scrollPosition = 0;
 
   @override
@@ -91,8 +111,6 @@ class _AdListViewState extends State<AdListView> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return ListView.builder(
       controller: _scrollController,
       itemCount: ctrl.ads.length,
@@ -106,34 +124,24 @@ class _AdListViewState extends State<AdListView> {
               arguments: ctrl.ads[index],
             );
           },
-          child: Card(
-            margin: const EdgeInsets.only(bottom: 12),
-            clipBehavior: Clip.antiAlias,
-            color: colorScheme.surfaceContainer,
-            child: Row(
-              children: [
-                showImage(ctrl.ads[index].images[0]),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AdTextTitle(ctrl.ads[index].title),
-                        AdTextPrice(ctrl.ads[index].price),
-                        AdTextInfo(
-                          date: ctrl.ads[index].createdAt,
-                          city: ctrl.ads[index].address.city,
-                          state: ctrl.ads[index].address.state,
-                        ),
-                      ],
-                    ),
-                  ),
+          child: widget.enableDismissible
+              ? DismissibleAd(
+                  ad: ctrl.ads[index],
+                  itemButton: widget.itemButton,
+                  colorLeft: widget.colorLeft,
+                  colorRight: widget.colorRight,
+                  iconLeft: widget.iconLeft,
+                  iconRight: widget.iconRight,
+                  labelLeft: widget.labelLeft,
+                  labelRight: widget.labelRight,
+                  statusLeft: widget.statusLeft,
+                  statusRight: widget.statusRight,
+                  updateAdStatus: ctrl.updateAdStatus,
+                )
+              : AdCardView(
+                  ads: ctrl.ads[index],
+                  itemButton: widget.itemButton,
                 ),
-              ],
-            ),
-          ),
         ),
       ),
     );
