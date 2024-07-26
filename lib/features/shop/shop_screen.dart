@@ -15,15 +15,17 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:xlo_mobx/get_it.dart';
 
+import '../../common/basic_controller/basic_state.dart';
 import '../../common/theme/app_text_style.dart';
+import '../../get_it.dart';
 import '../base/base_controller.dart';
 import 'shop_controller.dart';
-import 'shop_state.dart';
 import 'widgets/ad_list_view.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -38,9 +40,10 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen>
     with SingleTickerProviderStateMixin {
   final ctrl = ShopController();
-  final _scrollController = ScrollController();
   late AnimationController _animationController;
-  late Animation<Offset> _fabAnimation;
+  late Animation<Offset> _fabOffsetAnimation;
+  final _scrollController = ScrollController();
+  Timer? _timer;
 
   @override
   void initState() {
@@ -48,10 +51,11 @@ class _ShopScreenState extends State<ShopScreen>
     ctrl.init();
 
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _fabAnimation = Tween<Offset>(
+
+    _fabOffsetAnimation = Tween<Offset>(
       begin: const Offset(0, 1.5),
       end: const Offset(0, 0),
     ).animate(CurvedAnimation(
@@ -60,16 +64,32 @@ class _ShopScreenState extends State<ShopScreen>
     ));
 
     _scrollController.addListener(_scrollListener);
+    _animationController.forward();
   }
 
   void _scrollListener() {
     if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      _animationController.forward();
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      _animationController.reverse();
+            ScrollDirection.forward ||
+        _scrollController.position.userScrollDirection ==
+            ScrollDirection.reverse) {
+      _hideFab();
+      _resetTimer();
     }
+  }
+
+  void _showFab() {
+    _animationController.forward();
+  }
+
+  void _resetTimer() {
+    _timer?.cancel();
+    _timer = Timer(const Duration(seconds: 5), () {
+      _showFab();
+    });
+  }
+
+  void _hideFab() {
+    _animationController.reverse();
   }
 
   @override
@@ -77,7 +97,9 @@ class _ShopScreenState extends State<ShopScreen>
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     _animationController.dispose();
+    _timer?.cancel();
     ctrl.dispose();
+
     super.dispose();
   }
 
@@ -102,8 +124,9 @@ class _ShopScreenState extends State<ShopScreen>
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: SlideTransition(
-        position: _fabAnimation,
+        position: _fabOffsetAnimation,
         child: FloatingActionButton.extended(
           onPressed: () {
             getIt<BaseController>().jumpToPage(1);
@@ -113,93 +136,100 @@ class _ShopScreenState extends State<ShopScreen>
           label: const Text('Adicionar anúncio'),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListenableBuilder(
-            listenable: ctrl,
-            builder: (context, _) {
-              return Stack(
-                children: [
-                  // state HomeState Success
-                  // empty search
-                  if (ctrl.ads.isEmpty && ctrl.state is ShopeStateSuccess)
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Card(
-                            color:
-                                colorScheme.primaryContainer.withOpacity(.45),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                children: [
-                                  const Icon(
-                                    Icons.warning_amber,
-                                    color: Colors.amber,
-                                    size: 80,
-                                  ),
-                                  Text(
-                                    'Nenhum anúncio encontrado',
-                                    style: AppTextStyle.font18Bold,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (ctrl.ads.isNotEmpty && ctrl.state is ShopeStateSuccess)
-                    AdListView(
-                      ctrl: ctrl,
-                      scrollController: _scrollController,
-                    ),
-                  if (ctrl.state is ShopeStateError)
-                    Positioned.fill(
-                      child: Container(
-                        color: colorScheme.surface.withOpacity(0.7),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Card(
-                                color: colorScheme.primaryContainer,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Column(
-                                    children: [
-                                      Icon(
-                                        Icons.error,
-                                        color: colorScheme.error,
-                                        size: 80,
-                                      ),
-                                      const Text(
-                                        'Desculpe. Ocorreu algum problema.\n'
-                                        ' Tente mais tarde.',
-                                      ),
-                                    ],
-                                  ),
+      body: NotificationListener<ScrollStartNotification>(
+        onNotification: (scrollNotification) {
+          _hideFab();
+          _resetTimer();
+          return false;
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListenableBuilder(
+              listenable: ctrl,
+              builder: (context, _) {
+                return Stack(
+                  children: [
+                    // state HomeState Success
+                    // empty search
+                    if (ctrl.ads.isEmpty && ctrl.state is BasicStateSuccess)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Card(
+                              color:
+                                  colorScheme.primaryContainer.withOpacity(.45),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  children: [
+                                    const Icon(
+                                      Icons.warning_amber,
+                                      color: Colors.amber,
+                                      size: 80,
+                                    ),
+                                    Text(
+                                      'Nenhum anúncio encontrado',
+                                      style: AppTextStyle.font18Bold,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    if (ctrl.ads.isNotEmpty && ctrl.state is BasicStateSuccess)
+                      AdListView(
+                        ctrl: ctrl,
+                        scrollController: _scrollController,
+                      ),
+                    if (ctrl.state is BasicStateError)
+                      Positioned.fill(
+                        child: Container(
+                          color: colorScheme.surface.withOpacity(0.7),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Card(
+                                  color: colorScheme.primaryContainer,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Column(
+                                      children: [
+                                        Icon(
+                                          Icons.error,
+                                          color: colorScheme.error,
+                                          size: 80,
+                                        ),
+                                        const Text(
+                                          'Desculpe. Ocorreu algum problema.\n'
+                                          ' Tente mais tarde.',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  // state HomeState Loading
-                  if (ctrl.state is ShopeStateLoading)
-                    Positioned.fill(
-                      child: Container(
-                        color: colorScheme.surface.withOpacity(.7),
-                        child: const Center(
-                          child: CircularProgressIndicator(),
+                    // state HomeState Loading
+                    if (ctrl.state is BasicStateLoading)
+                      Positioned.fill(
+                        child: Container(
+                          color: colorScheme.surface.withOpacity(.7),
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
                       ),
-                    ),
-                ],
-              );
-            }),
+                  ],
+                );
+              }),
+        ),
       ),
     );
   }

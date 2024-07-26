@@ -60,7 +60,7 @@ class _ProductScreenState extends State<ProductScreen>
     super.initState();
 
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
 
@@ -144,11 +144,8 @@ class _ProductScreenState extends State<ProductScreen>
       ),
       body: NotificationListener<ScrollNotification>(
         onNotification: (scrollNotification) {
-          if (scrollNotification is ScrollStartNotification) {
-            _hideFab();
-          } else if (scrollNotification is ScrollEndNotification) {
-            _resetTimer();
-          }
+          _hideFab();
+          _resetTimer();
           return false;
         },
         child: SingleChildScrollView(

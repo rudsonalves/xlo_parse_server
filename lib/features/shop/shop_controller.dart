@@ -17,24 +17,17 @@
 
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
-
-import '../../common/models/advert.dart';
+import '../../common/basic_controller/basic_controller.dart';
+import '../../common/basic_controller/basic_state.dart';
 import '../../common/models/filter.dart';
 import '../../common/singletons/app_settings.dart';
-import '../../common/singletons/current_user.dart';
 import '../../common/singletons/search_filter.dart';
 import '../../get_it.dart';
 import '../../repository/advert_repository.dart';
-import 'shop_state.dart';
+import '../../repository/constants.dart';
 
-class ShopController extends ChangeNotifier {
-  ShopState _state = ShopStateInitial();
-
-  ShopState get state => _state;
-
+class ShopController extends BasicController {
   final app = getIt<AppSettings>();
-  final currentUser = getIt<CurrentUser>();
   final searchFilter = getIt<SearchFilter>();
 
   FilterModel get filter => searchFilter.filter;
@@ -43,14 +36,12 @@ class ShopController extends ChangeNotifier {
     _getMorePages = true;
   }
 
-  final List<AdvertModel> _ads = [];
-  List<AdvertModel> get ads => _ads;
-
   int _adPage = 0;
 
   bool _getMorePages = true;
   bool get getMorePages => _getMorePages;
 
+  @override
   void init() {
     getAds();
 
@@ -58,51 +49,48 @@ class ShopController extends ChangeNotifier {
     searchFilter.search.addListener(getAds);
   }
 
-  void _changeState(ShopState newState) {
-    _state = newState;
-    notifyListeners();
-  }
-
+  @override
   Future<void> getAds() async {
     try {
-      _changeState(ShopeStateLoading());
+      changeState(BasicStateLoading());
       final result = await AdvertRepository.get(
         filter: filter,
         search: searchFilter.searchString,
         page: _adPage,
       );
-      _ads.clear();
+      ads.clear();
       if (result != null && result.isNotEmpty) {
-        _ads.addAll(result);
-        _getMorePages = AdvertRepository.maxAdsPerList == result.length;
+        ads.addAll(result);
+        _getMorePages = maxAdsPerList == result.length;
       }
-      _changeState(ShopeStateSuccess());
+      changeState(BasicStateSuccess());
     } catch (err) {
       log(err.toString());
-      _changeState(ShopeStateError());
+      changeState(BasicStateError());
     }
   }
 
+  @override
   Future<void> getMoreAds() async {
     if (!_getMorePages) return;
     _adPage++;
     try {
-      _changeState(ShopeStateLoading());
+      changeState(BasicStateLoading());
       final result = await AdvertRepository.get(
         filter: filter,
         search: searchFilter.searchString,
         page: _adPage,
       );
       if (result != null && result.isNotEmpty) {
-        _ads.addAll(result);
+        ads.addAll(result);
         _getMorePages = true;
       } else {
         _getMorePages = false;
       }
-      _changeState(ShopeStateSuccess());
+      changeState(BasicStateSuccess());
     } catch (err) {
       log(err.toString());
-      _changeState(ShopeStateError());
+      changeState(BasicStateError());
     }
   }
 }

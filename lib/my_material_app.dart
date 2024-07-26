@@ -51,7 +51,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = createTextTheme(context, "Comfortaa", "Poppins");
+    TextTheme textTheme = createTextTheme(context, "Poppins", "Comfortaa");
     MaterialTheme theme = MaterialTheme(textTheme);
 
     return ValueListenableBuilder(

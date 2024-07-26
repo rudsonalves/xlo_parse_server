@@ -21,6 +21,50 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/26 - version: 0.5.1+17
+
+This commit includes several adjustments to animations, a reduction in the number of `AdvertStatus` options, and various other enhancements to improve code consistency and functionality. Changes:
+
+1. lib/common/models/advert.dart
+   - Removed `AdvertStatus.closed` from the `AdvertStatus` enum.
+
+2. lib/common/theme/app_text_style.dart
+   - Added `font14Thin` style for thinner text with font size 14.
+
+3. lib/features/my_ads/my_ads_controller.dart
+   - Added properties `_adPage`, `_getMorePages`, and `getMorePages`.
+   - Implemented logic to fetch additional pages of advertisements in `getMoreAds`.
+
+4. lib/features/my_ads/my_ads_screen.dart
+   - Updated `TabBar` length to 3 to remove the unnecessary "Fechados" tab.
+   - Adjusted text styles for consistency.
+   - Enhanced error and loading state handling.
+
+5. lib/features/product/product_screen.dart
+   - Adjusted `AnimationController` duration for `FloatingActionButton` to 300 milliseconds.
+   - Simplified scroll notification handling logic.
+
+6. lib/features/shop/shop_controller.dart
+   - Refactored to extend `BasicController` and use `BasicState` for state management.
+   - Added initialization and pagination logic for fetching advertisements.
+
+7. lib/features/shop/shop_screen.dart
+   - Refactored to integrate `BasicState` for consistent state management.
+   - Updated `AnimationController` duration and scroll listener logic.
+   - Improved `FloatingActionButton` animation and visibility handling.
+
+8. lib/my_material_app.dart
+   - Changed the text theme order in `createTextTheme` to prioritize "Poppins" over "Comfortaa".
+
+9. lib/repository/advert_repository.dart
+   - Removed the `maxAdsPerList` constant and relocated it to `constants.dart`.
+
+10. lib/repository/constants.dart
+    - Added `maxAdsPerList` constant and set its value to 5 for better performance during testing.
+
+Standardized animations for `FloatingActionButton`, streamlined advertisement status options, and improved overall state management and UI consistency across various features.
+
+
 ## 2024/07/26 - version: 0.5.0+16
 
 This commit introduces several new files and modifications to the existing codebase, adding functionalities and enhancements, including dependency injection with `get_it`. Changes:
