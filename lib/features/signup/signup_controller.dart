@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import '../../common/models/user.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../components/custon_field_controllers/masked_text_controller.dart';
+import '../../get_it.dart';
 import '../../repository/user_repository.dart';
 import 'signup_state.dart';
 
@@ -34,7 +35,7 @@ class SignupController extends ChangeNotifier {
   final nicknameController = TextEditingController();
   final phoneController = MaskedTextController(mask: '(##) ####-#####');
 
-  final app = AppSettings.instance;
+  final app = getIt<AppSettings>();
 
   final emailFocusNode = FocusNode();
   final celularFocusNode = FocusNode();

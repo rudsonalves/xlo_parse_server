@@ -39,6 +39,7 @@ const keyAddressNeighborhood = 'neighborhood';
 const keyAddressState = 'state';
 const keyAddressCity = 'city';
 const keyAddressOwner = 'owner';
+const keyAddressCreatedAt = 'createdAt';
 
 const keyAdvertTable = 'AdSale';
 const keyAdvertId = 'objectId';

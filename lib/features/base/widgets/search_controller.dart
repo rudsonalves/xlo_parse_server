@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../common/singletons/app_settings.dart';
+import '../../../get_it.dart';
 
 const keySearchHistory = 'SearchHistory';
 const historyMaxLength = 20;
@@ -26,7 +27,7 @@ const historyMaxLength = 20;
 class SearchDialogController {
   final List<String> _history = [];
   final search = SearchController();
-  final app = AppSettings.instance;
+  final app = getIt<AppSettings>();
   late final SharedPreferences prefs;
 
   bool _started = false;

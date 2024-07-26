@@ -1,3 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 // Copyright (C) 2024 Rudson Alves
 //
 // This file is part of xlo_parse_server.
@@ -26,6 +29,7 @@ class AddressModel {
   String neighborhood;
   String state;
   String city;
+  DateTime createdAt;
 
   AddressModel({
     this.id,
@@ -38,7 +42,8 @@ class AddressModel {
     required this.neighborhood,
     required this.state,
     required this.city,
-  });
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
   String addressString() {
     return '$street, '
@@ -51,16 +56,7 @@ class AddressModel {
 
   @override
   String toString() {
-    return 'AddressModel(id: $id,'
-        ' name: $name,'
-        ' zipCode: $zipCode,'
-        ' userId: $userId,'
-        ' street: $street,'
-        ' number: $number,'
-        ' complement: $complement,'
-        ' neighborhood: $neighborhood,'
-        ' state: $state,'
-        ' city: $city)';
+    return 'AddressModel(id: $id, name: $name, zipCode: $zipCode, userId: $userId, street: $street, number: $number, complement: $complement, neighborhood: $neighborhood, state: $state, city: $city, createdAt: $createdAt)';
   }
 
   @override
@@ -76,7 +72,8 @@ class AddressModel {
         other.complement == complement &&
         other.neighborhood == neighborhood &&
         other.state == state &&
-        other.city == city;
+        other.city == city &&
+        other.createdAt == createdAt;
   }
 
   @override
@@ -90,6 +87,73 @@ class AddressModel {
         complement.hashCode ^
         neighborhood.hashCode ^
         state.hashCode ^
-        city.hashCode;
+        city.hashCode ^
+        createdAt.hashCode;
   }
+
+  AddressModel copyWith({
+    String? id,
+    String? name,
+    String? zipCode,
+    String? userId,
+    String? street,
+    String? number,
+    String? complement,
+    String? neighborhood,
+    String? state,
+    String? city,
+    DateTime? createdAt,
+  }) {
+    return AddressModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      zipCode: zipCode ?? this.zipCode,
+      userId: userId ?? this.userId,
+      street: street ?? this.street,
+      number: number ?? this.number,
+      complement: complement ?? this.complement,
+      neighborhood: neighborhood ?? this.neighborhood,
+      state: state ?? this.state,
+      city: city ?? this.city,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'zipCode': zipCode,
+      'userId': userId,
+      'street': street,
+      'number': number,
+      'complement': complement,
+      'neighborhood': neighborhood,
+      'state': state,
+      'city': city,
+      'createdAt': createdAt.millisecondsSinceEpoch,
+    };
+  }
+
+  factory AddressModel.fromMap(Map<String, dynamic> map) {
+    return AddressModel(
+      id: map['id'] != null ? map['id'] as String : null,
+      name: map['name'] as String,
+      zipCode: map['zipCode'] as String,
+      userId: map['userId'] as String,
+      street: map['street'] as String,
+      number: map['number'] as String,
+      complement:
+          map['complement'] != null ? map['complement'] as String : null,
+      neighborhood: map['neighborhood'] as String,
+      state: map['state'] as String,
+      city: map['city'] as String,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory AddressModel.fromJson(String source) =>
+      AddressModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

@@ -26,6 +26,7 @@ import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
 import 'features/account/account_screen.dart';
 import 'features/address/address_screen.dart';
+import 'features/my_ads/my_ads_screen.dart';
 import 'features/product/product_screen.dart';
 import 'features/base/base_screen.dart';
 import 'features/filters/filters_screen.dart';
@@ -36,6 +37,7 @@ import 'features/advertisement/advert_screen.dart';
 import 'features/login/login_screen.dart';
 import 'features/new_address/new_address_screen.dart';
 import 'features/signup/signup_screen.dart';
+import 'get_it.dart';
 
 class MyMaterialApp extends StatefulWidget {
   const MyMaterialApp({super.key});
@@ -45,7 +47,7 @@ class MyMaterialApp extends StatefulWidget {
 }
 
 class _MyMaterialAppState extends State<MyMaterialApp> {
-  final app = AppSettings.instance;
+  final app = getIt<AppSettings>();
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +62,6 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             debugShowCheckedModeBanner: false,
             initialRoute: BaseScreen.routeName,
             localizationsDelegates: const [
-              // Adicione este delegate para suporte às localizações
-              // AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
@@ -79,19 +79,11 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
               LoginScreen.routeName: (_) => const LoginScreen(),
               SignUpScreen.routeName: (_) => const SignUpScreen(),
               AddressScreen.routeName: (_) => const AddressScreen(),
+              ShopScreen.routeName: (_) => const ShopScreen(),
+              MyAdsScreen.routeName: (_) => const MyAdsScreen(),
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {
-                case ShopScreen.routeName:
-                  return MaterialPageRoute(
-                    builder: (context) {
-                      final changeToPage =
-                          settings.arguments as void Function(int);
-
-                      return ShopScreen(changeToPage);
-                    },
-                  );
-
                 case ProductScreen.routeName:
                   return MaterialPageRoute(
                     builder: (context) {
@@ -100,6 +92,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
                       return ProductScreen(advert: advert);
                     },
                   );
+
                 case FiltersScreen.routeName:
                   return MaterialPageRoute(
                     builder: (context) {
@@ -108,6 +101,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
                       return FiltersScreen(filter);
                     },
                   );
+
                 case MecanicsScreen.routeName:
                   return MaterialPageRoute(
                     builder: (context) {
@@ -118,6 +112,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
                       );
                     },
                   );
+
                 case NewAddressScreen.routeName:
                   return MaterialPageRoute(
                     builder: (context) {

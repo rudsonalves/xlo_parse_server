@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
 // This file is part of xlo_parse_server.
@@ -21,9 +22,7 @@ import '../models/address.dart';
 import '../models/user.dart';
 
 class CurrentUser {
-  CurrentUser._();
-  static final CurrentUser _instance = CurrentUser._();
-  static CurrentUser get instance => _instance;
+  CurrentUser();
 
   UserModel? _user;
   UserModel? get user => _user;
@@ -34,7 +33,7 @@ class CurrentUser {
   Iterable<String> get addressNames => addressManager.addressNames;
 
   String get userId => _user!.id!;
-  bool get isLogin => _user != null;
+  bool get isLoged => _user != null;
 
   Future<void> init([UserModel? user]) async {
     user ??= await UserRepository.getCurrentUser();
@@ -49,4 +48,9 @@ class CurrentUser {
 
   Future<void> saveAddress(AddressModel address) async =>
       addressManager.save(address);
+
+  Future<void> logout() async {
+    await UserRepository.logout();
+    _user = null;
+  }
 }

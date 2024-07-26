@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 
 import '../../../common/singletons/current_user.dart';
 import '../../../common/utils/utils.dart';
+import '../../../get_it.dart';
 
 class CustomDrawerHeader extends StatelessWidget {
   const CustomDrawerHeader({
@@ -28,7 +29,7 @@ class CustomDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final currentUser = CurrentUser.instance;
+    final currentUser = getIt<CurrentUser>();
 
     return DrawerHeader(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -55,7 +56,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    currentUser.isLogin
+                    currentUser.isLoged
                         ? Utils.title(currentUser.user!.name!)
                         : 'Acessar sua conta agora!',
                     style: const TextStyle(
@@ -66,7 +67,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 const SizedBox(height: 6),
                 FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(currentUser.isLogin
+                  child: Text(currentUser.isLoged
                       ? currentUser.user!.email
                       : 'Click aqui!'),
                 ),

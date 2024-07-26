@@ -24,6 +24,7 @@ import '../../common/models/filter.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../common/singletons/search_filter.dart';
+import '../../get_it.dart';
 import '../../repository/advert_repository.dart';
 import 'shop_state.dart';
 
@@ -31,9 +32,9 @@ class ShopController extends ChangeNotifier {
   ShopState _state = ShopStateInitial();
   ShopState get state => _state;
 
-  final app = AppSettings.instance;
-  final CurrentUser? user = CurrentUser.instance;
-  final searchFilter = SearchFilter.instance;
+  final app = getIt<AppSettings>();
+  final CurrentUser? user = getIt<CurrentUser>();
+  final searchFilter = getIt<SearchFilter>();
 
   FilterModel get filter => searchFilter.filter;
   set filter(FilterModel newFilter) {

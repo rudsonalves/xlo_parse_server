@@ -21,6 +21,135 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/26 - version: 0.5.0+16
+
+This commit introduces several new files and modifications to the existing codebase, adding functionalities and enhancements, including dependency injection with `get_it`. Changes:
+
+1. lib/common/basic_controller/basic_controller.dart
+   - Added new file with `BasicController` abstract class.
+   - Defined state management and basic functionalities such as `changeState`, `init`, `getAds`, and `getMoreAds`.
+
+2. lib/common/basic_controller/basic_state.dart
+   - Added new file defining `BasicState` abstract class and its concrete implementations: `BasicStateInitial`, `BasicStateLoading`, `BasicStateSuccess`, and `BasicStateError`.
+
+3. lib/common/models/address.dart
+   - Added `import 'dart:convert';`.
+   - Included `createdAt` property in `AddressModel`.
+   - Modified constructor to initialize `createdAt`.
+   - Updated `toString`, `==`, and `hashCode` methods to include `createdAt`.
+   - Added `copyWith` method.
+   - Added `toMap`, `fromMap`, `toJson`, and `fromJson` methods for serialization.
+
+4. lib/common/models/user.dart
+   - Removed commented out `UserType type;` and related code.
+   - Simplified constructor initialization.
+
+5. lib/common/singletons/app_settings.dart
+   - Refactored `AppSettings` to remove singleton pattern, allowing for direct instantiation.
+
+6. lib/common/singletons/current_user.dart
+   - Refactored `CurrentUser` to remove singleton pattern, allowing for direct instantiation.
+   - Added `logout` method to handle user logout.
+
+7. lib/common/singletons/search_filter.dart
+   - Refactored `SearchFilter` to remove singleton pattern, allowing for direct instantiation.
+   - Added `dispose` method to clean up resources.
+
+8. lib/common/singletons/search_history.dart
+   - Refactored `SearchHistory` to remove singleton pattern, allowing for direct instantiation.
+
+9. lib/components/custom_drawer/custom_drawer.dart
+   - Updated imports and added dependency injection with `getIt`.
+   - Refactored navigation methods to use `jumpToPage` from `BaseController`.
+   - Enhanced `ListTile` widgets to conditionally enable/disable based on user login status.
+
+10. lib/components/custom_drawer/widgets/custom_drawer_header.dart
+    - Updated imports and added dependency injection with `getIt`.
+    - Refactored `isLogin` to `isLoged` for better readability.
+
+11. lib/features/account/account_screen.dart
+    - Converted `AccountScreen` to a `StatefulWidget`.
+    - Implemented user information display and various action items.
+
+12. lib/features/advertisement/advert_controller.dart
+    - Updated imports and added dependency injection with `getIt`.
+
+13. lib/features/base/base_controller.dart
+    - Updated imports and added dependency injection with `getIt`.
+
+14. lib/features/base/base_screen.dart
+    - Refactored `BaseScreen` to use dependency injection with `getIt`.
+    - Removed redundant `_changeToPage` method and updated `CustomDrawer`.
+
+15. lib/features/base/widgets/search_controller.dart
+    - Updated imports and added dependency injection with `getIt`.
+
+16. lib/features/base/widgets/search_dialog.dart
+    - Updated imports and added dependency injection with `getIt`.
+
+17. lib/features/login/login_controller.dart
+    - Updated imports and added dependency injection with `getIt`.
+
+18. lib/features/my_ads/my_ads_controller.dart
+    - Added new file with `MyAdsController` extending `BasicController`.
+    - Implemented `init`, `getAds`, `getMoreAds`, and `setProductStatus` methods.
+
+19. lib/features/my_ads/my_ads_screen.dart
+    - Added new file with `MyAdsScreen` implementing a stateful widget.
+    - Integrated `MyAdsController` and implemented UI with tabs for different ad statuses.
+
+20. lib/features/my_ads/my_ads_state.dart
+    - Added new file defining `MyAdsState` abstract class and its concrete implementations: `MyAdsStateInitial`, `MyAdsStateLoading`, `MyAdsStateSuccess`, and `MyAdsStateError`.
+
+21. lib/features/my_ads/widgets/my_ad_list_view.dart
+    - Added new file implementing `AdListView` widget with scroll and image handling capabilities.
+
+22. lib/features/new_address/new_address_controller.dart
+    - Updated imports and added dependency injection with `getIt`.
+
+23. lib/features/shop/shop_controller.dart
+    - Updated imports and added dependency injection with `getIt`.
+
+24. lib/features/shop/shop_screen.dart
+    - Refactored `ShopScreen` to use dependency injection with `getIt`.
+    - Removed redundant `changeToPage` method.
+
+25. lib/features/signup/signup_controller.dart
+    - Updated imports and added dependency injection with `getIt`.
+
+26. lib/get_it.dart
+    - Added new file to setup and dispose dependencies using `get_it`.
+
+27. lib/main.dart
+    - Integrated `get_it` for dependency injection.
+    - Updated initialization to use `setupDependencies`.
+
+28. lib/my_material_app.dart
+    - Updated imports and added dependency injection with `getIt`.
+    - Refactored `initialRoute` and `onGenerateRoute` for better route management.
+
+29. lib/repository/address_repository.dart
+    - Added a comment for potential fix regarding `toPointer` usage.
+
+30. lib/repository/advert_repository.dart
+    - Added `getMyAds` method to fetch user-specific advertisements.
+    - Refactored query logic to use consistent naming conventions.
+
+31. lib/repository/constants.dart
+    - Added `keyAddressCreatedAt` constant.
+
+32. lib/repository/parse_to_model.dart
+    - Updated `ParseToModel` methods to include `createdAt` property.
+
+33. pubspec.lock
+    - Added `get_it` dependency.
+
+34. pubspec.yaml
+    - Added `get_it` to dependencies.
+
+Implemented new controllers, refactored singletons to use dependency injection, enhanced UI components, and integrated `get_it` for dependency management, improving state management and overall code maintainability.
+
+
 ## 2024/07/25 - version: 0.5.0+15
 
 This commit introduces enhancements to the Product and Shop screens, adds a new ReadMoreText component, and adjusts the theme colors.

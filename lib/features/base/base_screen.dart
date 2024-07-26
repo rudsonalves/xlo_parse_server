@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/models/filter.dart';
 import '../../components/custom_drawer/custom_drawer.dart';
+import '../../get_it.dart';
 import '../account/account_screen.dart';
 import '../chat/chat_screen.dart';
 import '../favorites/favorites_screen.dart';
@@ -39,7 +40,7 @@ class BaseScreen extends StatefulWidget {
 }
 
 class _BaseScreenState extends State<BaseScreen> {
-  final ctrl = BaseController();
+  final ctrl = getIt<BaseController>();
 
   @override
   void initState() {
@@ -47,8 +48,11 @@ class _BaseScreenState extends State<BaseScreen> {
     ctrl.init();
   }
 
-  void _changeToPage(int page) {
-    ctrl.jumpToPage(page);
+  @override
+  void dispose() {
+    disposeDependencies(); // Locator dispose
+
+    super.dispose();
   }
 
   Widget get titleWidget {
@@ -180,9 +184,9 @@ class _BaseScreenState extends State<BaseScreen> {
         ],
       ),
       drawer: CustomDrawer(
-          colorScheme: colorScheme,
-          pageController: ctrl.pageController,
-          changeToPage: _changeToPage),
+        colorScheme: colorScheme,
+        pageController: ctrl.pageController,
+      ),
       body: ListenableBuilder(
         listenable: ctrl,
         builder: (context, _) {
@@ -192,12 +196,12 @@ class _BaseScreenState extends State<BaseScreen> {
                 child: PageView(
                   controller: ctrl.pageController,
                   physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    ShopScreen(_changeToPage),
-                    const AdvertScreen(),
-                    const ChatScreen(),
-                    const FavoritesScreen(),
-                    const AccountScreen(),
+                  children: const [
+                    ShopScreen(),
+                    AdvertScreen(),
+                    ChatScreen(),
+                    FavoritesScreen(),
+                    AccountScreen(),
                   ],
                 ),
               ),

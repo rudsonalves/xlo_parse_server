@@ -15,28 +15,31 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-class AppSettings {
-  AppSettings();
+import '../models/advert.dart';
+import '../singletons/current_user.dart';
+import '../../get_it.dart';
+import 'basic_state.dart';
 
-  final ValueNotifier<Brightness> _brightness =
-      ValueNotifier<Brightness>(Brightness.dark);
+abstract class BasicController extends ChangeNotifier {
+  BasicState _state = BasicStateInitial();
 
-  ValueNotifier<Brightness> get brightness => _brightness;
-  bool get isDark => _brightness.value == Brightness.dark;
+  BasicState get state => _state;
 
-  void toggleBrightnessMode() {
-    _brightness.value = _brightness.value == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
+  final currentUser = getIt<CurrentUser>();
+
+  final List<AdvertModel> _ads = [];
+  List<AdvertModel> get ads => _ads;
+
+  void changeState(BasicState newState) {
+    _state = newState;
+    notifyListeners();
   }
 
-  void setBrightnessMode(Brightness brightness) {
-    _brightness.value = brightness;
-  }
+  void init();
 
-  void dispose() {
-    _brightness.dispose();
-  }
+  Future<void> getAds();
+
+  Future<void> getMoreAds();
 }

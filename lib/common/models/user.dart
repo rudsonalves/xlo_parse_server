@@ -22,7 +22,6 @@ class UserModel {
   String email;
   String? phone;
   String? password;
-  // UserType type;
   DateTime? createAt;
 
   UserModel({
@@ -31,7 +30,6 @@ class UserModel {
     required this.email,
     this.phone,
     this.password,
-    // this.type = UserType.particular,
     DateTime? createdAt,
   }) : createAt = createdAt ?? DateTime.now();
 
@@ -51,7 +49,6 @@ class UserModel {
       email: user.email,
       phone: user.phone,
       password: user.password,
-      // type: user.type,
       createdAt: user.createAt,
     );
   }

@@ -23,6 +23,7 @@ import 'package:xlo_mobx/features/new_address/new_address_state.dart';
 import '../../common/models/address.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/masked_text_controller.dart';
+import '../../get_it.dart';
 import '../../repository/viacep_repository.dart';
 
 class NewAddressController extends ChangeNotifier {
@@ -35,7 +36,7 @@ class NewAddressController extends ChangeNotifier {
     notifyListeners();
   }
 
-  final user = CurrentUser.instance;
+  final user = getIt<CurrentUser>();
 
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();

@@ -20,6 +20,7 @@ import 'package:xlo_mobx/common/singletons/search_filter.dart';
 
 import '../../common/models/filter.dart';
 import '../../common/singletons/current_user.dart';
+import '../../get_it.dart';
 import 'base_state.dart';
 import '../../common/singletons/app_settings.dart';
 
@@ -29,10 +30,10 @@ class BaseController extends ChangeNotifier {
   BaseState _state = BaseStateInitial();
 
   final pageController = PageController();
-  final app = AppSettings.instance;
+  final app = getIt<AppSettings>();
   final ValueNotifier<String> _pageTitle = ValueNotifier<String>('XLO');
-  final currentUser = CurrentUser.instance;
-  final searchFilter = SearchFilter.instance;
+  final currentUser = getIt<CurrentUser>();
+  final searchFilter = getIt<SearchFilter>();
 
   String get searchString => searchFilter.searchString;
 

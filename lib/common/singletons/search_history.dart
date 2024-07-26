@@ -22,9 +22,7 @@ const keySearchHistory = 'SearchHistory';
 const historyMaxLength = 20;
 
 class SearchHistory {
-  SearchHistory._();
-  static final SearchHistory _instance = SearchHistory._();
-  static SearchHistory get instance => _instance;
+  SearchHistory();
 
   final List<String> _history = [];
   final search = SearchController();

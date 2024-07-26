@@ -116,7 +116,8 @@ class AddressRepository {
       }
 
       final queryBuilder = QueryBuilder<ParseObject>(parseAddress)
-        ..whereEqualTo(keyAddressOwner, parseUser);
+        ..whereEqualTo(keyAddressOwner,
+            parseUser); // FIXME: check if is need a .toPointer() here!
 
       final response = await queryBuilder.query();
       if (!response.success) {

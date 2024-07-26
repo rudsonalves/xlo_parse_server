@@ -21,10 +21,11 @@ import 'package:flutter/services.dart';
 
 import '../../../common/singletons/app_settings.dart';
 import '../../../common/singletons/search_history.dart';
+import '../../../get_it.dart';
 
 class SearchDialog extends SearchDelegate<String> {
-  final searchHistory = SearchHistory.instance;
-  final app = AppSettings.instance;
+  final searchHistory = getIt<SearchHistory>();
+  final app = getIt<AppSettings>();
 
   @override
   List<Widget>? buildActions(BuildContext context) {

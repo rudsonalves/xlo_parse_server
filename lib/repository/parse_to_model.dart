@@ -58,6 +58,7 @@ class ParseToModel {
       neighborhood: parse.get<String>(keyAddressNeighborhood)!,
       state: parse.get<String>(keyAddressState)!,
       city: parse.get<String>(keyAddressCity)!,
+      createdAt: parse.get<DateTime>(keyAddressCreatedAt)!,
     );
   }
 
@@ -95,6 +96,7 @@ class ParseToModel {
       condition: ProductCondition.values
           .firstWhere((c) => c.index == parse.get<int>(keyAdvertCondition)!),
       views: parse.get<int>(keyAdvertViews, defaultValue: 0)!,
+      createdAt: parse.get<DateTime>(keyAdvertCreatedAt)!,
     );
   }
 

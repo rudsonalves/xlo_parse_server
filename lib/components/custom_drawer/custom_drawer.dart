@@ -19,29 +19,29 @@ import 'package:flutter/material.dart';
 
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
+import '../../features/base/base_controller.dart';
 import '../../features/login/login_screen.dart';
-import '../../repository/user_repository.dart';
+import '../../get_it.dart';
 import 'widgets/custom_drawer_header.dart';
 
 class CustomDrawer extends StatelessWidget {
   final ColorScheme colorScheme;
   final PageController pageController;
-  final void Function(int page) changeToPage;
 
   CustomDrawer({
     super.key,
     required this.colorScheme,
     required this.pageController,
-    required this.changeToPage,
   });
 
-  final app = AppSettings.instance;
-  final currentUSer = CurrentUser.instance;
+  final app = getIt<AppSettings>();
+  final currentUSer = getIt<CurrentUser>();
+  final jumpToPage = getIt<BaseController>().jumpToPage;
 
   void _navToLoginScreen(BuildContext context) {
-    if (currentUSer.isLogin) {
+    if (currentUSer.isLoged) {
       Navigator.pop(context);
-      changeToPage(4);
+      jumpToPage(4);
     } else {
       Navigator.pop(context);
       Navigator.pushNamed(context, LoginScreen.routeName);
@@ -54,8 +54,8 @@ class CustomDrawer extends StatelessWidget {
 
     return Drawer(
       backgroundColor: app.isDark
-          ? colorScheme.onSecondary.withOpacity(0.85)
-          : colorScheme.onPrimary.withOpacity(0.85),
+          ? colorScheme.onSecondary.withOpacity(0.90)
+          : colorScheme.onPrimary.withOpacity(0.90),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         topRight: Radius.circular(35),
@@ -72,54 +72,102 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Anúncios'),
             selected: pageController.page == 0,
             onTap: () {
-              changeToPage(0);
+              jumpToPage(0);
               Navigator.pop(context);
             },
           ),
           ListTile(
-            leading: const Icon(Icons.camera),
-            title: const Text('Inserir Anúncio'),
+            leading: Icon(
+              Icons.camera,
+              color: currentUSer.isLoged ? null : colorScheme.outline,
+            ),
+            title: Text(
+              'Inserir Anúncio',
+              style: TextStyle(
+                color: currentUSer.isLoged ? null : colorScheme.outline,
+              ),
+            ),
             selected: pageController.page == 1,
-            onTap: () {
-              changeToPage(1);
-              Navigator.pop(context);
-            },
+            onTap: currentUSer.isLoged
+                ? () {
+                    jumpToPage(1);
+                    Navigator.pop(context);
+                  }
+                : null,
           ),
           ListTile(
-            leading: const Icon(Icons.chat),
-            title: const Text('Chat'),
+            leading: Icon(Icons.chat,
+                color: currentUSer.isLoged ? null : colorScheme.outline),
+            title: Text(
+              'Chat',
+              style: TextStyle(
+                color: currentUSer.isLoged ? null : colorScheme.outline,
+              ),
+            ),
             selected: pageController.page == 2,
-            onTap: () {
-              changeToPage(2);
-              Navigator.pop(context);
-            },
+            onTap: currentUSer.isLoged
+                ? () {
+                    jumpToPage(2);
+                    Navigator.pop(context);
+                  }
+                : null,
           ),
           ListTile(
-            leading: const Icon(Icons.favorite),
-            title: const Text('Favoritos'),
+            leading: Icon(
+              Icons.favorite,
+              color: currentUSer.isLoged ? null : colorScheme.outline,
+            ),
+            title: Text(
+              'Favoritos',
+              style: TextStyle(
+                color: currentUSer.isLoged ? null : colorScheme.outline,
+              ),
+            ),
             selected: pageController.page == 3,
-            onTap: () {
-              changeToPage(3);
-              Navigator.pop(context);
-            },
+            onTap: currentUSer.isLoged
+                ? () {
+                    jumpToPage(3);
+                    Navigator.pop(context);
+                  }
+                : null,
           ),
           ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Minha Conta'),
+            leading: Icon(
+              color: currentUSer.isLoged ? null : colorScheme.outline,
+              Icons.person,
+            ),
+            title: Text(
+              'Minha Conta',
+              style: TextStyle(
+                color: currentUSer.isLoged ? null : colorScheme.outline,
+              ),
+            ),
             selected: pageController.page == 4,
-            onTap: () {
-              changeToPage(4);
-              Navigator.pop(context);
-            },
+            onTap: currentUSer.isLoged
+                ? () {
+                    jumpToPage(4);
+                    Navigator.pop(context);
+                  }
+                : null,
           ),
           ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Sair'),
+            leading: Icon(
+              Icons.logout,
+              color: currentUSer.isLoged ? null : colorScheme.outline,
+            ),
+            title: Text(
+              'Sair',
+              style: TextStyle(
+                color: currentUSer.isLoged ? null : colorScheme.outline,
+              ),
+            ),
             selected: pageController.page == 4,
-            onTap: () async {
-              await UserRepository.logout();
-              if (context.mounted) Navigator.pop(context);
-            },
+            onTap: currentUSer.isLoged
+                ? () async {
+                    await currentUSer.logout();
+                    if (context.mounted) Navigator.pop(context);
+                  }
+                : null,
           ),
         ],
       ),
