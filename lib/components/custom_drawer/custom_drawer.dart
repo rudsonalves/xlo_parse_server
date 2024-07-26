@@ -82,7 +82,7 @@ class CustomDrawer extends StatelessWidget {
               color: currentUSer.isLoged ? null : colorScheme.outline,
             ),
             title: Text(
-              'Inserir Anúncio',
+              'Adicionar Anúncio',
               style: TextStyle(
                 color: currentUSer.isLoged ? null : colorScheme.outline,
               ),

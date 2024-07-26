@@ -89,12 +89,16 @@ class _AdvertScreenState extends State<AdvertScreen> {
                         }
                       },
                     ),
-                    AdvertForm(controller: controller),
-                    BigButton(
-                      color: Colors.orange,
-                      label: 'Enviar',
-                      onPress: _createAnnounce,
-                    )
+                    Column(
+                      children: [
+                        AdvertForm(controller: controller),
+                        BigButton(
+                          color: Colors.orange,
+                          label: 'Enviar',
+                          onPress: _createAnnounce,
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),

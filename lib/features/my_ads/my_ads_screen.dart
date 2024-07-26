@@ -22,8 +22,8 @@ import 'package:flutter/material.dart';
 import '../../common/basic_controller/basic_state.dart';
 import '../../common/models/advert.dart';
 import '../../common/theme/app_text_style.dart';
+import '../../components/others_widgets/ad_list_view/ad_list_view.dart';
 import 'my_ads_controller.dart';
-import 'widgets/my_ad_list_view.dart';
 
 class MyAdsScreen extends StatefulWidget {
   const MyAdsScreen({super.key});
@@ -130,6 +130,7 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                 );
               }
               return TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
                 children: List.generate(
                   3,
                   (index) => Padding(
@@ -137,6 +138,51 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                     child: AdListView(
                       ctrl: ctrl,
                       scrollController: _scrollController,
+                      enableDismissible: true,
+                      colorLeft: index == 0
+                          ? Colors.blue.withOpacity(0.45)
+                          : index == 1
+                              ? Colors.green.withOpacity(0.45)
+                              : null,
+                      colorRight: index == 0
+                          ? null
+                          : index == 1
+                              ? Colors.yellow.withOpacity(0.45)
+                              : Colors.blue.withOpacity(0.45),
+                      labelRight: index == 0
+                          ? ''
+                          : index == 1
+                              ? 'Mover para Pendentes'
+                              : 'Mover para Ativos',
+                      labelLeft: index == 0
+                          ? 'Mover para Ativos'
+                          : index == 1
+                              ? 'Mover para Vendidos'
+                              : '',
+                      iconLeft: index == 0
+                          ? Icons.notifications_active
+                          : index == 1
+                              ? Icons.currency_exchange_rounded
+                              : null,
+                      iconRight: index == 0
+                          ? null
+                          : index == 1
+                              ? Icons.notifications_off_outlined
+                              : Icons.notifications_active,
+                      itemButton: Icon(
+                        Icons.edit,
+                        color: colorScheme.primary,
+                      ),
+                      statusLeft: index == 0
+                          ? AdvertStatus.active
+                          : index == 1
+                              ? AdvertStatus.sold
+                              : null,
+                      statusRight: index == 0
+                          ? null
+                          : index == 1
+                              ? AdvertStatus.pending
+                              : AdvertStatus.active,
                     ),
                   ),
                 ),

@@ -16,6 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:flutter/foundation.dart';
+
 import '../../manager/address_manager.dart';
 import '../../repository/user_repository.dart';
 import '../models/address.dart';
@@ -32,14 +34,22 @@ class CurrentUser {
   List<AddressModel> get addresses => addressManager.addresses;
   Iterable<String> get addressNames => addressManager.addressNames;
 
+  final _isLoged = ValueNotifier<bool>(false);
+
   String get userId => _user!.id!;
-  bool get isLoged => _user != null;
+  ValueListenable<bool> get isLogedListernable => _isLoged;
+  bool get isLoged => _isLoged.value;
+
+  void dispose() {
+    _isLoged.dispose();
+  }
 
   Future<void> init([UserModel? user]) async {
     user ??= await UserRepository.getCurrentUser();
     if (user == null) return;
 
     _user = user;
+    _isLoged.value = true;
     await addressManager.init(user.id!);
   }
 
@@ -52,5 +62,6 @@ class CurrentUser {
   Future<void> logout() async {
     await UserRepository.logout();
     _user = null;
+    _isLoged.value = false;
   }
 }

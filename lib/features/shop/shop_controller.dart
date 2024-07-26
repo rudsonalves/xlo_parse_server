@@ -17,6 +17,8 @@
 
 import 'dart:developer';
 
+import 'package:xlo_mobx/common/models/advert.dart';
+
 import '../../common/basic_controller/basic_controller.dart';
 import '../../common/basic_controller/basic_state.dart';
 import '../../common/models/filter.dart';
@@ -53,15 +55,17 @@ class ShopController extends BasicController {
   Future<void> getAds() async {
     try {
       changeState(BasicStateLoading());
-      final result = await AdvertRepository.get(
+      final newAds = await AdvertRepository.get(
         filter: filter,
         search: searchFilter.searchString,
-        page: _adPage,
       );
+      _adPage = 0;
       ads.clear();
-      if (result != null && result.isNotEmpty) {
-        ads.addAll(result);
-        _getMorePages = maxAdsPerList == result.length;
+      if (newAds != null && newAds.isNotEmpty) {
+        ads.addAll(newAds);
+        _getMorePages = maxAdsPerList == newAds.length;
+      } else {
+        _getMorePages = false;
       }
       changeState(BasicStateSuccess());
     } catch (err) {
@@ -76,14 +80,14 @@ class ShopController extends BasicController {
     _adPage++;
     try {
       changeState(BasicStateLoading());
-      final result = await AdvertRepository.get(
+      final newAds = await AdvertRepository.get(
         filter: filter,
         search: searchFilter.searchString,
         page: _adPage,
       );
-      if (result != null && result.isNotEmpty) {
-        ads.addAll(result);
-        _getMorePages = true;
+      if (newAds != null && newAds.isNotEmpty) {
+        ads.addAll(newAds);
+        _getMorePages = maxAdsPerList == newAds.length;
       } else {
         _getMorePages = false;
       }
@@ -92,5 +96,10 @@ class ShopController extends BasicController {
       log(err.toString());
       changeState(BasicStateError());
     }
+  }
+
+  @override
+  Future<bool> updateAdStatus(AdvertModel ad) {
+    throw UnimplementedError();
   }
 }

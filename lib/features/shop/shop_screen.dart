@@ -22,11 +22,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../common/basic_controller/basic_state.dart';
+import '../../common/singletons/current_user.dart';
 import '../../common/theme/app_text_style.dart';
 import '../../get_it.dart';
 import '../base/base_controller.dart';
+import '../login/login_screen.dart';
 import 'shop_controller.dart';
-import 'widgets/ad_list_view.dart';
+import '../../components/others_widgets/ad_list_view/ad_list_view.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -44,6 +46,8 @@ class _ShopScreenState extends State<ShopScreen>
   late Animation<Offset> _fabOffsetAnimation;
   final _scrollController = ScrollController();
   Timer? _timer;
+
+  final currentUser = getIt<CurrentUser>();
 
   @override
   void initState() {
@@ -125,16 +129,31 @@ class _ShopScreenState extends State<ShopScreen>
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: SlideTransition(
-        position: _fabOffsetAnimation,
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            getIt<BaseController>().jumpToPage(1);
-          },
-          backgroundColor: colorScheme.primaryContainer.withOpacity(0.65),
-          icon: const Icon(Icons.camera),
-          label: const Text('Adicionar anúncio'),
-        ),
+      floatingActionButton: ValueListenableBuilder(
+        valueListenable: currentUser.isLogedListernable,
+        builder: (context, isLoged, _) {
+          return SlideTransition(
+            position: _fabOffsetAnimation,
+            child: isLoged
+                ? FloatingActionButton.extended(
+                    onPressed: () {
+                      getIt<BaseController>().jumpToPage(1);
+                    },
+                    backgroundColor:
+                        colorScheme.primaryContainer.withOpacity(0.75),
+                    icon: const Icon(Icons.camera),
+                    label: const Text('Adicionar anúncio'),
+                  )
+                : FloatingActionButton.extended(
+                    onPressed: () {
+                      Navigator.pushNamed(context, LoginScreen.routeName);
+                    },
+                    backgroundColor: colorScheme.tertiaryContainer,
+                    icon: const Icon(Icons.login),
+                    label: const Text('Faça Login'),
+                  ),
+          );
+        },
       ),
       body: NotificationListener<ScrollStartNotification>(
         onNotification: (scrollNotification) {

@@ -16,10 +16,11 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/common/models/advert.dart';
 
+import '../../../common/models/advert.dart';
 import '../../../common/validators/validators.dart';
 import '../../../components/form_fields/custom_form_field.dart';
+import '../../../components/others_widgets/fitted_button_segment.dart';
 import '../../address/address_screen.dart';
 import '../../mecanics/mecanics_screen.dart';
 import '../advert_controller.dart';
@@ -68,6 +69,7 @@ class _AdvertFormState extends State<AdvertForm> {
     return Form(
       key: ctrl.formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomFormField(
             controller: ctrl.titleController,
@@ -86,19 +88,22 @@ class _AdvertFormState extends State<AdvertForm> {
             textCapitalization: TextCapitalization.sentences,
             validator: Validator.description,
           ),
+          const Text('Estado do Produto'),
           Row(
             children: [
               Expanded(
                 child: SegmentedButton<ProductCondition>(
                   segments: const [
                     ButtonSegment(
-                        value: ProductCondition.used,
-                        label: Text('Usado'),
-                        icon: Icon(Icons.history)),
+                      value: ProductCondition.used,
+                      label: Text('Usado'),
+                      icon: Icon(Icons.recycling),
+                    ),
                     ButtonSegment(
-                        value: ProductCondition.sealed,
-                        label: Text('Selado'),
-                        icon: Icon(Icons.new_releases))
+                      value: ProductCondition.sealed,
+                      label: Text('Lacrado'),
+                      icon: Icon(Icons.new_releases_outlined),
+                    ),
                   ],
                   selected: {ctrl.condition},
                   onSelectionChanged: (p0) {
@@ -166,6 +171,38 @@ class _AdvertFormState extends State<AdvertForm> {
               ),
               const Expanded(
                 child: Text('Ocultar meu telefone neste anúncio.'),
+              ),
+            ],
+          ),
+          const Text('Status do Anúncio'),
+          Row(
+            children: [
+              Expanded(
+                child: SegmentedButton<AdvertStatus>(
+                  segments: [
+                    FittedButtonSegment(
+                      value: AdvertStatus.pending,
+                      label: 'Pendente',
+                      iconData: Icons.recycling,
+                    ),
+                    FittedButtonSegment(
+                      value: AdvertStatus.active,
+                      label: 'Ativo',
+                      iconData: Icons.new_releases_outlined,
+                    ),
+                    FittedButtonSegment(
+                      value: AdvertStatus.sold,
+                      label: 'Vendido',
+                      iconData: Icons.new_releases_outlined,
+                    ),
+                  ],
+                  selected: {ctrl.adStatus},
+                  onSelectionChanged: (p0) {
+                    setState(() {
+                      ctrl.setAdStatus(p0.first);
+                    });
+                  },
+                ),
               ),
             ],
           ),

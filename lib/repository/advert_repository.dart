@@ -30,6 +30,26 @@ import 'parse_to_model.dart';
 /// This class provides methods to interact with the Parse Server
 /// to retrieve and save advertisements.
 class AdvertRepository {
+  static Future<bool> updateStatus(AdvertModel ad) async {
+    try {
+      final parse = ParseObject(keyAdvertTable)
+        ..objectId = ad.id!
+        ..set(keyAdvertStatus, ad.status.index);
+
+      final response = await parse.save();
+
+      if (!response.success) {
+        throw Exception(response.error ?? 'update advert table error');
+      }
+
+      return true;
+    } catch (err) {
+      final message = 'AdvertRepository.getMyAds: $err';
+      log(message);
+      return false;
+    }
+  }
+
   /// Fetches a list of advertisements from an user.
   ///
   /// [user] - The user to apply to the search.

@@ -17,12 +17,12 @@
 
 import 'dart:developer';
 
-import 'package:xlo_mobx/common/basic_controller/basic_state.dart';
-
+import '../../common/basic_controller/basic_state.dart';
 import '../../common/models/advert.dart';
 import '../../common/models/filter.dart';
 import '../../repository/advert_repository.dart';
 import '../../common/basic_controller/basic_controller.dart';
+import '../../repository/constants.dart';
 
 class MyAdsController extends BasicController {
   AdvertStatus _productStatus = AdvertStatus.active;
@@ -42,18 +42,26 @@ class MyAdsController extends BasicController {
   Future<void> getAds() async {
     try {
       changeState(BasicStateLoading());
-      final newsAds = await AdvertRepository.getMyAds(
-        currentUser.user!,
-        _productStatus.index,
-      );
-      ads.clear();
-      if (newsAds != null) {
-        ads.addAll(newsAds);
-      }
+      await _getAds();
       changeState(BasicStateSuccess());
     } catch (err) {
       log(err.toString());
       changeState(BasicStateError());
+    }
+  }
+
+  Future<void> _getAds() async {
+    final newAds = await AdvertRepository.getMyAds(
+      currentUser.user!,
+      _productStatus.index,
+    );
+    _adPage = 0;
+    ads.clear();
+    if (newAds != null && newAds.isNotEmpty) {
+      ads.addAll(newAds);
+      _getMorePages = maxAdsPerList == newAds.length;
+    } else {
+      _getMorePages = false;
     }
   }
 
@@ -65,24 +73,48 @@ class MyAdsController extends BasicController {
   @override
   Future<void> getMoreAds() async {
     if (!_getMorePages) return;
-    _adPage++;
     try {
       changeState(BasicStateLoading());
-      final result = await AdvertRepository.get(
-        filter: FilterModel(),
-        search: '',
-        page: _adPage,
-      );
-      if (result != null && result.isNotEmpty) {
-        ads.addAll(result);
-        _getMorePages = true;
-      } else {
-        _getMorePages = false;
-      }
+      await _getMoreAds();
       changeState(BasicStateSuccess());
     } catch (err) {
       log(err.toString());
       changeState(BasicStateError());
+    }
+  }
+
+  Future<void> _getMoreAds() async {
+    _adPage++;
+    final newAds = await AdvertRepository.get(
+      filter: FilterModel(),
+      search: '',
+      page: _adPage,
+    );
+    if (newAds != null && newAds.isNotEmpty) {
+      ads.addAll(newAds);
+      _getMorePages = maxAdsPerList == newAds.length;
+    } else {
+      _getMorePages = false;
+    }
+  }
+
+  @override
+  Future<bool> updateAdStatus(AdvertModel ad) async {
+    int atePage = _adPage;
+    try {
+      changeState(BasicStateLoading());
+      final result = await AdvertRepository.updateStatus(ad);
+      await _getAds();
+      while (atePage > 0) {
+        await _getMoreAds();
+        atePage--;
+      }
+      changeState(BasicStateSuccess());
+      return result;
+    } catch (err) {
+      log(err.toString());
+      changeState(BasicStateError());
+      return false;
     }
   }
 }

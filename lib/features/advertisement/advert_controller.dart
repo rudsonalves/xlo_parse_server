@@ -35,11 +35,6 @@ class AdvertController extends ChangeNotifier {
 
   AdvertState get state => _state;
 
-  void _changeState(AdvertState newState) {
-    _state = newState;
-    notifyListeners();
-  }
-
   final app = getIt<AppSettings>();
   final currentUser = getIt<CurrentUser>();
   final mechanicsManager = MechanicsManager.instance;
@@ -59,10 +54,12 @@ class AdvertController extends ChangeNotifier {
   String _selectedAddressId = '';
   String get selectedAddressId => _selectedAddressId;
   ProductCondition _condition = ProductCondition.used;
+  AdvertStatus _adStatus = AdvertStatus.pending;
 
   List<MechanicModel> get mechanics => mechanicsManager.mechanics;
   List<String> get mechanicsNames => mechanicsManager.mechanicsNames;
   ProductCondition get condition => _condition;
+  AdvertStatus get adStatus => _adStatus;
 
   List<String> get selectedMechIds => _selectedMechIds;
   List<String> get selectedMachNames => mechanics
@@ -86,6 +83,11 @@ class AdvertController extends ChangeNotifier {
     _imagesLength.dispose();
     hidePhone.dispose();
     super.dispose();
+  }
+
+  void _changeState(AdvertState newState) {
+    _state = newState;
+    notifyListeners();
   }
 
   void addImage(String path) {
@@ -133,6 +135,7 @@ class AdvertController extends ChangeNotifier {
         price: priceController.currencyValue,
         hidePhone: hidePhone.value,
         condition: _condition,
+        status: _adStatus,
       );
       await AdvertRepository.save(ad);
       _changeState(AdvertStateSuccess());
@@ -142,8 +145,12 @@ class AdvertController extends ChangeNotifier {
     }
   }
 
-  void setCondition(ProductCondition condition) {
-    _condition = condition;
+  void setCondition(ProductCondition newCondition) {
+    _condition = newCondition;
+  }
+
+  void setAdStatus(AdvertStatus newStatus) {
+    _adStatus = newStatus;
   }
 
   void setSelectedAddress(String addressName) {

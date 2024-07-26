@@ -45,8 +45,9 @@ void setupDependencies() {
 }
 
 void disposeDependencies() {
-  getIt<AppSettings>().dispose();
-  getIt<SearchFilter>().dispose();
-  getIt<SearchFilter>().dispose();
   getIt<BaseController>().dispose();
+  getIt<SearchFilter>().dispose();
+  getIt<SearchFilter>().dispose();
+  getIt<CurrentUser>().dispose();
+  getIt<AppSettings>().dispose();
 }

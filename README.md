@@ -21,6 +21,96 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/26 - version: 0.5.2+18
+
+Improved Advertisement Management and Code Refactoring
+
+1. `lib/common/basic_controller/basic_controller.dart`
+   - **Added**: `Future<bool> updateAdStatus(AdvertModel ad)` method to update advertisement status.
+
+2. `lib/common/singletons/current_user.dart`
+   - **Imported**: `foundation.dart` to use `ValueNotifier`.
+   - **Added**: `_isLoged` as `ValueNotifier<bool>` to manage login state.
+   - **Updated**: `isLoged` to use `_isLoged.value` and added `isLogedListernable` getter.
+   - **Modified**: `init` method to update `_isLoged.value` upon initialization.
+   - **Added**: `dispose` method to dispose of `_isLoged`.
+   - **Updated**: `logout` method to set `_isLoged.value` to false.
+
+3. `lib/components/custom_drawer/custom_drawer.dart`
+   - **Updated**: Menu item text from 'Inserir Anúncio' to 'Adicionar Anúncio'.
+
+4. `lib/features/shop/widgets/ad_list_view.dart`
+   - **Renamed**: File to `lib/components/others_widgets/ad_list_view/ad_list_view.dart`.
+   - **Replaced**: `ShopController` with `BasicController`.
+   - **Enhanced**: `AdListView` with new parameters for dismissible ads and additional properties.
+
+5. `lib/components/others_widgets/ad_list_view/widgets/ad_card_view.dart`
+   - **New File**: Handles the display of advertisement cards with various properties.
+
+6. `lib/components/others_widgets/ad_list_view/widgets/dismissible_ad.dart`
+   - **New File**: Manages dismissible ads with customizable actions and status updates.
+
+7. `lib/components/others_widgets/ad_list_view/widgets/show_image.dart`
+   - **New File**: Manages image display with a fallback for empty images.
+
+8. `lib/components/others_widgets/base_dismissible_container.dart`
+   - **New File**: Provides a base container for dismissible actions in the UI.
+
+9. `lib/components/others_widgets/fitted_button_segment.dart`
+   - **New File**: Defines a fitted button segment for use in segmented controls.
+
+10. `lib/features/advertisement/advert_controller.dart`
+    - **Added**: `_adStatus` property and corresponding getter.
+    - **Refactored**: Moved `_changeState` method to a different position.
+    - **Updated**: `saveAd` method to include `status` property.
+    - **Added**: `setAdStatus` method to update advertisement status.
+
+11. `lib/features/advertisement/advert_screen.dart`
+    - **Wrapped**: `AdvertForm` and `BigButton` inside a `Column` for better structure.
+
+12. `lib/features/advertisement/widgets/advert_form.dart`
+    - **Imported**: `fitted_button_segment.dart` for custom button segments.
+    - **Added**: Segmented button for selecting `AdvertStatus`.
+
+13. `lib/features/base/base_controller.dart`
+    - **Updated**: Title from 'Criar Anúncio' to 'Adicionar Anúncio' for consistency.
+
+14. `lib/features/my_ads/my_ads_controller.dart`
+    - **Refactored**: `getAds` method to use a helper method `_getAds`.
+    - **Added**: `_getAds` and `_getMoreAds` helper methods for better code organization.
+    - **Added**: `updateAdStatus` method to handle advertisement status updates.
+
+15. `lib/features/my_ads/my_ads_screen.dart`
+    - **Enhanced**: `AdListView` to support dismissible ads with custom status updates and icons.
+    - **Added**: `physics` property to `TabBarView` to disable scrolling.
+
+16. `lib/features/shop/shop_controller.dart`
+    - **Refactored**: `getAds` method to reset `_adPage` and clear ads.
+    - **Added**: `updateAdStatus` method with `UnimplementedError`.
+
+17. `lib/features/shop/shop_screen.dart`
+    - **Updated**: Import path for `ad_list_view.dart`.
+    - **Added**: `ValueListenableBuilder` to manage `FloatingActionButton` state based on login status.
+
+18. `lib/features/shop/widgets/ad_text_price.dart`
+    - **Removed**: Unused `colorScheme` variable.
+    - **Updated**: Text style for better readability.
+
+19. `lib/features/shop/widgets/ad_text_title.dart`
+    - **Changed**: `maxLines` from 3 to 2 for better layout consistency.
+
+20. `lib/get_it.dart`
+    - **Added**: `dispose` call for `CurrentUser`.
+
+21. `lib/my_material_app.dart`
+    - **Changed**: Main font from "Poppins" to "Manrope" for a refreshed UI look.
+
+22. `lib/repository/advert_repository.dart`
+    - **Added**: `updateStatus` method to update advertisement status in the Parse server.
+
+These changes enhance the advertisement management capabilities by adding new functionalities and refactoring the code for better maintainability and usability. The updates improve user experience and ensure consistent behavior across the application.
+
+
 ## 2024/07/26 - version: 0.5.1+17
 
 This commit includes several adjustments to animations, a reduction in the number of `AdvertStatus` options, and various other enhancements to improve code consistency and functionality. Changes:
