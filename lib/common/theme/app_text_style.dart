@@ -95,6 +95,11 @@ class AppTextStyle {
     fontWeight: FontWeight.w700,
   );
 
+  static TextStyle font14Thin = const TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w100,
+  );
+
   static TextStyle font14 = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,

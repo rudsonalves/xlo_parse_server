@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+const maxAdsPerList = 5; // FIXME: change after repairing the scroll blink.
+
 const keyUserId = 'objectId';
 const keyUserName = 'username';
 const keyUserNickname = 'nickname';

@@ -30,8 +30,6 @@ import 'parse_to_model.dart';
 /// This class provides methods to interact with the Parse Server
 /// to retrieve and save advertisements.
 class AdvertRepository {
-  static const maxAdsPerList = 20;
-
   /// Fetches a list of advertisements from an user.
   ///
   /// [user] - The user to apply to the search.

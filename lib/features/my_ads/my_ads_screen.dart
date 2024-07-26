@@ -18,10 +18,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/common/basic_controller/basic_state.dart';
-import 'package:xlo_mobx/common/theme/app_text_style.dart';
 
+import '../../common/basic_controller/basic_state.dart';
 import '../../common/models/advert.dart';
+import '../../common/theme/app_text_style.dart';
 import 'my_ads_controller.dart';
 import 'widgets/my_ad_list_view.dart';
 
@@ -54,7 +54,7 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
 
     return DefaultTabController(
       initialIndex: 1,
-      length: 4,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Meus Anúncios'),
@@ -70,28 +70,21 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                 icon: const Icon(Icons.notifications_off_outlined),
                 child: Text(
                   'Pendentes',
-                  style: AppTextStyle.font12,
+                  style: AppTextStyle.font14Thin,
                 ),
               ),
               Tab(
                 icon: const Icon(Icons.notifications_active),
                 child: Text(
                   'Ativos',
-                  style: AppTextStyle.font12,
+                  style: AppTextStyle.font14,
                 ),
               ),
               Tab(
                 icon: const Icon(Icons.currency_exchange_rounded),
                 child: Text(
                   'Vendidos',
-                  style: AppTextStyle.font12,
-                ),
-              ),
-              Tab(
-                icon: const Icon(Icons.close_rounded),
-                child: Text(
-                  'Fechados',
-                  style: AppTextStyle.font12,
+                  style: AppTextStyle.font14,
                 ),
               ),
             ],
@@ -106,60 +99,58 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                 case 2:
                   ctrl.setProductStatus(AdvertStatus.sold);
                   break;
-                case 3:
-                  ctrl.setProductStatus(AdvertStatus.closed);
-                  break;
               }
               log(value.toString());
             },
           ),
         ),
         body: ListenableBuilder(
-            listenable: ctrl,
-            builder: (context, _) {
-              if (ctrl.state is BasicStateSuccess) {
-                if (ctrl.ads.isEmpty) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Card(
-                          color: colorScheme.primaryContainer,
-                          child: const Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Column(
-                              children: [
-                                Icon(Icons.cloud_off),
-                                Text('Nenhum anúncio encontrado.')
-                              ],
-                            ),
+          listenable: ctrl,
+          builder: (context, _) {
+            if (ctrl.state is BasicStateSuccess) {
+              if (ctrl.ads.isEmpty) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Card(
+                        color: colorScheme.primaryContainer,
+                        child: const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Column(
+                            children: [
+                              Icon(Icons.cloud_off),
+                              Text('Nenhum anúncio encontrado.')
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  );
-                }
-                return TabBarView(
-                  children: List.generate(
-                    4,
-                    (index) => Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: AdListView(
-                        ctrl: ctrl,
-                        scrollController: _scrollController,
-                      ),
                     ),
-                  ),
-                );
-              } else if (ctrl.state is BasicStateLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                  ],
                 );
               }
-              return const Center(
-                child: Text('Error!'),
+              return TabBarView(
+                children: List.generate(
+                  3,
+                  (index) => Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: AdListView(
+                      ctrl: ctrl,
+                      scrollController: _scrollController,
+                    ),
+                  ),
+                ),
               );
-            }),
+            } else if (ctrl.state is BasicStateLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return const Center(
+              child: Text('Error!'),
+            );
+          },
+        ),
       ),
     );
   }

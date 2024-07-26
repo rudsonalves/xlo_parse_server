@@ -20,12 +20,18 @@ import 'dart:developer';
 import 'package:xlo_mobx/common/basic_controller/basic_state.dart';
 
 import '../../common/models/advert.dart';
+import '../../common/models/filter.dart';
 import '../../repository/advert_repository.dart';
 import '../../common/basic_controller/basic_controller.dart';
 
 class MyAdsController extends BasicController {
   AdvertStatus _productStatus = AdvertStatus.active;
   AdvertStatus get productStatus => _productStatus;
+
+  int _adPage = 0;
+
+  bool _getMorePages = true;
+  bool get getMorePages => _getMorePages;
 
   @override
   void init() {
@@ -58,6 +64,25 @@ class MyAdsController extends BasicController {
 
   @override
   Future<void> getMoreAds() async {
-    log('Ops...');
+    if (!_getMorePages) return;
+    _adPage++;
+    try {
+      changeState(BasicStateLoading());
+      final result = await AdvertRepository.get(
+        filter: FilterModel(),
+        search: '',
+        page: _adPage,
+      );
+      if (result != null && result.isNotEmpty) {
+        ads.addAll(result);
+        _getMorePages = true;
+      } else {
+        _getMorePages = false;
+      }
+      changeState(BasicStateSuccess());
+    } catch (err) {
+      log(err.toString());
+      changeState(BasicStateError());
+    }
   }
 }
