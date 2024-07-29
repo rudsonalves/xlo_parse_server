@@ -18,11 +18,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../common/models/advert.dart';
-import '../advert_controller.dart';
+import '../edit_advert_controller.dart';
 import 'horizontal_image_gallery.dart';
 
 class ImagesListView extends StatelessWidget {
-  final AdvertController controller;
+  final EditAdvertController controller;
   final bool validator;
   final Function(AdvertModel ad)? editAd;
   final Function(AdvertModel ad)? deleteAd;

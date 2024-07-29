@@ -21,6 +21,51 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/29 - version: 0.5.2+21
+
+Renamed Advertisement Features and Updated Navigation
+
+1. Updated Navigation in `lib/components/custom_drawer/custom_drawer.dart`:
+   - Changed import from `AdvertScreen` to `EditAdvertScreen`.
+   - Updated navigation from `AdvertScreen` to `EditAdvertScreen`.
+
+2. Modified Navigation in `lib/features/base/base_screen.dart`:
+   - Changed import from `AccountScreen` to `MyAccountScreen`.
+   - Updated the last screen in `PageView` to `MyAccountScreen`.
+
+3. Renamed Advertisement Controller and State:
+   - Renamed `lib/features/advertisement/advert_controller.dart` to `lib/features/edit_advert/edit_advert_controller.dart`.
+   - Renamed `AdvertController` to `EditAdvertController`.
+   - Updated state management classes from `AdvertState` to `EditAdvertState`.
+
+4. Renamed Advertisement Screen:
+   - Renamed `lib/features/advertisement/advert_screen.dart` to `lib/features/edit_advert/edit_advert_screen.dart`.
+   - Renamed `AdvertScreen` to `EditAdvertScreen`.
+
+5. Updated Advertisement State Class Names:
+   - Renamed `lib/features/advertisement/advert_state.dart` to `lib/features/edit_advert/edit_advert_state.dart`.
+   - Updated state classes from `AdvertState` to `EditAdvertState`.
+
+6. Updated Advertisement Form and Widgets:
+   - Renamed advertisement form and widget files to `edit_advert` equivalents.
+
+7. Renamed Account Screen:
+   - Renamed `lib/features/account/account_screen.dart` to `lib/features/my_account/my_account_screen.dart`.
+   - Renamed `AccountScreen` to `MyAccountScreen`.
+
+8. Updated References in My Ads Screen:
+   - Updated import and usage from `AdvertScreen` to `EditAdvertScreen`.
+
+9. Updated Shop Screen Navigation:
+   - Changed navigation from `AdvertScreen` to `EditAdvertScreen`.
+
+10. Updated Main App Navigation:
+    - Changed import and route from `AccountScreen` to `MyAccountScreen`.
+    - Updated the route for advertisement screen to `EditAdvertScreen`.
+
+These changes refactor the advertisement feature by renaming relevant files and classes for better clarity and organization. Navigation has been updated accordingly to reflect these changes.
+
+
 ## 2024/07/29 - version: 0.5.2+20
 
 Enhanced Advertisement Features and Refactoring

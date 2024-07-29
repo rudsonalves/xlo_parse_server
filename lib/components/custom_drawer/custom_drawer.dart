@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:xlo_mobx/common/app_constants.dart';
-import 'package:xlo_mobx/features/advertisement/advert_screen.dart';
+import 'package:xlo_mobx/features/edit_advert/edit_advert_screen.dart';
 
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
@@ -91,7 +91,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             onTap: currentUSer.isLoged
                 ? () {
-                    Navigator.pushNamed(context, AdvertScreen.routeName);
+                    Navigator.pushNamed(context, EditAdvertScreen.routeName);
                   }
                 : null,
           ),

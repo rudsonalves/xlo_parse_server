@@ -19,15 +19,15 @@ import 'package:flutter/material.dart';
 
 import '../../common/models/advert.dart';
 import '../../components/buttons/big_button.dart';
-import 'advert_controller.dart';
-import 'advert_state.dart';
+import 'edit_advert_controller.dart';
+import 'edit_advert_state.dart';
 import 'widgets/advert_form.dart';
 import 'widgets/image_list_view.dart';
 
-class AdvertScreen extends StatefulWidget {
+class EditAdvertScreen extends StatefulWidget {
   final AdvertModel? advert;
 
-  const AdvertScreen({
+  const EditAdvertScreen({
     super.key,
     this.advert,
   });
@@ -35,11 +35,11 @@ class AdvertScreen extends StatefulWidget {
   static const routeName = '/insert';
 
   @override
-  State<AdvertScreen> createState() => _AdvertScreenState();
+  State<EditAdvertScreen> createState() => _EditAdvertScreenState();
 }
 
-class _AdvertScreenState extends State<AdvertScreen> {
-  final ctrl = AdvertController();
+class _EditAdvertScreenState extends State<EditAdvertScreen> {
+  final ctrl = EditAdvertController();
 
   @override
   void initState() {
@@ -128,11 +128,11 @@ class _AdvertScreenState extends State<AdvertScreen> {
                 ),
               ),
             ),
-            if (ctrl.state is AdvertStateLoading)
+            if (ctrl.state is EditAdvertStateLoading)
               const Center(
                 child: CircularProgressIndicator(),
               ),
-            if (ctrl.state is AdvertStateError)
+            if (ctrl.state is EditAdvertStateError)
               AlertDialog(
                 icon: Icon(
                   Icons.error,

@@ -24,16 +24,16 @@ import '../base/base_controller.dart';
 import '../my_ads/my_ads_screen.dart';
 import '../product/widgets/title_product.dart';
 
-class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+class MyAccountScreen extends StatefulWidget {
+  const MyAccountScreen({super.key});
 
   static const routeName = '/account';
 
   @override
-  State<AccountScreen> createState() => _AccountScreenState();
+  State<MyAccountScreen> createState() => _MyAccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _MyAccountScreenState extends State<MyAccountScreen> {
   final currentUser = getIt<CurrentUser>();
 
   @override

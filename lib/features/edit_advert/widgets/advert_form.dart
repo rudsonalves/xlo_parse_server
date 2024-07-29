@@ -23,10 +23,10 @@ import '../../../components/form_fields/custom_form_field.dart';
 import '../../../components/others_widgets/fitted_button_segment.dart';
 import '../../address/address_screen.dart';
 import '../../mecanics/mecanics_screen.dart';
-import '../advert_controller.dart';
+import '../edit_advert_controller.dart';
 
 class AdvertForm extends StatefulWidget {
-  final AdvertController controller;
+  final EditAdvertController controller;
 
   const AdvertForm({
     super.key,
@@ -38,7 +38,7 @@ class AdvertForm extends StatefulWidget {
 }
 
 class _AdvertFormState extends State<AdvertForm> {
-  AdvertController get ctrl => widget.controller;
+  EditAdvertController get ctrl => widget.controller;
 
   @override
   void initState() {

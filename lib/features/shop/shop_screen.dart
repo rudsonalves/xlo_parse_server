@@ -20,7 +20,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:xlo_mobx/features/advertisement/advert_screen.dart';
+import 'package:xlo_mobx/features/edit_advert/edit_advert_screen.dart';
 
 import '../../common/basic_controller/basic_state.dart';
 import '../../common/singletons/current_user.dart';
@@ -137,7 +137,7 @@ class _ShopScreenState extends State<ShopScreen>
             child: isLoged
                 ? FloatingActionButton.extended(
                     onPressed: () {
-                      Navigator.pushNamed(context, AdvertScreen.routeName);
+                      Navigator.pushNamed(context, EditAdvertScreen.routeName);
                     },
                     backgroundColor:
                         colorScheme.primaryContainer.withOpacity(0.75),

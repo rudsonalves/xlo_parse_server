@@ -28,12 +28,12 @@ import '../../components/custon_field_controllers/currency_text_controller.dart'
 import '../../get_it.dart';
 import '../../manager/mechanics_manager.dart';
 import '../../repository/advert_repository.dart';
-import 'advert_state.dart';
+import 'edit_advert_state.dart';
 
-class AdvertController extends ChangeNotifier {
-  AdvertState _state = AdvertStateInitial();
+class EditAdvertController extends ChangeNotifier {
+  EditAdvertState _state = EditAdvertStateInitial();
 
-  AdvertState get state => _state;
+  EditAdvertState get state => _state;
 
   final app = getIt<AppSettings>();
   final currentUser = getIt<CurrentUser>();
@@ -99,7 +99,7 @@ class AdvertController extends ChangeNotifier {
     super.dispose();
   }
 
-  void _changeState(AdvertState newState) {
+  void _changeState(EditAdvertState newState) {
     _state = newState;
     notifyListeners();
   }
@@ -148,7 +148,7 @@ class AdvertController extends ChangeNotifier {
   Future<AdvertModel?> updateAds(String id) async {
     if (!formValit) return null;
     try {
-      _changeState(AdvertStateLoading());
+      _changeState(EditAdvertStateLoading());
       final ad = AdvertModel(
         id: id,
         owner: currentUser.user!,
@@ -164,11 +164,11 @@ class AdvertController extends ChangeNotifier {
         status: _adStatus,
       );
       await AdvertRepository.update(ad);
-      _changeState(AdvertStateSuccess());
+      _changeState(EditAdvertStateSuccess());
       return ad;
     } catch (err) {
       log(err.toString());
-      _changeState(AdvertStateError());
+      _changeState(EditAdvertStateError());
       return null;
     }
   }
@@ -176,7 +176,7 @@ class AdvertController extends ChangeNotifier {
   Future<AdvertModel?> createAds() async {
     if (!formValit) return null;
     try {
-      _changeState(AdvertStateLoading());
+      _changeState(EditAdvertStateLoading());
       final ad = AdvertModel(
         owner: currentUser.user!,
         images: _images,
@@ -191,11 +191,11 @@ class AdvertController extends ChangeNotifier {
         status: _adStatus,
       );
       await AdvertRepository.save(ad);
-      _changeState(AdvertStateSuccess());
+      _changeState(EditAdvertStateSuccess());
       return ad;
     } catch (err) {
       log(err.toString());
-      _changeState(AdvertStateError());
+      _changeState(EditAdvertStateError());
       return null;
     }
   }
@@ -218,6 +218,6 @@ class AdvertController extends ChangeNotifier {
   }
 
   void gotoSuccess() {
-    _changeState(AdvertStateSuccess());
+    _changeState(EditAdvertStateSuccess());
   }
 }
