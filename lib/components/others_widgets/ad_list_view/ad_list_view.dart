@@ -15,19 +15,23 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/common/models/advert.dart';
 
 import '../../../common/basic_controller/basic_controller.dart';
+import '../../../common/models/advert.dart';
 import '../../../features/product/product_screen.dart';
 import 'widgets/ad_card_view.dart';
 import 'widgets/dismissible_ad.dart';
 
+enum ButtonBehavior { edit, delete }
+
 class AdListView extends StatefulWidget {
   final BasicController ctrl;
   final ScrollController scrollController;
-  final Widget? itemButton;
+  final ButtonBehavior? buttonBehavior;
   final bool enableDismissible;
   final Color? colorLeft;
   final Color? colorRight;
@@ -42,7 +46,7 @@ class AdListView extends StatefulWidget {
     super.key,
     required this.ctrl,
     required this.scrollController,
-    this.itemButton,
+    this.buttonBehavior,
     this.enableDismissible = false,
     this.colorLeft,
     this.colorRight,
@@ -109,8 +113,55 @@ class _AdListViewState extends State<AdListView> {
     }
   }
 
+  void _editAdvert(AdvertModel ad) {
+    log('Edit ad: ${ad.id}');
+  }
+
+  void _deleteAdvert(AdvertModel ad) {
+    log('Delete: ${ad.id}');
+  }
+
+  Widget? getItemButton(int index) {
+    final ad = ctrl.ads[index];
+
+    switch (widget.buttonBehavior) {
+      case null:
+        return null;
+      case ButtonBehavior.edit:
+        return InkWell(
+          borderRadius: BorderRadius.circular(50),
+          onTap: () => _editAdvert(ad),
+          child: Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              Icons.edit,
+              color: Colors.yellowAccent.withOpacity(0.65),
+            ),
+          ),
+        );
+      case ButtonBehavior.delete:
+        return InkWell(
+          borderRadius: BorderRadius.circular(50),
+          onTap: () => _deleteAdvert(ad),
+          child: Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              Icons.delete,
+              color: Colors.redAccent.withOpacity(0.65),
+            ),
+          ),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    log('ListView length: ${ctrl.ads.length}');
+
     return ListView.builder(
       controller: _scrollController,
       itemCount: ctrl.ads.length,
@@ -127,7 +178,7 @@ class _AdListViewState extends State<AdListView> {
           child: widget.enableDismissible
               ? DismissibleAd(
                   ad: ctrl.ads[index],
-                  itemButton: widget.itemButton,
+                  itemButton: getItemButton(index),
                   colorLeft: widget.colorLeft,
                   colorRight: widget.colorRight,
                   iconLeft: widget.iconLeft,
@@ -140,7 +191,6 @@ class _AdListViewState extends State<AdListView> {
                 )
               : AdCardView(
                   ads: ctrl.ads[index],
-                  itemButton: widget.itemButton,
                 ),
         ),
       ),

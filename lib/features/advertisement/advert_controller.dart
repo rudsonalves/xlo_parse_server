@@ -73,6 +73,20 @@ class AdvertController extends ChangeNotifier {
   final _valit = ValueNotifier<bool?>(null);
   ValueNotifier<bool?> get valit => _valit;
 
+  void init(AdvertModel? ad) {
+    if (ad != null) {
+      titleController.text = ad.title;
+      descriptionController.text = ad.description;
+      hidePhone.value = ad.hidePhone;
+      priceController.currencyValue = ad.price;
+      setAdStatus(ad.status);
+      setMechanicsIds(ad.mechanicsId);
+      _selectedAddressId = ad.address.id!;
+      setImages(ad.images);
+      setCondition(ad.condition);
+    }
+  }
+
   @override
   void dispose() {
     titleController.dispose();
@@ -92,6 +106,12 @@ class AdvertController extends ChangeNotifier {
 
   void addImage(String path) {
     _images.add(path);
+    _imagesLength.value = _images.length;
+  }
+
+  void setImages(List<String> images) {
+    _images.clear();
+    _images.addAll(images);
     _imagesLength.value = _images.length;
   }
 

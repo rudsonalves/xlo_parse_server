@@ -43,6 +43,9 @@ class AdCardView extends StatelessWidget {
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
         color: colorScheme.surfaceContainer,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
         child: Row(
           children: [
             ShowImage(image: ads.images[0]),

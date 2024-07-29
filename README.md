@@ -21,6 +21,55 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/29 - version: 0.5.2+19
+
+Enhanced Advertisement Features and Refactoring
+
+1. `lib/common/models/advert.dart`
+   - Reordered the `title` property to appear before `status` in the `AdvertModel` class for consistency.
+
+2. `lib/components/custon_field_controllers/currency_text_controller.dart`
+   - Added `currencyValue` setter to update the text value of the controller based on the provided currency value. This simplifies setting the currency value programmatically.
+
+3. `lib/components/others_widgets/ad_list_view/ad_list_view.dart`
+   - Imported `dart:developer` for logging purposes.
+   - Added `ButtonBehavior` enum to define possible button actions (`edit`, `delete`).
+   - Replaced `itemButton` parameter with `buttonBehavior` to handle different button actions dynamically.
+   - Added `getItemButton` method to generate the appropriate button widget based on `buttonBehavior`.
+   - Enhanced logging to include the length of ads list to aid in debugging and monitoring the list state.
+
+4. `lib/components/others_widgets/ad_list_view/widgets/ad_card_view.dart`
+   - Updated the `Card` widget with a `shape` property, applying `RoundedRectangleBorder` to provide rounded corners for better visual appeal.
+
+5. `lib/features/advertisement/advert_controller.dart`
+   - Added `init` method to initialize the controller with an `AdvertModel` instance, populating various fields like `title`, `description`, `hidePhone`, `price`, `status`, `mechanicsId`, `address`, and `images`.
+   - Added `setImages` method to set the list of images in the controller, updating the `_images` list and notifying listeners.
+
+6. `lib/features/advertisement/advert_screen.dart`
+   - Updated constructor to accept an optional `AdvertModel` instance, allowing the screen to display and edit existing advertisements.
+   - Added initialization of `AdvertController` with the provided `AdvertModel` instance in `initState` to pre-fill the form fields with existing data.
+
+7. `lib/features/my_ads/my_ads_controller.dart`
+   - Added placeholder methods `updateAd` and `deleteAd` with TODO comments indicating future implementation plans for updating and deleting advertisements.
+
+8. `lib/features/my_ads/my_ads_screen.dart`
+   - Refactored to replace direct usage of `TabBar` and `TabBarView` with custom widgets `MyTabBar` and `MyTabBarView` to improve code modularity and readability.
+   - Added custom `MyTabBar` widget to handle tab selection and update the product status in the controller.
+   - Added custom `MyTabBarView` widget to display advertisements based on their status, with configurable dismissible actions and button behaviors.
+
+9. `lib/features/my_ads/widgets/my_tab_bar.dart`
+   - Implements a custom `TabBar` widget that maps tab selection to product status changes in the `MyAdsController`.
+
+10. `lib/features/my_ads/widgets/my_tab_bar_view.dart`
+    - Implements a custom `TabBarView` widget that displays a list of advertisements with different statuses, using `AdListView` with configurable actions for each tab.
+
+11. `lib/my_material_app.dart`
+    - Updated routing logic to handle `AdvertScreen` navigation, passing an `AdvertModel` instance when navigating to allow for ad editing.
+    - Simplified `onGenerateRoute` method for better readability, ensuring all routes handle their respective arguments correctly.
+
+These changes enhance the advertisement management capabilities by adding the ability to edit and delete ads directly from the list, initializing controllers with existing ad data, and modularizing the UI components for better code organization and maintainability. The refactor also improves the overall user experience by making the UI more intuitive and the codebase easier to maintain and extend.
+
+
 ## 2024/07/26 - version: 0.5.2+18
 
 Improved Advertisement Management and Code Refactoring

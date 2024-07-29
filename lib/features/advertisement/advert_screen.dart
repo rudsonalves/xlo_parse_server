@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../common/models/advert.dart';
 import '../../components/buttons/big_button.dart';
 import '../base/base_screen.dart';
 import 'advert_controller.dart';
@@ -25,7 +26,12 @@ import 'widgets/advert_form.dart';
 import 'widgets/image_list_view.dart';
 
 class AdvertScreen extends StatefulWidget {
-  const AdvertScreen({super.key});
+  final AdvertModel? advert;
+
+  const AdvertScreen({
+    super.key,
+    this.advert,
+  });
 
   static const routeName = '/insert';
 
@@ -34,18 +40,25 @@ class AdvertScreen extends StatefulWidget {
 }
 
 class _AdvertScreenState extends State<AdvertScreen> {
-  final controller = AdvertController();
+  final ctrl = AdvertController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    ctrl.init(widget.advert);
+  }
 
   @override
   void dispose() {
-    controller.dispose();
+    ctrl.dispose();
     super.dispose();
   }
 
   Future<void> _createAnnounce() async {
-    if (!controller.formValit) return;
+    if (!ctrl.formValit) return;
     FocusScope.of(context).unfocus();
-    await controller.createAnnounce();
+    await ctrl.createAnnounce();
     if (mounted) Navigator.pushNamed(context, BaseScreen.routeName);
   }
 
@@ -55,7 +68,7 @@ class _AdvertScreenState extends State<AdvertScreen> {
 
     return Scaffold(
       body: ListenableBuilder(
-        listenable: controller,
+        listenable: ctrl,
         builder: (context, _) => Stack(
           children: [
             SingleChildScrollView(
@@ -68,16 +81,16 @@ class _AdvertScreenState extends State<AdvertScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ImagesListView(
-                      controller: controller,
+                      controller: ctrl,
                       validator: true,
                     ),
                     AnimatedBuilder(
-                      animation: Listenable.merge(
-                          [controller.valit, controller.imagesLength]),
+                      animation:
+                          Listenable.merge([ctrl.valit, ctrl.imagesLength]),
                       builder: (context, _) {
-                        if ((controller.imagesLength.value == 0 &&
-                                controller.valit.value == null) ||
-                            controller.imagesLength.value > 0) {
+                        if ((ctrl.imagesLength.value == 0 &&
+                                ctrl.valit.value == null) ||
+                            ctrl.imagesLength.value > 0) {
                           return Container();
                         } else {
                           return Text(
@@ -91,23 +104,23 @@ class _AdvertScreenState extends State<AdvertScreen> {
                     ),
                     Column(
                       children: [
-                        AdvertForm(controller: controller),
+                        AdvertForm(controller: ctrl),
                         BigButton(
                           color: Colors.orange,
                           label: 'Enviar',
                           onPress: _createAnnounce,
-                        )
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
             ),
-            if (controller.state is AdvertStateLoading)
+            if (ctrl.state is AdvertStateLoading)
               const Center(
                 child: CircularProgressIndicator(),
               ),
-            if (controller.state is AdvertStateError)
+            if (ctrl.state is AdvertStateError)
               AlertDialog(
                 icon: Icon(
                   Icons.error,
@@ -119,7 +132,7 @@ class _AdvertScreenState extends State<AdvertScreen> {
                 actions: [
                   FilledButton(
                     onPressed: () {
-                      controller.gotoSuccess();
+                      ctrl.gotoSuccess();
                     },
                     child: const Text('Fechar'),
                   ),

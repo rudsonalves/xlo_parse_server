@@ -117,4 +117,12 @@ class MyAdsController extends BasicController {
       return false;
     }
   }
+
+  void updateAd(AdvertModel ad) {
+    // FIXME: implement this function
+  }
+
+  void deleteAd(AdvertModel ad) {
+    // FIXME: implement this function
+  }
 }
