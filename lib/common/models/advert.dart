@@ -25,11 +25,11 @@ enum ProductCondition { all, used, sealed }
 class AdvertModel {
   String? id;
   UserModel owner;
+  String title;
   String description;
   bool hidePhone;
   double price;
   AdvertStatus status;
-  String title;
   List<String> mechanicsId;
   AddressModel address;
   List<String> images;

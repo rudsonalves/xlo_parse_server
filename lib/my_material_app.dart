@@ -73,7 +73,6 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             locale: const Locale('pt', 'BR'),
             routes: {
               BaseScreen.routeName: (_) => const BaseScreen(),
-              AdvertScreen.routeName: (_) => const AdvertScreen(),
               ChatScreen.routeName: (_) => const ChatScreen(),
               AccountScreen.routeName: (_) => const AccountScreen(),
               LoginScreen.routeName: (_) => const LoginScreen(),
@@ -84,45 +83,43 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {
-                case ProductScreen.routeName:
-                  return MaterialPageRoute(
-                    builder: (context) {
-                      final advert = settings.arguments as AdvertModel;
+                case AdvertScreen.routeName:
+                  return MaterialPageRoute(builder: (context) {
+                    final advert = settings.arguments as AdvertModel?;
+                    return AdvertScreen(advert: advert);
+                  });
 
-                      return ProductScreen(advert: advert);
-                    },
-                  );
+                case ProductScreen.routeName:
+                  return MaterialPageRoute(builder: (context) {
+                    final advert = settings.arguments as AdvertModel;
+
+                    return ProductScreen(advert: advert);
+                  });
 
                 case FiltersScreen.routeName:
-                  return MaterialPageRoute(
-                    builder: (context) {
-                      final filter = settings.arguments as FilterModel?;
+                  return MaterialPageRoute(builder: (context) {
+                    final filter = settings.arguments as FilterModel?;
 
-                      return FiltersScreen(filter);
-                    },
-                  );
+                    return FiltersScreen(filter);
+                  });
 
                 case MecanicsScreen.routeName:
-                  return MaterialPageRoute(
-                    builder: (context) {
-                      final selectedIds = settings.arguments as List<String>;
+                  return MaterialPageRoute(builder: (context) {
+                    final selectedIds = settings.arguments as List<String>;
 
-                      return MecanicsScreen(
-                        selectedIds: selectedIds,
-                      );
-                    },
-                  );
+                    return MecanicsScreen(
+                      selectedIds: selectedIds,
+                    );
+                  });
 
                 case NewAddressScreen.routeName:
-                  return MaterialPageRoute(
-                    builder: (context) {
-                      final address = settings.arguments as AddressModel?;
+                  return MaterialPageRoute(builder: (context) {
+                    final address = settings.arguments as AddressModel?;
 
-                      return NewAddressScreen(
-                        address: address,
-                      );
-                    },
-                  );
+                    return NewAddressScreen(
+                      address: address,
+                    );
+                  });
                 default:
                   return null;
               }

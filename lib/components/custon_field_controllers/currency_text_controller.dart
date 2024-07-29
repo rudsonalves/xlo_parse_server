@@ -65,6 +65,10 @@ class CurrencyTextController extends TextEditingController {
     return value / _getDivisionFactor();
   }
 
+  set currencyValue(double value) {
+    text = value.toStringAsFixed(decimalDigits);
+  }
+
   void _onTextChanged() {
     if (_isApplyingMask) return;
 
