@@ -16,6 +16,7 @@
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/common/app_constants.dart';
 
 import '../../common/singletons/current_user.dart';
 import '../../get_it.dart';
@@ -53,7 +54,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   icon: const Icon(Icons.power_settings_new_rounded),
                   onPressed: () {
                     currentUser.logout();
-                    getIt<BaseController>().jumpToPage(0);
+                    getIt<BaseController>().jumpToPage(AppPage.shopePage);
                   },
                 ),
               ),

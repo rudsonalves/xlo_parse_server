@@ -44,7 +44,7 @@ class BigButton extends StatelessWidget {
               style: ButtonStyle(
                 shape: ButtonStyleButton.allOrNull(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(32),
                   ),
                 ),
                 backgroundColor: WidgetStateProperty.all(

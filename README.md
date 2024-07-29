@@ -21,6 +21,82 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/29 - version: 0.5.2+20
+
+Enhanced Advertisement Features and Refactoring
+
+1. `lib/common/app_constants.dart`
+   - Created a new file to define the `AppPage` enum with values `shopePage`, `chatPage`, `favoritesPage`, and `accountPage` for better navigation handling.
+
+2. `lib/components/buttons/big_button.dart`
+   - Updated the button's `borderRadius` to 32 for a more rounded appearance.
+
+3. `lib/components/custom_drawer/custom_drawer.dart`
+   - Imported `AppPage` enum from `app_constants.dart` and `AdvertScreen`.
+   - Replaced hard-coded page numbers with `AppPage` enum values for improved readability and maintainability.
+
+4. `lib/components/others_widgets/ad_list_view/ad_list_view.dart`
+   - Added `editAd` and `deleteAd` callbacks to handle advertisement editing and deletion.
+   - Removed logging and simplified button actions to call the new callbacks.
+
+5. `lib/features/account/account_screen.dart`
+   - Imported `AppPage` enum from `app_constants.dart`.
+   - Replaced hard-coded page number with `AppPage.shopePage` for navigation after logout.
+
+6. `lib/features/advertisement/advert_controller.dart`
+   - Updated `init` method to use `setSelectedAddress` for setting the address.
+   - Improved `removeImage` method to handle both URL and local file deletion.
+   - Added `updateAds` method to update an existing advertisement.
+   - Renamed `createAnnounce` to `createAds` and adjusted its implementation.
+
+7. `lib/features/advertisement/advert_screen.dart`
+   - Added an AppBar with dynamic title based on whether the ad is new or being edited.
+   - Updated `_createAnnounce` method to handle both ad creation and updating, returning to the previous screen with the updated ad.
+
+8. `lib/features/advertisement/widgets/advert_form.dart`
+   - Updated icons in `SegmentedButton` for better representation of `AdvertStatus` values.
+
+9. `lib/features/advertisement/widgets/horizontal_image_gallery.dart`
+   - Added `showImage` method to handle displaying both network and local images.
+   - Adjusted `_showImageEditDialog` to show either a network or local image based on the URL pattern.
+
+10. `lib/features/advertisement/widgets/image_list_view.dart`
+    - Added `editAd` and `deleteAd` callbacks for handling ad editing and deletion.
+
+11. `lib/features/base/base_controller.dart`
+    - Imported `AppPage` enum from `app_constants.dart`.
+    - Replaced `_page` type from `int` to `AppPage` for better type safety and readability.
+
+12. `lib/features/base/base_screen.dart`
+    - Imported `AppPage` enum from `app_constants.dart`.
+    - Updated various navigation references to use `AppPage` enum values.
+
+13. `lib/features/my_ads/my_ads_controller.dart`
+    - Implemented `updateAd` method to refresh ads after an update.
+    - Implemented `deleteAd` method to delete an advertisement and refresh the ads list.
+
+14. `lib/features/my_ads/my_ads_screen.dart`
+    - Added methods `_editAd` and `_deleteAd` to handle editing and deletion of advertisements with confirmation dialogs.
+    - Updated `MyTabBarView` usage to include `editAd` and `deleteAd` callbacks.
+
+15. `lib/features/my_ads/widgets/my_tab_bar.dart`
+    - Updated icons in `Tab` widgets for better representation of advertisement statuses.
+
+16. `lib/features/my_ads/widgets/my_tab_bar_view.dart`
+    - Added `editAd` and `deleteAd` callbacks to `AdListView`.
+
+17. `lib/features/shop/shop_screen.dart`
+    - Imported `AdvertScreen`.
+    - Updated `FloatingActionButton` to navigate to `AdvertScreen` for adding a new advertisement.
+
+18. `lib/repository/advert_repository.dart`
+    - Added `update` method to update an advertisement on the Parse server.
+    - Improved `_saveImages` method to correctly identify URL patterns.
+    - Added `delete` method to delete an advertisement from the Parse server.
+
+These changes enhance the advertisement management features by improving navigation with the `AppPage` enum, adding capabilities for editing and deleting ads, and refining the UI components for better user experience and maintainability. The refactor also ensures the codebase is more readable and easier to manage.
+
+
 ## 2024/07/29 - version: 0.5.2+19
 
 Enhanced Advertisement Features and Refactoring

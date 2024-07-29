@@ -249,6 +249,61 @@ class AdvertRepository {
     }
   }
 
+  static Future<AdvertModel?> update(AdvertModel advert) async {
+    try {
+      final parseUser = await ParseUser.currentUser() as ParseUser?;
+      if (parseUser == null) {
+        throw Exception('Current user access error');
+      }
+
+      List<ParseFile> parseImages = await _saveImages(advert.images, parseUser);
+
+      final List<ParseObject> parseMechanics = advert.mechanicsId.map((id) {
+        final parse = ParseObject(keyMechanicTable);
+        parse.objectId = id;
+        return parse;
+      }).toList();
+
+      final parseAddress = ParseObject(keyAddressTable);
+      parseAddress.objectId = advert.address.id;
+
+      if (advert.id == null) {
+        throw Exception('Advert ID cannot be null for update');
+      }
+
+      final parseAd = ParseObject(keyAdvertTable)..objectId = advert.id!;
+
+      parseAd
+        ..set<String>(keyAdvertTitle, advert.title)
+        ..set<String>(keyAdvertDescription, advert.description)
+        ..set<bool>(keyAdvertHidePhone, advert.hidePhone)
+        ..set<double>(keyAdvertPrice, advert.price)
+        ..set<int>(keyAdvertStatus, advert.status.index)
+        ..set<int>(keyAdvertCondition, advert.condition.index)
+        ..set<ParseObject>(keyAdvertAddress, parseAddress)
+        ..set<List<ParseFile>>(keyAdvertImages, parseImages)
+        ..set<List<ParseObject>>(keyAdvertMechanics, parseMechanics);
+
+      final response = await parseAd.update();
+      if (!response.success) {
+        if (response.count > 0) {
+          for (final item in response.results!) {
+            log('>> ${item.toString()}');
+          }
+        } else {
+          log('parseAd.update error: ${response.error?.message}');
+        }
+        throw Exception(response.error);
+      }
+
+      return advert;
+    } catch (err) {
+      final message = 'AdvertRepository.update: $err';
+      log(message);
+      throw Exception(message);
+    }
+  }
+
   /// Saves the images to the Parse Server.
   ///
   /// [imagesPaths] - The list of image paths to save.
@@ -263,7 +318,7 @@ class AdvertRepository {
 
     try {
       for (final path in imagesPaths) {
-        if (!path.contains('://')) {
+        if (!path.contains(RegExp(r'http'))) {
           final file = File(path);
           final parseFile = ParseFile(file, name: basename(path));
 
@@ -294,6 +349,21 @@ class AdvertRepository {
     } catch (err) {
       log('exception in _saveImages: $err');
       throw Exception(err);
+    }
+  }
+
+  static Future<void> delete(AdvertModel ad) async {
+    try {
+      final parse = ParseObject(keyAdvertTable)..objectId = ad.id;
+
+      final response = await parse.delete();
+      if (!response.success) {
+        throw Exception(response.error ?? 'delete advert table error');
+      }
+      return;
+    } catch (err) {
+      final message = 'AdvertRepository.delete: $err';
+      log(message);
     }
   }
 }

@@ -87,6 +87,7 @@ class _HotizontalImageGalleryState extends State<HotizontalImageGallery> {
 
   void _showImageEditDialog(int index) {
     final colorScheme = Theme.of(context).colorScheme;
+    final image = widget.images[index];
 
     showDialog(
       context: context,
@@ -96,14 +97,15 @@ class _HotizontalImageGalleryState extends State<HotizontalImageGallery> {
         ),
         backgroundColor: colorScheme.onSecondary,
         title: const Text('Image'),
-        content: Image.file(
-          File(widget.images[index]),
-        ),
+        content: image.contains(RegExp(r'^http'))
+            ? Image.network(image)
+            : Image.file(File(image)),
         actions: [
           TextButton.icon(
             onPressed: () {
               widget.removeImage(index);
               Navigator.pop(context);
+              setState(() {});
             },
             label: const Text('Remover'),
             icon: const Icon(Icons.delete),
@@ -128,6 +130,12 @@ class _HotizontalImageGalleryState extends State<HotizontalImageGallery> {
     );
   }
 
+  Image showImage(String url) {
+    return url.contains(RegExp(r'http'))
+        ? Image.network(url)
+        : Image.file(File(url));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -137,17 +145,11 @@ class _HotizontalImageGalleryState extends State<HotizontalImageGallery> {
         if (index < widget.length) {
           // Show image
           return Padding(
-            padding: const EdgeInsets.all(2),
+            padding: const EdgeInsets.only(right: 4),
             child: InkWell(
               onTap: () => _showImageEditDialog(index),
               child: SizedBox(
-                // width: 108,
-                // height: 108,
-                child: Image.file(
-                  File(
-                    widget.images[index],
-                  ),
-                ),
+                child: showImage(widget.images[index]),
               ),
             ),
           );

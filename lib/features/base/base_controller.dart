@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:xlo_mobx/common/singletons/search_filter.dart';
 
+import '../../common/app_constants.dart';
 import '../../common/models/filter.dart';
 import '../../common/singletons/current_user.dart';
 import '../../get_it.dart';
@@ -42,8 +43,8 @@ class BaseController extends ChangeNotifier {
     searchFilter.updateFilter(newFilter);
   }
 
-  int _page = 0;
-  int get page => _page;
+  AppPage _page = AppPage.shopePage;
+  AppPage get page => _page;
 
   BaseState get state => _state;
   String get pageTitle => _pageTitle.value;
@@ -71,24 +72,24 @@ class BaseController extends ChangeNotifier {
     }
   }
 
-  void jumpToPage(int page) {
+  void jumpToPage(AppPage page) {
     _page = page;
-    if (_page == 0) {
+    if (_page == AppPage.shopePage) {
       _pageTitle.value = searchFilter.searchString.isEmpty
-          ? titles[0]
+          ? titles[AppPage.shopePage.index]
           : searchFilter.searchString;
     } else {
-      _pageTitle.value = titles[_page];
+      _pageTitle.value = titles[_page.index];
     }
 
-    pageController.jumpToPage(page);
+    pageController.jumpToPage(page.index);
   }
 
   void setSearch(String value) {
     searchFilter.searchString = value;
-    if (_page == 0) {
+    if (_page == AppPage.shopePage) {
       _pageTitle.value = searchFilter.searchString.isEmpty
-          ? titles[0]
+          ? titles[AppPage.shopePage.index]
           : searchFilter.searchString;
     }
   }

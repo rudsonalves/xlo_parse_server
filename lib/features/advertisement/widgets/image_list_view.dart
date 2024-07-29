@@ -17,17 +17,22 @@
 
 import 'package:flutter/material.dart';
 
+import '../../../common/models/advert.dart';
 import '../advert_controller.dart';
 import 'horizontal_image_gallery.dart';
 
 class ImagesListView extends StatelessWidget {
   final AdvertController controller;
   final bool validator;
+  final Function(AdvertModel ad)? editAd;
+  final Function(AdvertModel ad)? deleteAd;
 
   const ImagesListView({
     super.key,
     required this.controller,
     required this.validator,
+    this.editAd,
+    this.deleteAd,
   });
 
   @override
@@ -35,6 +40,7 @@ class ImagesListView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: controller.app.isDark
             ? colorScheme.onSecondary
@@ -42,16 +48,13 @@ class ImagesListView extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       height: 120,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ValueListenableBuilder(
-          valueListenable: controller.imagesLength,
-          builder: (context, length, _) => HotizontalImageGallery(
-            length: length,
-            images: controller.images,
-            addImage: controller.addImage,
-            removeImage: controller.removeImage,
-          ),
+      child: ValueListenableBuilder(
+        valueListenable: controller.imagesLength,
+        builder: (context, length, _) => HotizontalImageGallery(
+          length: length,
+          images: controller.images,
+          addImage: controller.addImage,
+          removeImage: controller.removeImage,
         ),
       ),
     );

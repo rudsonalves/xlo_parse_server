@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 
 import '../../common/models/advert.dart';
 import '../../components/buttons/big_button.dart';
-import '../base/base_screen.dart';
 import 'advert_controller.dart';
 import 'advert_state.dart';
 import 'widgets/advert_form.dart';
@@ -56,10 +55,15 @@ class _AdvertScreenState extends State<AdvertScreen> {
   }
 
   Future<void> _createAnnounce() async {
+    AdvertModel? advert;
     if (!ctrl.formValit) return;
     FocusScope.of(context).unfocus();
-    await ctrl.createAnnounce();
-    if (mounted) Navigator.pushNamed(context, BaseScreen.routeName);
+    if (widget.advert != null) {
+      advert = await ctrl.updateAds(widget.advert!.id!);
+    } else {
+      advert = await ctrl.createAds();
+    }
+    if (mounted) Navigator.pop(context, advert);
   }
 
   @override
@@ -67,6 +71,14 @@ class _AdvertScreenState extends State<AdvertScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.advert != null ? 'Edit' : 'Criar Anúncio'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: ListenableBuilder(
         listenable: ctrl,
         builder: (context, _) => Stack(
@@ -107,7 +119,7 @@ class _AdvertScreenState extends State<AdvertScreen> {
                         AdvertForm(controller: ctrl),
                         BigButton(
                           color: Colors.orange,
-                          label: 'Enviar',
+                          label: widget.advert != null ? 'Atualizar' : 'Enviar',
                           onPress: _createAnnounce,
                         ),
                       ],
@@ -128,7 +140,10 @@ class _AdvertScreenState extends State<AdvertScreen> {
                   color: colorScheme.error,
                 ),
                 title: const Text('Erro'),
-                content: const Text('Desculpe. Por favor, tente mais tarde.'),
+                content: const Text(
+                  'Desculpe, estamos tendo algum proplema.'
+                  ' Por favor, tente mais tarde.',
+                ),
                 actions: [
                   FilledButton(
                     onPressed: () {

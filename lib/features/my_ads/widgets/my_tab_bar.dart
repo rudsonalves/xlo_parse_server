@@ -36,21 +36,21 @@ class MyTabBar extends StatelessWidget implements PreferredSizeWidget {
     return TabBar(
       tabs: [
         Tab(
-          icon: const Icon(Icons.notifications_off_outlined),
+          icon: const Icon(Icons.hourglass_empty),
           child: Text(
             'Pendentes',
             style: AppTextStyle.font14Thin,
           ),
         ),
         Tab(
-          icon: const Icon(Icons.notifications_active),
+          icon: const Icon(Icons.verified),
           child: Text(
             'Ativos',
             style: AppTextStyle.font14,
           ),
         ),
         Tab(
-          icon: const Icon(Icons.currency_exchange_rounded),
+          icon: const Icon(Icons.attach_money),
           child: Text(
             'Vendidos',
             style: AppTextStyle.font14,

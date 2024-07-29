@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../common/app_constants.dart';
 import '../../common/models/filter.dart';
 import '../../components/custom_drawer/custom_drawer.dart';
 import '../../get_it.dart';
@@ -25,7 +26,6 @@ import '../chat/chat_screen.dart';
 import '../favorites/favorites_screen.dart';
 import '../filters/filters_screen.dart';
 import '../shop/shop_screen.dart';
-import '../advertisement/advert_screen.dart';
 import 'base_controller.dart';
 import 'base_state.dart';
 import 'widgets/search_dialog.dart';
@@ -56,7 +56,7 @@ class _BaseScreenState extends State<BaseScreen> {
   }
 
   Widget get titleWidget {
-    if (ctrl.page == 0) {
+    if (ctrl.page == AppPage.shopePage) {
       return (ctrl.searchString.isNotEmpty)
           ? GestureDetector(
               onTap: _openSearchDialog,
@@ -125,7 +125,7 @@ class _BaseScreenState extends State<BaseScreen> {
           ListenableBuilder(
             listenable: ctrl.titleNotifier,
             builder: (context, _) {
-              return (ctrl.page == 0)
+              return (ctrl.page == AppPage.shopePage)
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -198,7 +198,6 @@ class _BaseScreenState extends State<BaseScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   children: const [
                     ShopScreen(),
-                    AdvertScreen(),
                     ChatScreen(),
                     FavoritesScreen(),
                     AccountScreen(),
