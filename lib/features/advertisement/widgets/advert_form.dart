@@ -183,17 +183,17 @@ class _AdvertFormState extends State<AdvertForm> {
                     FittedButtonSegment(
                       value: AdvertStatus.pending,
                       label: 'Pendente',
-                      iconData: Icons.recycling,
+                      iconData: Icons.hourglass_empty,
                     ),
                     FittedButtonSegment(
                       value: AdvertStatus.active,
                       label: 'Ativo',
-                      iconData: Icons.new_releases_outlined,
+                      iconData: Icons.verified,
                     ),
                     FittedButtonSegment(
                       value: AdvertStatus.sold,
                       label: 'Vendido',
-                      iconData: Icons.new_releases_outlined,
+                      iconData: Icons.attach_money,
                     ),
                   ],
                   selected: {ctrl.adStatus},

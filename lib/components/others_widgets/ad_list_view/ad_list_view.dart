@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +39,8 @@ class AdListView extends StatefulWidget {
   final String? labelRight;
   final AdvertStatus? statusLeft;
   final AdvertStatus? statusRight;
+  final Function(AdvertModel ad)? editAd;
+  final Function(AdvertModel ad)? deleteAd;
 
   const AdListView({
     super.key,
@@ -56,6 +56,8 @@ class AdListView extends StatefulWidget {
     this.labelRight,
     this.statusLeft,
     this.statusRight,
+    this.editAd,
+    this.deleteAd,
   });
 
   @override
@@ -113,14 +115,6 @@ class _AdListViewState extends State<AdListView> {
     }
   }
 
-  void _editAdvert(AdvertModel ad) {
-    log('Edit ad: ${ad.id}');
-  }
-
-  void _deleteAdvert(AdvertModel ad) {
-    log('Delete: ${ad.id}');
-  }
-
   Widget? getItemButton(int index) {
     final ad = ctrl.ads[index];
 
@@ -130,7 +124,9 @@ class _AdListViewState extends State<AdListView> {
       case ButtonBehavior.edit:
         return InkWell(
           borderRadius: BorderRadius.circular(50),
-          onTap: () => _editAdvert(ad),
+          onTap: () {
+            if (widget.editAd != null) widget.editAd!(ad);
+          },
           child: Ink(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
@@ -144,7 +140,9 @@ class _AdListViewState extends State<AdListView> {
       case ButtonBehavior.delete:
         return InkWell(
           borderRadius: BorderRadius.circular(50),
-          onTap: () => _deleteAdvert(ad),
+          onTap: () {
+            if (widget.deleteAd != null) widget.deleteAd!(ad);
+          },
           child: Ink(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
@@ -160,8 +158,6 @@ class _AdListViewState extends State<AdListView> {
 
   @override
   Widget build(BuildContext context) {
-    log('ListView length: ${ctrl.ads.length}');
-
     return ListView.builder(
       controller: _scrollController,
       itemCount: ctrl.ads.length,

@@ -81,7 +81,7 @@ class AdvertController extends ChangeNotifier {
       priceController.currencyValue = ad.price;
       setAdStatus(ad.status);
       setMechanicsIds(ad.mechanicsId);
-      _selectedAddressId = ad.address.id!;
+      setSelectedAddress(ad.address.name);
       setImages(ad.images);
       setCondition(ad.condition);
     }
@@ -116,11 +116,17 @@ class AdvertController extends ChangeNotifier {
   }
 
   void removeImage(int index) {
+    final image = images[index];
     if (index < images.length) {
-      final file = File(images[index]);
-      _images.removeAt(index);
-      _imagesLength.value = _images.length;
-      file.delete();
+      if (image.contains(RegExp(r'^http'))) {
+        _images.removeAt(index);
+        _imagesLength.value = _images.length;
+      } else {
+        final file = File(image);
+        _images.removeAt(index);
+        _imagesLength.value = _images.length;
+        file.delete();
+      }
     }
   }
 
@@ -139,11 +145,38 @@ class AdvertController extends ChangeNotifier {
     return _valit.value!;
   }
 
-  Future<void> createAnnounce() async {
+  Future<AdvertModel?> updateAds(String id) async {
+    if (!formValit) return null;
     try {
       _changeState(AdvertStateLoading());
-      if (!formValit) return;
+      final ad = AdvertModel(
+        id: id,
+        owner: currentUser.user!,
+        images: _images,
+        title: titleController.text,
+        description: descriptionController.text,
+        mechanicsId: _selectedMechIds,
+        address: currentUser.addresses
+            .firstWhere((address) => address.id == _selectedAddressId),
+        price: priceController.currencyValue,
+        hidePhone: hidePhone.value,
+        condition: _condition,
+        status: _adStatus,
+      );
+      await AdvertRepository.update(ad);
+      _changeState(AdvertStateSuccess());
+      return ad;
+    } catch (err) {
+      log(err.toString());
+      _changeState(AdvertStateError());
+      return null;
+    }
+  }
 
+  Future<AdvertModel?> createAds() async {
+    if (!formValit) return null;
+    try {
+      _changeState(AdvertStateLoading());
       final ad = AdvertModel(
         owner: currentUser.user!,
         images: _images,
@@ -159,9 +192,11 @@ class AdvertController extends ChangeNotifier {
       );
       await AdvertRepository.save(ad);
       _changeState(AdvertStateSuccess());
+      return ad;
     } catch (err) {
       log(err.toString());
       _changeState(AdvertStateError());
+      return null;
     }
   }
 

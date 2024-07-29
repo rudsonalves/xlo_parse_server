@@ -24,11 +24,15 @@ import '../my_ads_controller.dart';
 class MyTabBarView extends StatefulWidget {
   final MyAdsController ctrl;
   final ScrollController scrollController;
+  final Function(AdvertModel ad) editAd;
+  final Function(AdvertModel ad) deleteAd;
 
   const MyTabBarView({
     super.key,
     required this.ctrl,
     required this.scrollController,
+    required this.editAd,
+    required this.deleteAd,
   });
 
   @override
@@ -157,6 +161,8 @@ class _MyTabBarViewState extends State<MyTabBarView> {
             buttonBehavior: getItemButton(tabIndex),
             statusLeft: getStatusLeft(tabIndex),
             statusRight: getStatusRight(tabIndex),
+            editAd: widget.editAd,
+            deleteAd: widget.deleteAd,
           ),
         ),
       ),

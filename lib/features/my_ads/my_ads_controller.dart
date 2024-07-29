@@ -119,10 +119,18 @@ class MyAdsController extends BasicController {
   }
 
   void updateAd(AdvertModel ad) {
-    // FIXME: implement this function
+    getAds();
   }
 
-  void deleteAd(AdvertModel ad) {
-    // FIXME: implement this function
+  Future<void> deleteAd(AdvertModel ad) async {
+    try {
+      changeState(BasicStateLoading());
+      await AdvertRepository.delete(ad);
+      await _getAds();
+      changeState(BasicStateSuccess());
+    } catch (err) {
+      log(err.toString());
+      changeState(BasicStateError());
+    }
   }
 }

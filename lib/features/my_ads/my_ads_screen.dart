@@ -16,6 +16,9 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/common/models/advert.dart';
+import 'package:xlo_mobx/features/advertisement/advert_screen.dart';
+import 'package:xlo_mobx/features/product/widgets/title_product.dart';
 
 import '../../common/basic_controller/basic_state.dart';
 import 'my_ads_controller.dart';
@@ -44,6 +47,51 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
 
   void _backPage() {
     Navigator.pop(context);
+  }
+
+  void _editAd(AdvertModel ad) async {
+    final result = await Navigator.pushNamed(context, AdvertScreen.routeName,
+        arguments: ad) as AdvertModel?;
+    if (result != null) {
+      ctrl.updateAd(result);
+    }
+  }
+
+  Future<void> _deleteAd(AdvertModel ad) async {
+    final response = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Remover Anúncio'),
+            icon: const Icon(
+              Icons.warning_amber,
+              color: Colors.amber,
+              size: 80,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Confirma a remoção do anúcio:'),
+                TitleProduct(title: ad.title),
+              ],
+            ),
+            actions: [
+              FilledButton.tonalIcon(
+                onPressed: () => Navigator.pop(context, true),
+                label: const Text('Remover'),
+                icon: const Icon(Icons.delete),
+              ),
+              FilledButton.tonal(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancelar'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+
+    if (response) {
+      ctrl.deleteAd(ad);
+    }
   }
 
   @override
@@ -92,6 +140,8 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
               return MyTabBarView(
                 ctrl: ctrl,
                 scrollController: _scrollController,
+                editAd: _editAd,
+                deleteAd: _deleteAd,
               );
             } else if (ctrl.state is BasicStateLoading) {
               return const Center(
