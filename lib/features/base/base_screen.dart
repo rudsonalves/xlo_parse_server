@@ -21,7 +21,7 @@ import '../../common/app_constants.dart';
 import '../../common/models/filter.dart';
 import '../../components/custom_drawer/custom_drawer.dart';
 import '../../get_it.dart';
-import '../account/account_screen.dart';
+import '../my_account/my_account_screen.dart';
 import '../chat/chat_screen.dart';
 import '../favorites/favorites_screen.dart';
 import '../filters/filters_screen.dart';
@@ -200,7 +200,7 @@ class _BaseScreenState extends State<BaseScreen> {
                     ShopScreen(),
                     ChatScreen(),
                     FavoritesScreen(),
-                    AccountScreen(),
+                    MyAccountScreen(),
                   ],
                 ),
               ),

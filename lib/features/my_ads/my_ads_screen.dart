@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:xlo_mobx/common/models/advert.dart';
-import 'package:xlo_mobx/features/advertisement/advert_screen.dart';
+import 'package:xlo_mobx/features/edit_advert/edit_advert_screen.dart';
 import 'package:xlo_mobx/features/product/widgets/title_product.dart';
 
 import '../../common/basic_controller/basic_state.dart';
@@ -50,7 +50,8 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
   }
 
   void _editAd(AdvertModel ad) async {
-    final result = await Navigator.pushNamed(context, AdvertScreen.routeName,
+    final result = await Navigator.pushNamed(
+        context, EditAdvertScreen.routeName,
         arguments: ad) as AdvertModel?;
     if (result != null) {
       ctrl.updateAd(result);
