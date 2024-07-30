@@ -25,6 +25,7 @@ class PasswordFormField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
+  final bool fullBorder;
 
   PasswordFormField({
     super.key,
@@ -35,6 +36,7 @@ class PasswordFormField extends StatelessWidget {
     this.textInputAction,
     this.focusNode,
     this.nextFocusNode,
+    this.fullBorder = true,
   });
 
   final notVisible = ValueNotifier<bool>(true);
@@ -57,9 +59,11 @@ class PasswordFormField extends StatelessWidget {
               labelText: labelText,
               hintText: hintText,
               errorText: errorString.value,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+              border: fullBorder
+                  ? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    )
+                  : null,
               floatingLabelBehavior: FloatingLabelBehavior.always,
               suffixIcon: IconButton(
                 onPressed: () {

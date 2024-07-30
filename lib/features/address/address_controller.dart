@@ -18,10 +18,11 @@
 import 'package:flutter/material.dart';
 
 import '../../common/models/address.dart';
+import '../../get_it.dart';
 import '../../manager/address_manager.dart';
 
 class AddressController extends ChangeNotifier {
-  final addressManager = AddressManager.instance;
+  final addressManager = getIt<AddressManager>();
   List<AddressModel> get addresses => addressManager.addresses;
   List<String> get addressNames => addressManager.addressNames.toList();
 

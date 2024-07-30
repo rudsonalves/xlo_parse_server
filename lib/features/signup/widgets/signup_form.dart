@@ -45,10 +45,10 @@ class SignUpForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CustomFormField(
-            labelText: 'Apelido',
+            labelText: 'Nome',
             hintText: 'Como aparecerá em seus anúncios',
-            controller: controller.nicknameController,
-            validator: Validator.nickname,
+            controller: controller.nameController,
+            validator: Validator.name,
             nextFocusNode: controller.emailFocusNode,
           ),
           CustomFormField(
@@ -58,7 +58,7 @@ class SignUpForm extends StatelessWidget {
             validator: Validator.email,
             keyboardType: TextInputType.emailAddress,
             focusNode: controller.emailFocusNode,
-            nextFocusNode: controller.celularFocusNode,
+            nextFocusNode: controller.phoneFocusNode,
           ),
           CustomFormField(
             labelText: 'Celular',
@@ -66,7 +66,7 @@ class SignUpForm extends StatelessWidget {
             controller: controller.phoneController,
             validator: Validator.phone,
             keyboardType: TextInputType.phone,
-            focusNode: controller.celularFocusNode,
+            focusNode: controller.phoneFocusNode,
             nextFocusNode: controller.passwordFocusNode,
           ),
           PasswordFormField(

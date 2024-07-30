@@ -16,12 +16,15 @@
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:xlo_mobx/common/app_constants.dart';
 
 import '../../common/singletons/current_user.dart';
 import '../../get_it.dart';
+import '../address/address_screen.dart';
 import '../base/base_controller.dart';
 import '../my_ads/my_ads_screen.dart';
+import '../my_data/my_data_screen.dart';
 import '../product/widgets/title_product.dart';
 
 class MyAccountScreen extends StatefulWidget {
@@ -38,6 +41,8 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(12),
@@ -76,15 +81,21 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                 onTap: () {},
               ),
               const Divider(),
-              const TitleProduct(title: 'Vendas'),
+              TitleProduct(
+                title: 'Vendas',
+                color: primary,
+              ),
               ListTile(
                 leading: const Icon(Icons.text_snippet),
                 title: const Text('Resumo'),
                 onTap: () {},
               ),
               ListTile(
-                leading: const Icon(Icons.discount),
-                title: const Text('Anúncios'),
+                leading: Icon(Icons.discount, color: primary),
+                title: Text(
+                  'Anúncios',
+                  style: TextStyle(color: primary),
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, MyAdsScreen.routeName);
                 },
@@ -100,16 +111,18 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                 onTap: () {},
               ),
               const Divider(),
-              const TitleProduct(title: 'Configurações'),
+              TitleProduct(title: 'Configurações', color: primary),
               ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('Meus Dados'),
-                onTap: () {},
+                leading: Icon(Icons.person, color: primary),
+                title: Text('Meus Dados', style: TextStyle(color: primary)),
+                onTap: () =>
+                    Navigator.pushNamed(context, MyDataScreen.routeName),
               ),
               ListTile(
-                leading: const Icon(Icons.contact_mail_rounded),
-                title: const Text('Meus Endereços'),
-                onTap: () {},
+                leading: Icon(Icons.contact_mail_rounded, color: primary),
+                title: Text('Meus Endereços', style: TextStyle(color: primary)),
+                onTap: () =>
+                    Navigator.pushNamed(context, AddressScreen.routeName),
               ),
             ],
           ),

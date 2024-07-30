@@ -16,39 +16,26 @@
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/common/app_constants.dart';
-import 'package:xlo_mobx/features/edit_advert/edit_advert_screen.dart';
 
+import '../../common/app_constants.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../features/base/base_controller.dart';
-import '../../features/login/login_screen.dart';
+import '../../features/edit_advert/edit_advert_screen.dart';
 import '../../get_it.dart';
 import 'widgets/custom_drawer_header.dart';
 
 class CustomDrawer extends StatelessWidget {
-  final ColorScheme colorScheme;
-  final PageController pageController;
+  final void Function() navToLoginScreen;
 
   CustomDrawer({
     super.key,
-    required this.colorScheme,
-    required this.pageController,
+    required this.navToLoginScreen,
   });
 
   final app = getIt<AppSettings>();
   final currentUSer = getIt<CurrentUser>();
-  final jumpToPage = getIt<BaseController>().jumpToPage;
-
-  void _navToLoginScreen(BuildContext context) {
-    if (currentUSer.isLoged) {
-      Navigator.pop(context);
-      jumpToPage(AppPage.accountPage);
-    } else {
-      Navigator.pop(context);
-      Navigator.pushNamed(context, LoginScreen.routeName);
-    }
-  }
+  final ctrl = getIt<BaseController>();
 
   @override
   Widget build(BuildContext context) {
@@ -66,15 +53,18 @@ class CustomDrawer extends StatelessWidget {
       child: ListView(
         children: [
           InkWell(
-            onTap: () => _navToLoginScreen(context),
+            onTap: () {
+              Navigator.pop(context);
+              navToLoginScreen();
+            },
             child: const CustomDrawerHeader(),
           ),
           ListTile(
             leading: const Icon(Icons.list),
             title: const Text('Anúncios'),
-            selected: pageController.page == AppPage.shopePage.index,
+            selected: ctrl.pageController.page == AppPage.shopePage.index,
             onTap: () {
-              jumpToPage(AppPage.shopePage);
+              ctrl.jumpToPage(AppPage.shopePage);
               Navigator.pop(context);
             },
           ),
@@ -91,6 +81,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             onTap: currentUSer.isLoged
                 ? () {
+                    Navigator.pop(context);
                     Navigator.pushNamed(context, EditAdvertScreen.routeName);
                   }
                 : null,
@@ -104,10 +95,10 @@ class CustomDrawer extends StatelessWidget {
                 color: currentUSer.isLoged ? null : colorScheme.outline,
               ),
             ),
-            selected: pageController.page == AppPage.chatPage.index,
+            selected: ctrl.pageController.page == AppPage.chatPage.index,
             onTap: currentUSer.isLoged
                 ? () {
-                    jumpToPage(AppPage.chatPage);
+                    ctrl.jumpToPage(AppPage.chatPage);
                     Navigator.pop(context);
                   }
                 : null,
@@ -123,10 +114,10 @@ class CustomDrawer extends StatelessWidget {
                 color: currentUSer.isLoged ? null : colorScheme.outline,
               ),
             ),
-            selected: pageController.page == AppPage.favoritesPage.index,
+            selected: ctrl.pageController.page == AppPage.favoritesPage.index,
             onTap: currentUSer.isLoged
                 ? () {
-                    jumpToPage(AppPage.favoritesPage);
+                    ctrl.jumpToPage(AppPage.favoritesPage);
                     Navigator.pop(context);
                   }
                 : null,
@@ -142,10 +133,10 @@ class CustomDrawer extends StatelessWidget {
                 color: currentUSer.isLoged ? null : colorScheme.outline,
               ),
             ),
-            selected: pageController.page == AppPage.accountPage.index,
+            selected: ctrl.pageController.page == AppPage.accountPage.index,
             onTap: currentUSer.isLoged
                 ? () {
-                    jumpToPage(AppPage.accountPage);
+                    ctrl.jumpToPage(AppPage.accountPage);
                     Navigator.pop(context);
                   }
                 : null,
@@ -161,12 +152,12 @@ class CustomDrawer extends StatelessWidget {
                 color: currentUSer.isLoged ? null : colorScheme.outline,
               ),
             ),
-            selected: pageController.page == AppPage.accountPage.index,
+            selected: ctrl.pageController.page == AppPage.accountPage.index,
             onTap: currentUSer.isLoged
                 ? () async {
                     await currentUSer.logout();
                     if (context.mounted) Navigator.pop(context);
-                    jumpToPage(AppPage.shopePage);
+                    ctrl.jumpToPage(AppPage.shopePage);
                   }
                 : null,
           ),

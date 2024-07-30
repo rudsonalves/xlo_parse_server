@@ -16,16 +16,17 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/common/singletons/search_filter.dart';
 
 import '../../common/app_constants.dart';
 import '../../common/models/filter.dart';
+import '../../common/models/user.dart';
 import '../../common/singletons/current_user.dart';
+import '../../common/singletons/search_filter.dart';
 import '../../get_it.dart';
 import 'base_state.dart';
 import '../../common/singletons/app_settings.dart';
 
-const titles = ['XLO', 'Adicionar Anúncio', 'Chat', 'Favoritos', 'Minha Conta'];
+const titles = ['XLO', 'Chat', 'Favoritos', 'Minha Conta'];
 
 class BaseController extends ChangeNotifier {
   BaseState _state = BaseStateInitial();
@@ -37,6 +38,7 @@ class BaseController extends ChangeNotifier {
   final searchFilter = getIt<SearchFilter>();
 
   String get searchString => searchFilter.searchString;
+  UserModel? get user => currentUser.user;
 
   FilterModel get filter => searchFilter.filter;
   set filter(FilterModel newFilter) {
@@ -47,10 +49,9 @@ class BaseController extends ChangeNotifier {
   AppPage get page => _page;
 
   BaseState get state => _state;
-  String get pageTitle => _pageTitle.value;
   double? get currentPage => pageController.page;
 
-  ValueNotifier<String> get titleNotifier => _pageTitle;
+  ValueNotifier<String> get pageTitle => _pageTitle;
   void _changeState(BaseState newState) {
     _state = newState;
     notifyListeners();
@@ -66,6 +67,7 @@ class BaseController extends ChangeNotifier {
     try {
       _changeState(BaseStateLoading());
       await currentUser.init();
+      setPageTitle();
       _changeState(BaseStateSuccess());
     } catch (err) {
       _changeState(BaseStateError());
@@ -74,15 +76,21 @@ class BaseController extends ChangeNotifier {
 
   void jumpToPage(AppPage page) {
     _page = page;
+    setPageTitle();
+    pageController.jumpToPage(page.index);
+  }
+
+  void setPageTitle() {
     if (_page == AppPage.shopePage) {
-      _pageTitle.value = searchFilter.searchString.isEmpty
-          ? titles[AppPage.shopePage.index]
-          : searchFilter.searchString;
+      if (searchFilter.searchString.isEmpty) {
+        _pageTitle.value =
+            user == null ? titles[AppPage.shopePage.index] : user!.name!;
+      } else {
+        _pageTitle.value = searchFilter.searchString;
+      }
     } else {
       _pageTitle.value = titles[_page.index];
     }
-
-    pageController.jumpToPage(page.index);
   }
 
   void setSearch(String value) {

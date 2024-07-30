@@ -15,22 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 
-extension NumberExtension on num {
-  String formatMoney() {
-    return NumberFormat('R\$ ###,##0.00', 'pt-BR').format(this);
-  }
-}
+class StateLoadingMessage extends StatelessWidget {
+  const StateLoadingMessage({super.key});
 
-extension DateTimeExtension on DateTime {
-  String formatDate() {
-    return DateFormat('dd/MM/yyy HH:mm', 'pt-BR').format(this);
-  }
-}
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-extension StringExtension on String {
-  String onlyNumbers() {
-    return replaceAll(RegExp(r'[^\d]'), '');
+    return Container(
+      color: colorScheme.surface.withOpacity(0.7),
+      child: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 }

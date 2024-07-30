@@ -27,6 +27,7 @@ import 'common/theme/util.dart';
 import 'features/my_account/my_account_screen.dart';
 import 'features/address/address_screen.dart';
 import 'features/my_ads/my_ads_screen.dart';
+import 'features/my_data/my_data_screen.dart';
 import 'features/product/product_screen.dart';
 import 'features/base/base_screen.dart';
 import 'features/filters/filters_screen.dart';
@@ -80,6 +81,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
               AddressScreen.routeName: (_) => const AddressScreen(),
               ShopScreen.routeName: (_) => const ShopScreen(),
               MyAdsScreen.routeName: (_) => const MyAdsScreen(),
+              MyDataScreen.routeName: (_) => const MyDataScreen(),
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {

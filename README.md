@@ -21,6 +21,110 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/30 - version: 0.5.2+22
+
+This commit introduces several enhancements and fixes across multiple files:
+
+1. `lib/common/models/advert.dart`
+   - Added `deleted` status to the `AdvertStatus` enum.
+
+2. `lib/common/singletons/current_user.dart`
+   - Imported `get_it.dart`.
+   - Changed the initialization of `addressManager` to use `getIt<AddressManager>()`.
+
+3. `lib/common/utils/extensions.dart`
+   - Added a new extension method `onlyNumbers` to `StringExtension`.
+
+4. `lib/common/validators/validators.dart`
+   - Imported `extensions.dart`.
+   - Renamed `nickname` validation method to `name`.
+   - Enhanced `phone` validation to include various checks like length, area code, and valid mobile/landline number.
+   - Added `DataValidator` class with methods for validating password, confirming password, name, and phone.
+
+5. `lib/components/custom_drawer/custom_drawer.dart`
+   - Removed redundant imports.
+   - Updated `CustomDrawer` constructor and properties.
+   - Refactored `_navToLoginScreen` method into `navToLoginScreen`.
+   - Adjusted `ListTile` items to use `ctrl.jumpToPage`.
+
+6. `lib/components/form_fields/password_form_field.dart`
+   - Added `fullBorder` parameter to `PasswordFormField`.
+   - Conditional application of `OutlineInputBorder`.
+
+7. `lib/components/others_widgets/state_error_message.dart`
+   - New file: Added `StateErrorMessage` widget for displaying error messages.
+
+8. `lib/components/others_widgets/state_loading_message.dart`
+   - New file: Added `StateLoadingMessage` widget for displaying loading messages.
+
+9. `lib/features/address/address_controller.dart`
+   - Changed the initialization of `addressManager` to use `getIt<AddressManager>()`.
+
+10. `lib/features/address/address_screen.dart`
+    - Disabled `_removeAddress` button and added comments for future implementation.
+
+11. `lib/features/base/base_controller.dart`
+    - Added `user` getter.
+    - Refactored `jumpToPage` and `setPageTitle` methods.
+    - Adjusted `titles` constant to reflect updated page titles.
+
+12. `lib/features/base/base_screen.dart`
+    - Updated `titleWidget` to use `ctrl.pageTitle`.
+    - Added `navToLoginScreen` method.
+    - Replaced `CircularProgressIndicator` with `StateLoadingMessage`.
+
+13. `lib/features/login/login_screen.dart`
+    - Added `StateErrorMessage` and `StateLoadingMessage` for error and loading states.
+    - Threw exception for unimplemented navigation actions.
+
+14. `lib/features/my_account/my_account_screen.dart`
+    - Added imports for `AddressScreen` and `MyDataScreen`.
+    - Updated `ListTile` items to use the new screens.
+
+15. `lib/features/my_ads/my_ads_controller.dart`
+    - Commented out the call to `AdvertRepository.delete` and added a status update using `AdvertRepository.updateStatus`.
+
+16. `lib/features/my_data/my_data_controller.dart`
+    - New file: Added `MyDataController` for managing user data.
+
+17. `lib/features/my_data/my_data_screen.dart`
+    - New file: Added `MyDataScreen` for displaying and editing user data.
+
+18. `lib/features/my_data/my_data_state.dart`
+    - New file: Added `MyDataState` classes for representing different states in `MyDataController`.
+
+19. `lib/features/product/widgets/title_product.dart`
+    - Added optional `color` parameter to `TitleProduct`.
+
+20. `lib/features/shop/shop_screen.dart`
+    - Added `StateErrorMessage` and `StateLoadingMessage` for error and loading states.
+    - Adjusted `FloatingActionButton` behavior to reinitialize the controller after login.
+
+21. `lib/features/signup/signup_controller.dart`
+    - Renamed `nicknameController` to `nameController`.
+    - Updated focus nodes and controller disposal.
+
+22. `lib/features/signup/widgets/signup_form.dart`
+    - Updated to use `nameController` and `phoneFocusNode`.
+
+23. `lib/get_it.dart`
+    - Registered `AddressManager` as a lazy singleton.
+
+24. `lib/manager/address_manager.dart`
+    - Removed singleton pattern in favor of dependency injection.
+
+25. `lib/my_material_app.dart`
+    - Added route for `MyDataScreen`.
+
+26. `lib/repository/advert_repository.dart`
+    - Updated `updateStatus` method to use `parse.update`.
+
+27. `lib/repository/user_repository.dart`
+    - Added `update` method for updating user information.
+
+These changes collectively enhance functionality, improve code readability, and address various bugs.
+
+
 ## 2024/07/29 - version: 0.5.2+21
 
 Renamed Advertisement Features and Updated Navigation

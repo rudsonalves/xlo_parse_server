@@ -36,7 +36,7 @@ class AdvertRepository {
         ..objectId = ad.id!
         ..set(keyAdvertStatus, ad.status.index);
 
-      final response = await parse.save();
+      final response = await parse.update();
 
       if (!response.success) {
         throw Exception(response.error ?? 'update advert table error');

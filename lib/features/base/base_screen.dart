@@ -20,7 +20,9 @@ import 'package:flutter/material.dart';
 import '../../common/app_constants.dart';
 import '../../common/models/filter.dart';
 import '../../components/custom_drawer/custom_drawer.dart';
+import '../../components/others_widgets/state_loading_message.dart';
 import '../../get_it.dart';
+import '../login/login_screen.dart';
 import '../my_account/my_account_screen.dart';
 import '../chat/chat_screen.dart';
 import '../favorites/favorites_screen.dart';
@@ -72,9 +74,9 @@ class _BaseScreenState extends State<BaseScreen> {
                 ),
               ),
             )
-          : Text(ctrl.titleNotifier.value);
+          : Text(ctrl.pageTitle.value);
     } else {
-      return Text(ctrl.titleNotifier.value);
+      return Text(ctrl.pageTitle.value);
     }
   }
 
@@ -107,14 +109,21 @@ class _BaseScreenState extends State<BaseScreen> {
     ctrl.filter = FilterModel();
   }
 
+  Future<void> navToLoginScreen() async {
+    if (ctrl.currentUser.isLoged) {
+      ctrl.jumpToPage(AppPage.accountPage);
+    } else {
+      await Navigator.pushNamed(context, LoginScreen.routeName);
+      ctrl.init();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppBar(
         title: ListenableBuilder(
-          listenable: ctrl.titleNotifier,
+          listenable: ctrl.pageTitle,
           builder: (context, _) {
             return titleWidget;
           },
@@ -123,7 +132,7 @@ class _BaseScreenState extends State<BaseScreen> {
         elevation: 5,
         actions: [
           ListenableBuilder(
-            listenable: ctrl.titleNotifier,
+            listenable: ctrl.pageTitle,
             builder: (context, _) {
               return (ctrl.page == AppPage.shopePage)
                   ? Row(
@@ -184,8 +193,7 @@ class _BaseScreenState extends State<BaseScreen> {
         ],
       ),
       drawer: CustomDrawer(
-        colorScheme: colorScheme,
-        pageController: ctrl.pageController,
+        navToLoginScreen: navToLoginScreen,
       ),
       body: ListenableBuilder(
         listenable: ctrl,
@@ -206,9 +214,7 @@ class _BaseScreenState extends State<BaseScreen> {
               ),
               if (ctrl.state is BaseStateLoading)
                 const Positioned.fill(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: StateLoadingMessage(),
                 ),
             ],
           );

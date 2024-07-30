@@ -32,13 +32,13 @@ class SignupController extends ChangeNotifier {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final checkPasswordController = TextEditingController();
-  final nicknameController = TextEditingController();
+  final nameController = TextEditingController();
   final phoneController = MaskedTextController(mask: '(##) ####-#####');
 
   final app = getIt<AppSettings>();
 
   final emailFocusNode = FocusNode();
-  final celularFocusNode = FocusNode();
+  final phoneFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
   final checkPassFocusNode = FocusNode();
 
@@ -48,11 +48,11 @@ class SignupController extends ChangeNotifier {
     emailController.dispose();
     passwordController.dispose();
     checkPasswordController.dispose();
-    nicknameController.dispose();
+    nameController.dispose();
     phoneController.dispose();
 
     emailFocusNode.dispose();
-    celularFocusNode.dispose();
+    phoneFocusNode.dispose();
     passwordFocusNode.dispose();
     checkPassFocusNode.dispose();
   }
@@ -66,7 +66,7 @@ class SignupController extends ChangeNotifier {
     try {
       _changeState(SignUpStateLoading());
       final user = UserModel(
-        name: nicknameController.text,
+        name: nameController.text,
         email: emailController.text,
         phone: phoneController.text,
         password: passwordController.text,

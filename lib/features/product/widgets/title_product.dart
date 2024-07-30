@@ -21,10 +21,12 @@ import '../../../common/theme/app_text_style.dart';
 
 class TitleProduct extends StatelessWidget {
   final String title;
+  final Color? color;
 
   const TitleProduct({
     super.key,
     required this.title,
+    this.color,
   });
 
   @override
@@ -33,7 +35,7 @@ class TitleProduct extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Text(
         title,
-        style: AppTextStyle.font16SemiBold,
+        style: AppTextStyle.font16SemiBold.copyWith(color: color),
       ),
     );
   }

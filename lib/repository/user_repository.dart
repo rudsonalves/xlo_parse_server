@@ -134,4 +134,30 @@ class UserRepository {
           'error setting ACL permissions: ${aclResponse.error?.message ?? 'unknown error'}');
     }
   }
+
+  static Future<void> update(UserModel user) async {
+    try {
+      final parseUser = ParseUser(null, null, null)..objectId = user.id;
+
+      if (user.name != null) {
+        parseUser.set(keyUserNickname, user.name);
+      }
+
+      if (user.phone != null) {
+        parseUser.set(keyUserPhone, user.phone);
+      }
+
+      if (user.password != null) {
+        parseUser.set(keyUserPassword, user.password);
+      }
+
+      final response = await parseUser.update();
+
+      if (!response.success) {
+        throw Exception(response.error.toString());
+      }
+    } catch (err) {
+      log('UserRepository.update: $err');
+    }
+  }
 }
