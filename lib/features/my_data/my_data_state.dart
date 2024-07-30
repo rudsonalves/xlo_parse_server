@@ -15,22 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:intl/intl.dart';
+abstract class MyDataState {}
 
-extension NumberExtension on num {
-  String formatMoney() {
-    return NumberFormat('R\$ ###,##0.00', 'pt-BR').format(this);
-  }
-}
+class MyDataStateInitial extends MyDataState {}
 
-extension DateTimeExtension on DateTime {
-  String formatDate() {
-    return DateFormat('dd/MM/yyy HH:mm', 'pt-BR').format(this);
-  }
-}
+class MyDataStateLoading extends MyDataState {}
 
-extension StringExtension on String {
-  String onlyNumbers() {
-    return replaceAll(RegExp(r'[^\d]'), '');
-  }
-}
+class MyDataStateSuccess extends MyDataState {}
+
+class MyDataStateError extends MyDataState {}

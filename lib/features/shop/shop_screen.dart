@@ -20,12 +20,15 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:xlo_mobx/features/edit_advert/edit_advert_screen.dart';
 
 import '../../common/basic_controller/basic_state.dart';
 import '../../common/singletons/current_user.dart';
 import '../../common/theme/app_text_style.dart';
+import '../../components/others_widgets/state_error_message.dart';
+import '../../components/others_widgets/state_loading_message.dart';
 import '../../get_it.dart';
+import '../base/base_controller.dart';
+import '../edit_advert/edit_advert_screen.dart';
 import '../login/login_screen.dart';
 import 'shop_controller.dart';
 import '../../components/others_widgets/ad_list_view/ad_list_view.dart';
@@ -145,8 +148,9 @@ class _ShopScreenState extends State<ShopScreen>
                     label: const Text('Adicionar anúncio'),
                   )
                 : FloatingActionButton.extended(
-                    onPressed: () {
-                      Navigator.pushNamed(context, LoginScreen.routeName);
+                    onPressed: () async {
+                      await Navigator.pushNamed(context, LoginScreen.routeName);
+                      getIt<BaseController>().init();
                     },
                     backgroundColor: colorScheme.tertiaryContainer,
                     icon: const Icon(Icons.login),
@@ -164,90 +168,58 @@ class _ShopScreenState extends State<ShopScreen>
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListenableBuilder(
-              listenable: ctrl,
-              builder: (context, _) {
-                return Stack(
-                  children: [
-                    // state HomeState Success
-                    // empty search
-                    if (ctrl.ads.isEmpty && ctrl.state is BasicStateSuccess)
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Card(
-                              color:
-                                  colorScheme.primaryContainer.withOpacity(.45),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                  children: [
-                                    const Icon(
-                                      Icons.warning_amber,
-                                      color: Colors.amber,
-                                      size: 80,
-                                    ),
-                                    Text(
-                                      'Nenhum anúncio encontrado',
-                                      style: AppTextStyle.font18Bold,
-                                    ),
-                                  ],
-                                ),
+            listenable: ctrl,
+            builder: (context, _) {
+              return Stack(
+                children: [
+                  // state HomeState Success
+                  // empty search
+                  if (ctrl.ads.isEmpty && ctrl.state is BasicStateSuccess)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Card(
+                            color:
+                                colorScheme.primaryContainer.withOpacity(.45),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.warning_amber,
+                                    color: Colors.amber,
+                                    size: 80,
+                                  ),
+                                  Text(
+                                    'Nenhum anúncio encontrado',
+                                    style: AppTextStyle.font18Bold,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    if (ctrl.ads.isNotEmpty && ctrl.state is BasicStateSuccess)
-                      AdListView(
-                        ctrl: ctrl,
-                        scrollController: _scrollController,
-                      ),
-                    if (ctrl.state is BasicStateError)
-                      Positioned.fill(
-                        child: Container(
-                          color: colorScheme.surface.withOpacity(0.7),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Card(
-                                  color: colorScheme.primaryContainer,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Column(
-                                      children: [
-                                        Icon(
-                                          Icons.error,
-                                          color: colorScheme.error,
-                                          size: 80,
-                                        ),
-                                        const Text(
-                                          'Desculpe. Ocorreu algum problema.\n'
-                                          ' Tente mais tarde.',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
-                      ),
-                    // state HomeState Loading
-                    if (ctrl.state is BasicStateLoading)
-                      Positioned.fill(
-                        child: Container(
-                          color: colorScheme.surface.withOpacity(.7),
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              }),
+                      ],
+                    ),
+                  if (ctrl.ads.isNotEmpty && ctrl.state is BasicStateSuccess)
+                    AdListView(
+                      ctrl: ctrl,
+                      scrollController: _scrollController,
+                    ),
+                  if (ctrl.state is BasicStateError)
+                    const Positioned.fill(
+                      child: StateErrorMessage(),
+                    ),
+                  // state HomeState Loading
+                  if (ctrl.state is BasicStateLoading)
+                    const Positioned.fill(
+                      child: StateLoadingMessage(),
+                    ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

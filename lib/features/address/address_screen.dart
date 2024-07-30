@@ -62,7 +62,6 @@ class _AddressScreenState extends State<AddressScreen> {
       appBar: AppBar(
         title: const Text('Endereços'),
         centerTitle: true,
-        // automaticallyImplyLeading: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: _backPage,
@@ -77,9 +76,11 @@ class _AddressScreenState extends State<AddressScreen> {
           ),
           const SizedBox(width: 12),
           FloatingActionButton(
-            onPressed: _removeAddress,
+            onPressed: null, // FIXME: tem de verificar se o endereço está
+            // sendo usado em algum anúncio antes de remover.
+            // _removeAddress,
             heroTag: 'fab2',
-            child: const Icon(Icons.remove),
+            child: Icon(Icons.remove, color: colorScheme.outline),
           ),
         ],
       ),

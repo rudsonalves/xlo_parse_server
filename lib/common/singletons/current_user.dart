@@ -18,6 +18,7 @@
 
 import 'package:flutter/foundation.dart';
 
+import '../../get_it.dart';
 import '../../manager/address_manager.dart';
 import '../../repository/user_repository.dart';
 import '../models/address.dart';
@@ -29,7 +30,7 @@ class CurrentUser {
   UserModel? _user;
   UserModel? get user => _user;
 
-  final addressManager = AddressManager.instance;
+  final addressManager = getIt<AddressManager>();
 
   List<AddressModel> get addresses => addressManager.addresses;
   Iterable<String> get addressNames => addressManager.addressNames;

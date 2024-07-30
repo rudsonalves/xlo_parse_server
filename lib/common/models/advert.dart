@@ -18,7 +18,7 @@
 import 'address.dart';
 import 'user.dart';
 
-enum AdvertStatus { pending, active, sold }
+enum AdvertStatus { pending, active, sold, deleted }
 
 enum ProductCondition { all, used, sealed }
 

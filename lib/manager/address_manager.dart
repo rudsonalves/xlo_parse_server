@@ -31,10 +31,6 @@ class DuplicateNameException implements Exception {
 /// Manager class to handle address operations such as initialization, fetching,
 /// saving, and deleting addresses.
 class AddressManager {
-  AddressManager._();
-  static final _instance = AddressManager._();
-  static AddressManager get instance => _instance;
-
   final List<AddressModel> _addresses = [];
   List<AddressModel> get addresses => _addresses;
   Iterable<String> get addressNames => _addresses.map((e) => e.name);

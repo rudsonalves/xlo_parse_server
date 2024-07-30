@@ -21,6 +21,8 @@ import '../../common/models/user.dart';
 import '../../common/parse_server/errors_mensages.dart';
 import '../../components/buttons/big_button.dart';
 import '../../components/dialogs/simple_message.dart';
+import '../../components/others_widgets/state_error_message.dart';
+import '../../components/others_widgets/state_loading_message.dart';
 import '../signup/signup_screen.dart';
 import 'login_controller.dart';
 import 'login_state.dart';
@@ -62,7 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if (user == null || user.id == null) {
           throw Exception(
-              '-1	Error code indicating that an unknown error or an error unrelated to Parse occurred.');
+              '-1	Error code indicating that an unknown error or an error'
+              ' unrelated to Parse occurred.');
         }
 
         if (mounted) Navigator.pop(context);
@@ -90,8 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _navLostPassword() {
-    // TODO: not implemented
-    Navigator.pop(context);
+    throw Exception('Has not yet been implemented');
   }
 
   @override
@@ -128,7 +130,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             BigButton(
                               color: Colors.blue,
                               label: 'Entrar com Facebook',
-                              onPress: () {},
+                              onPress: () {
+                                throw Exception('Has not yet been implemented');
+                              },
                             ),
                             const OrRow(),
                             LoginForm(
@@ -147,9 +151,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               if (_controller.state is LoginStateLoading)
                 const Positioned.fill(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: StateLoadingMessage(),
+                ),
+              if (_controller.state is LoginStateError)
+                const Positioned.fill(
+                  child: StateErrorMessage(),
                 ),
             ],
           );

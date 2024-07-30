@@ -24,6 +24,7 @@ import 'common/singletons/current_user.dart';
 import 'common/singletons/search_filter.dart';
 import 'common/singletons/search_history.dart';
 import 'features/base/base_controller.dart';
+import 'manager/address_manager.dart';
 
 final getIt = GetIt.instance;
 
@@ -32,6 +33,8 @@ void setupDependencies() {
     getIt.registerSingleton<AppSettings>(AppSettings());
 
     getIt.registerLazySingleton<CurrentUser>(() => CurrentUser());
+
+    getIt.registerLazySingleton<AddressManager>(() => AddressManager());
 
     getIt.registerLazySingleton<SearchFilter>(() => SearchFilter());
 

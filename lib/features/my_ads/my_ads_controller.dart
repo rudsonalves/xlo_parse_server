@@ -125,7 +125,9 @@ class MyAdsController extends BasicController {
   Future<void> deleteAd(AdvertModel ad) async {
     try {
       changeState(BasicStateLoading());
-      await AdvertRepository.delete(ad);
+      // await AdvertRepository.delete(ad);
+      ad.status = AdvertStatus.deleted;
+      await AdvertRepository.updateStatus(ad);
       await _getAds();
       changeState(BasicStateSuccess());
     } catch (err) {
