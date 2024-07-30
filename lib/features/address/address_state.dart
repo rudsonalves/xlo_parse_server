@@ -15,12 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-abstract class MyDataState {}
+abstract class AddressState {}
 
-class MyDataStateInitial extends MyDataState {}
+class AddressStateInitial extends AddressState {}
 
-class MyDataStateLoading extends MyDataState {}
+class AddressStateLoading extends AddressState {}
 
-class MyDataStateSuccess extends MyDataState {}
+class AddressStateSuccess extends AddressState {}
 
-class MyDataStateError extends MyDataState {}
+class AddressStateError extends AddressState {}

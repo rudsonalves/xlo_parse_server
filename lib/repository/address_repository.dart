@@ -76,16 +76,12 @@ class AddressRepository {
 
   /// Deletes an address from the Parse Server.
   ///
-  /// [address] - The address model to delete.
+  /// [addressId] - The address model to delete.
   /// Returns `true` if successful, otherwise returns `false`.
-  static Future<bool> delete(AddressModel address) async {
+  static Future<bool> delete(String addressId) async {
     try {
-      if (address.id == null) {
-        throw Exception('address ID is required to delete the address');
-      }
-
       final parseAddress = ParseObject(keyAddressTable);
-      parseAddress.objectId = address.id!;
+      parseAddress.objectId = addressId;
 
       final response = await parseAddress.delete();
       if (!response.success) {
@@ -95,7 +91,7 @@ class AddressRepository {
     } catch (err) {
       final message = 'AddressRepository.delete: $err';
       log(message);
-      return false;
+      throw Exception(message);
     }
   }
 
@@ -116,8 +112,7 @@ class AddressRepository {
       }
 
       final queryBuilder = QueryBuilder<ParseObject>(parseAddress)
-        ..whereEqualTo(keyAddressOwner,
-            parseUser); // FIXME: check if is need a .toPointer() here!
+        ..whereEqualTo(keyAddressOwner, parseUser.toPointer());
 
       final response = await queryBuilder.query();
       if (!response.success) {

@@ -21,6 +21,60 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/30 - version: 0.5.3+23
+
+This commit introduces a range of updates and new functionalities across multiple files:
+
+1. `lib/components/dialogs/simple_question.dart`
+   - New file: Added `SimpleQuestionDialog` widget for displaying simple question dialogs with Yes/No or Confirm/Cancel options.
+
+2. `lib/features/address/address_controller.dart`
+   - Imported `dart:developer`.
+   - Added `AddressState` management.
+   - Introduced `selectesAddresId`, `_changeState`, and `moveAdsAddressAndRemove` methods for better address handling.
+
+3. `lib/features/address/address_screen.dart`
+   - Imported `dart:developer` and `state_error_message.dart`.
+   - Updated `_removeAddress` to handle advertisements associated with the address.
+   - Added `AnimatedBuilder` for managing loading and error states.
+   - Included `DestinyAddressDialog` for handling the destination address when removing an address.
+
+4. `lib/features/my_data/my_data_state.dart`
+   - Renamed file to `lib/features/address/address_state.dart` to be consistent with the new address state management.
+
+5. `lib/features/address/widgets/destiny_address_dialog.dart`
+   - New file: Added `DestinyAddressDialog` widget for selecting a destination address when removing an address with associated advertisements.
+
+6. `lib/features/my_ads/my_ads_screen.dart`
+   - Added `floatingActionButton` for adding new advertisements.
+   - Introduced `_addNewAdvert` method to navigate to the `EditAdvertScreen`.
+
+7. `lib/features/my_data/my_data_controller.dart`
+   - Removed `MyDataState` management to simplify the controller.
+   - Removed `_changeState` method.
+
+8. `lib/features/my_data/my_data_screen.dart`
+   - Added `backScreen` method to handle unsaved changes.
+   - Refactored the screen layout to include `SimpleQuestionDialog` for unsaved changes.
+
+9. `lib/manager/address_manager.dart`
+   - Added methods `deleteByName`, `deleteById`, and `getAddressIdFromName` for better address management.
+
+10. `lib/repository/address_repository.dart`
+    - Updated `delete` method to accept `addressId` instead of `address`.
+    - Added `moveAdsAddressTo` method for moving advertisements to another address.
+    - Added `adsInAddress` method to retrieve advertisements associated with a specific address.
+
+11. `lib/repository/advert_repository.dart`
+    - Updated `delete` method to accept `adId` instead of `ad`.
+    - Added `moveAdsAddressTo` and `adsInAddress` methods to support address management.
+
+12. `pubspec.yaml`
+    - Updated version to `0.5.3+23`.
+
+These changes collectively enhance the address management functionality, introduce new dialog widgets for better user interaction, and update the repository methods to handle advertisement associations with addresses.
+
+
 ## 2024/07/30 - version: 0.5.2+22
 
 This commit introduces several enhancements and fixes across multiple files:

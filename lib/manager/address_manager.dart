@@ -56,11 +56,19 @@ class AddressManager {
   /// Deletes the address with the given name.
   ///
   /// [name] - The name of the address to be deleted.
-  Future<void> delete(String name) async {
+  Future<void> deleteByName(String name) async {
     final index = _indexWhereName(name);
     if (index != -1) {
       final address = _addresses[index];
-      await AddressRepository.delete(address);
+      await AddressRepository.delete(address.id!);
+      _addresses.removeAt(index);
+    }
+  }
+
+  Future<void> deleteById(String addressId) async {
+    final index = _indexWhereId(addressId);
+    if (index != -1) {
+      await AddressRepository.delete(addressId);
       _addresses.removeAt(index);
     }
   }
@@ -122,5 +130,13 @@ class AddressManager {
     return _addresses.indexWhere(
       (addr) => addr.id == id,
     );
+  }
+
+  String? getAddressIdFromName(String name) {
+    try {
+      return _addresses.firstWhere((a) => a.name == name).id!;
+    } catch (err) {
+      return null;
+    }
   }
 }

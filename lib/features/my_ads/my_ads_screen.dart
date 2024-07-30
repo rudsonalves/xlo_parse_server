@@ -95,6 +95,11 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
     }
   }
 
+  Future<void> _addNewAdvert() async {
+    await Navigator.pushNamed(context, EditAdvertScreen.routeName);
+    ctrl.getAds();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -112,6 +117,12 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
             onPressed: _backPage,
           ),
           bottom: MyTabBar(setProductStatus: ctrl.setProductStatus),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: _addNewAdvert,
+          backgroundColor: colorScheme.primaryContainer.withOpacity(0.75),
+          icon: const Icon(Icons.camera),
+          label: const Text('Adicionar anúncio'),
         ),
         body: ListenableBuilder(
           listenable: ctrl,

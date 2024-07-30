@@ -15,10 +15,17 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:xlo_mobx/components/others_widgets/state_error_message.dart';
+import 'package:xlo_mobx/components/others_widgets/state_loading_message.dart';
+import 'package:xlo_mobx/features/address/address_state.dart';
+
+import '../../repository/advert_repository.dart';
 import '../new_address/new_address_screen.dart';
 import 'address_controller.dart';
+import 'widgets/destiny_address_dialog.dart';
 
 class AddressScreen extends StatefulWidget {
   const AddressScreen({super.key});
@@ -30,12 +37,12 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> {
-  final controller = AddressController();
+  final ctrl = AddressController();
 
   @override
   void initState() {
     super.initState();
-    controller.init();
+    ctrl.init();
   }
 
   Future<void> _addAddress() async {
@@ -46,12 +53,44 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   Future<void> _removeAddress() async {
-    await controller.removeAddress();
-    setState(() {});
+    final addressId = ctrl.selectesAddresId;
+    if (addressId != null) {
+      final adsList = await AdvertRepository.adsInAddress(addressId);
+
+      if (adsList.isNotEmpty) {
+        if (mounted) {
+          final destiny = await DestinyAddressDialog.open(
+            context,
+            addressNames: ctrl.addressNames,
+            addressRemoveName: ctrl.selectedAddressName.value,
+            adsListLength: adsList.length,
+          );
+
+          if (destiny != null) {
+            final destinyId = ctrl.addressManager.getAddressIdFromName(destiny);
+            if (destinyId != null) {
+              ctrl.moveAdsAddressAndRemove(
+                adsList: adsList,
+                moveToId: destinyId,
+                removeAddressId: addressId,
+              );
+            } else {
+              log('Ocorreu um erro em _removeAddress');
+            }
+          }
+        }
+      } else {
+        ctrl.moveAdsAddressAndRemove(
+          adsList: [],
+          moveToId: null,
+          removeAddressId: addressId,
+        );
+      }
+    }
   }
 
   void _backPage() {
-    Navigator.pop(context, controller.selectedAddressName.value);
+    Navigator.pop(context, ctrl.selectedAddressName.value);
   }
 
   @override
@@ -67,45 +106,55 @@ class _AddressScreenState extends State<AddressScreen> {
           onPressed: _backPage,
         ),
       ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: ButtonBar(
         children: [
-          FloatingActionButton(
+          FloatingActionButton.extended(
             onPressed: _addAddress,
             heroTag: 'fab1',
-            child: const Icon(Icons.add),
+            label: const Text('Adicionar'),
+            icon: const Icon(Icons.contact_mail),
           ),
           const SizedBox(width: 12),
-          FloatingActionButton(
-            onPressed: null, // FIXME: tem de verificar se o endereço está
-            // sendo usado em algum anúncio antes de remover.
-            // _removeAddress,
+          FloatingActionButton.extended(
+            onPressed: _removeAddress,
             heroTag: 'fab2',
-            child: Icon(Icons.remove, color: colorScheme.outline),
+            icon: const Icon(Icons.unsubscribe),
+            label: const Text('Remover'),
           ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
-        child: ValueListenableBuilder(
-            valueListenable: controller.selectedAddressName,
-            builder: (context, seledtedName, _) {
-              return ListView.builder(
-                itemCount: controller.addressNames.length,
-                itemBuilder: (context, index) {
-                  final address = controller.addresses[index];
-                  return Card(
-                    color: address.name == seledtedName
-                        ? colorScheme.primaryContainer
-                        : colorScheme.primaryContainer.withOpacity(0.4),
-                    child: ListTile(
-                      title: Text(address.name),
-                      subtitle: Text(address.addressString()),
-                      onTap: () => controller.selectAddress(address.name),
-                    ),
-                  );
-                },
-              );
-            }),
+        child: AnimatedBuilder(
+          animation: Listenable.merge([ctrl.selectedAddressName, ctrl]),
+          builder: (context, _) {
+            return Stack(
+              children: [
+                ListView.builder(
+                  itemCount: ctrl.addressNames.length,
+                  itemBuilder: (context, index) {
+                    final address = ctrl.addresses[index];
+                    return Card(
+                      color: address.name == ctrl.selectedAddressName.value
+                          ? colorScheme.primaryContainer
+                          : colorScheme.primaryContainer.withOpacity(0.4),
+                      child: ListTile(
+                        title: Text(address.name),
+                        subtitle: Text(address.addressString()),
+                        onTap: () => ctrl.selectAddress(address.name),
+                      ),
+                    );
+                  },
+                ),
+                if (ctrl.state is AddressStateLoading)
+                  const StateLoadingMessage(),
+                if (ctrl.state is AddressStateError) const StateErrorMessage(),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
