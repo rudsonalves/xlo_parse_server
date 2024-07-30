@@ -15,11 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../../common/models/address.dart';
 import '../../get_it.dart';
 import '../../manager/address_manager.dart';
+import '../../repository/advert_repository.dart';
+import 'address_state.dart';
 
 class AddressController extends ChangeNotifier {
   final addressManager = getIt<AddressManager>();
@@ -28,6 +32,21 @@ class AddressController extends ChangeNotifier {
 
   final _selectedAddressName = ValueNotifier<String>('');
   ValueNotifier<String> get selectedAddressName => _selectedAddressName;
+  String? get selectesAddresId {
+    if (_selectedAddressName.value.isNotEmpty) {
+      return addressManager.getAddressIdFromName(_selectedAddressName.value);
+    }
+    return null;
+  }
+
+  AddressState _state = AddressStateInitial();
+
+  AddressState get state => _state;
+
+  void _changeState(AddressState newState) {
+    _state = newState;
+    notifyListeners();
+  }
 
   Future<void> init() async {}
 
@@ -48,8 +67,27 @@ class AddressController extends ChangeNotifier {
     if (name.isNotEmpty &&
         addressNames.isNotEmpty &&
         addressNames.contains(name)) {
-      await addressManager.delete(name);
+      await addressManager.deleteByName(name);
       _selectedAddressName.value = '';
+    }
+  }
+
+  Future<void> moveAdsAddressAndRemove({
+    required List<String> adsList,
+    required String? moveToId,
+    required String removeAddressId,
+  }) async {
+    try {
+      _changeState(AddressStateLoading());
+      if (adsList.isNotEmpty && moveToId != null) {
+        await AdvertRepository.moveAdsAddressTo(adsList, moveToId);
+      }
+      await addressManager.deleteById(removeAddressId);
+      await Future.delayed(Duration(seconds: 3));
+      _changeState(AddressStateSuccess());
+    } catch (err) {
+      log(err.toString());
+      _changeState(AddressStateError());
     }
   }
 }

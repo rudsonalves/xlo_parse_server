@@ -27,13 +27,8 @@ import '../../components/custon_field_controllers/masked_text_controller.dart';
 import '../../get_it.dart';
 import '../../manager/address_manager.dart';
 import '../../repository/user_repository.dart';
-import 'my_data_state.dart';
 
 class MyDataController extends ChangeNotifier {
-  MyDataState _state = MyDataStateInitial();
-
-  MyDataState get state => _state;
-
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final phoneController = MaskedTextController(mask: '(##) ####-#####');
@@ -59,11 +54,6 @@ class MyDataController extends ChangeNotifier {
     super.dispose();
   }
 
-  void _changeState(MyDataState newState) {
-    _state = newState;
-    notifyListeners();
-  }
-
   void init() {
     nameController.text = user.name ?? '';
     phoneController.text = user.phone ?? '';
@@ -86,7 +76,6 @@ class MyDataController extends ChangeNotifier {
 
   Future<void> updateUserData() async {
     try {
-      _changeState(MyDataStateLoading());
       final newName = nameController.text.trim();
       final newPhone = phoneController.text;
       final newPass = passwordController.text.trim();
@@ -107,9 +96,7 @@ class MyDataController extends ChangeNotifier {
         user.name = newUser.name ?? user.name;
         user.phone = newUser.phone ?? user.phone;
       }
-      _changeState(MyDataStateSuccess());
     } catch (err) {
-      _changeState(MyDataStateError());
       log(err.toString());
     }
   }

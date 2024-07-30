@@ -20,16 +20,66 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'package:xlo_mobx/common/models/user.dart';
 
 import '../common/models/advert.dart';
 import '../common/models/filter.dart';
+import '../common/models/user.dart';
 import 'constants.dart';
 import 'parse_to_model.dart';
 
 /// This class provides methods to interact with the Parse Server
 /// to retrieve and save advertisements.
 class AdvertRepository {
+  static Future<void> moveAdsAddressTo(
+    List<String> adsIdList,
+    String moveToId,
+  ) async {
+    try {
+      final parseAddress = ParseObject(keyAddressTable)..objectId = moveToId;
+      for (String id in adsIdList) {
+        final parseAd = ParseObject(keyAdvertTable)
+          ..objectId = id
+          ..set(keyAdvertAddress, parseAddress.toPointer());
+
+        final response = await parseAd.update();
+
+        if (!response.success) {
+          throw Exception(response.error ?? 'update advert table error');
+        }
+      }
+    } catch (err) {
+      final message = 'AdvertRepository.getMyAds: $err';
+      log(message);
+      throw Exception(message);
+    }
+  }
+
+  static Future<List<String>> adsInAddress(String addressId) async {
+    final List<String> adsId = [];
+    try {
+      final query = QueryBuilder<ParseObject>(ParseObject(keyAdvertTable));
+      final parseAddress = ParseObject(keyAddressTable)..objectId = addressId;
+
+      query.whereEqualTo(keyAdvertAddress, parseAddress.toPointer());
+
+      final response = await query.query();
+
+      if (!response.success) {
+        return [];
+      }
+
+      for (final ParseObject parse in response.results!) {
+        adsId.add(parse.objectId as String);
+      }
+
+      return adsId;
+    } catch (err) {
+      final message = 'AddressRepository.delete: $err';
+      log(message);
+      return [];
+    }
+  }
+
   static Future<bool> updateStatus(AdvertModel ad) async {
     try {
       final parse = ParseObject(keyAdvertTable)
@@ -352,9 +402,9 @@ class AdvertRepository {
     }
   }
 
-  static Future<void> delete(AdvertModel ad) async {
+  static Future<void> delete(String ad) async {
     try {
-      final parse = ParseObject(keyAdvertTable)..objectId = ad.id;
+      final parse = ParseObject(keyAdvertTable)..objectId = ad;
 
       final response = await parse.delete();
       if (!response.success) {
