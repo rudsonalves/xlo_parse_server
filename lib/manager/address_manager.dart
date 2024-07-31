@@ -17,12 +17,12 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import '../common/models/address.dart';
+import '../common/singletons/current_user.dart';
+import '../get_it.dart';
 import '../repository/address_repository.dart';
 
 /// Custom exception to handle duplicate address names.
 class DuplicateNameException implements Exception {
-  DuplicateNameException();
-
   @override
   String toString() =>
       'This address can\'t be updated because it has a duplicate name.';
@@ -32,14 +32,25 @@ class DuplicateNameException implements Exception {
 /// saving, and deleting addresses.
 class AddressManager {
   final List<AddressModel> _addresses = [];
+
   List<AddressModel> get addresses => _addresses;
   Iterable<String> get addressNames => _addresses.map((e) => e.name);
+  bool get isLogged => getIt<CurrentUser>().isLogged;
+  String? get userId => getIt<CurrentUser>().userId;
 
   /// Initializes the address list for the given user ID.
   ///
   /// [userId] - The ID of the user.
-  Future<void> init(String userId) async {
-    await getFromUserId(userId);
+  Future<void> login() async {
+    if (isLogged) {
+      await getFromUserId(userId!);
+    }
+  }
+
+  Future<void> logout() async {
+    if (isLogged) {
+      _addresses.clear();
+    }
   }
 
   /// Fetches and sets the addresses for the given user ID.

@@ -17,6 +17,7 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/foundation.dart';
+import 'package:xlo_mobx/manager/favorites_manager.dart';
 
 import '../../get_it.dart';
 import '../../manager/address_manager.dart';
@@ -31,6 +32,7 @@ class CurrentUser {
   UserModel? get user => _user;
 
   final addressManager = getIt<AddressManager>();
+  final favoritesManager = getIt<FavoritesManager>();
 
   List<AddressModel> get addresses => addressManager.addresses;
   Iterable<String> get addressNames => addressManager.addressNames;
@@ -39,7 +41,7 @@ class CurrentUser {
 
   String get userId => _user!.id!;
   ValueListenable<bool> get isLogedListernable => _isLoged;
-  bool get isLoged => _isLoged.value;
+  bool get isLogged => _isLoged.value;
 
   void dispose() {
     _isLoged.dispose();
@@ -48,10 +50,14 @@ class CurrentUser {
   Future<void> init([UserModel? user]) async {
     user ??= await UserRepository.getCurrentUser();
     if (user == null) return;
+    await login(user);
+  }
 
+  Future<void> login(UserModel user) async {
     _user = user;
     _isLoged.value = true;
-    await addressManager.init(user.id!);
+    await addressManager.login();
+    await favoritesManager.login();
   }
 
   AddressModel? addressByName(String name) =>
@@ -62,6 +68,8 @@ class CurrentUser {
 
   Future<void> logout() async {
     await UserRepository.logout();
+    addressManager.logout();
+    favoritesManager.logout();
     _user = null;
     _isLoged.value = false;
   }

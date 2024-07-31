@@ -22,14 +22,14 @@ import '../edit_advert_controller.dart';
 import 'horizontal_image_gallery.dart';
 
 class ImagesListView extends StatelessWidget {
-  final EditAdvertController controller;
+  final EditAdvertController ctrl;
   final bool validator;
   final Function(AdvertModel ad)? editAd;
   final Function(AdvertModel ad)? deleteAd;
 
   const ImagesListView({
     super.key,
-    required this.controller,
+    required this.ctrl,
     required this.validator,
     this.editAd,
     this.deleteAd,
@@ -42,19 +42,19 @@ class ImagesListView extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: controller.app.isDark
+        color: ctrl.app.isDark
             ? colorScheme.onSecondary
             : colorScheme.primary.withOpacity(0.25),
         borderRadius: BorderRadius.circular(12),
       ),
       height: 120,
       child: ValueListenableBuilder(
-        valueListenable: controller.imagesLength,
+        valueListenable: ctrl.imagesLength,
         builder: (context, length, _) => HotizontalImageGallery(
           length: length,
-          images: controller.images,
-          addImage: controller.addImage,
-          removeImage: controller.removeImage,
+          images: ctrl.images,
+          addImage: ctrl.addImage,
+          removeImage: ctrl.removeImage,
         ),
       ),
     );
