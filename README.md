@@ -21,6 +21,77 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/31 - version: 0.6.0+24
+
+This commit introduces several updates, new functionalities, and refactorings across multiple files:
+
+1. `lib/common/models/favorite.dart`
+   - New file: Added `FavoriteModel` class to represent favorite advertisements with attributes `id` and `adId`.
+
+2. `lib/features/address/address_controller.dart`
+   - Removed unnecessary delay after deleting an address in the `moveAdsAddressAndRemove` method.
+
+3. `lib/features/base/widgets/search_dialog_bar.dart`
+   - Renamed and moved to `lib/features/base/widgets/old/search_dialog_bar.dart` for better organization.
+
+4. `lib/features/base/widgets/search_dialog_search_bar.dart`
+   - Renamed and moved to `lib/features/base/widgets/old/search_dialog_search_bar.dart` for better organization.
+
+5. `lib/features/edit_advert/edit_advert_controller.dart`
+   - Updated `mechanicsManager` to use the instance from `getIt` for dependency injection.
+
+6. `lib/features/filters/filters_controller.dart`
+   - Updated `mechManager` to use the instance from `getIt` for dependency injection.
+
+7. `lib/features/filters/filters_screen.dart`
+   - Fixed typo in the hint text from 'Cidate' to 'Cidade'.
+
+8. `lib/features/mecanics/mecanics_screen.dart`
+   - Updated `mechanics` to use the instance from `getIt` for dependency injection.
+
+9. `lib/features/my_account/my_account_screen.dart`
+   - Refactored `onPressed` method of the logout button to be asynchronous.
+
+10. `lib/features/product/product_screen.dart`
+    - Added a favorite button to the app bar for product screens.
+
+11. `lib/features/product/widgets/image_carousel.dart`
+    - Replaced `carousel_slider` with `flutter_carousel_slider` for better functionality.
+    - Updated the layout and behavior of the image carousel.
+
+12. `lib/get_it.dart`
+    - Registered `MechanicsManager` as a lazy singleton for dependency injection.
+
+13. `lib/main.dart`
+    - Updated initialization process to include `MechanicsManager`.
+
+14. `lib/manager/mechanics_manager.dart`
+    - Removed singleton pattern in favor of dependency injection using `getIt`.
+
+15. `lib/repository/constants.dart`
+    - Added constants for the `Favorite` table and its fields.
+
+16. `lib/repository/favorite_repository.dart`
+    - New file: Added `FavoriteRepository` with methods to add and delete favorites.
+
+17. `lib/repository/parse_to_model.dart`
+    - Added method `favorite` to convert ParseObject to `FavoriteModel`.
+
+18. `lib/repository/user_repository.dart`
+    - Updated `update` method to handle user password changes more effectively.
+    - Improved logout method to be asynchronous.
+
+19. `pubspec.lock`
+    - Removed `carousel_slider` package.
+    - Added `flutter_carousel_slider` package.
+
+20. `pubspec.yaml`
+    - Removed `carousel_slider` dependency.
+    - Added `flutter_carousel_slider` dependency.
+
+These changes collectively enhance the functionality and organization of the application, improve dependency management, and introduce the capability to handle favorite advertisements.
+
+
 ## 2024/07/30 - version: 0.5.3+23
 
 This commit introduces a range of updates and new functionalities across multiple files:

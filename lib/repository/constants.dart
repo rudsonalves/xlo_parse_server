@@ -57,3 +57,8 @@ const keyAdvertAddress = 'address';
 const keyAdvertViews = 'views';
 const keyAdvertCondition = 'condition';
 const keyAdvertCreatedAt = 'createdAt';
+
+const keyFavoriteTable = 'Favorite';
+const keyFavoriteId = 'objectId';
+const keyFavoriteOwner = 'owner';
+const keyFavoriteAd = 'ad';

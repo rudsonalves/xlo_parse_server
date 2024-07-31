@@ -19,7 +19,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'search_controller.dart';
+import '../search_controller.dart';
 
 class SearchDialog extends StatefulWidget {
   final String? search;

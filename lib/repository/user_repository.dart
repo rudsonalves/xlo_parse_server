@@ -20,6 +20,8 @@ import 'dart:developer';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../common/models/user.dart';
+import '../common/singletons/current_user.dart';
+import '../get_it.dart';
 import 'constants.dart';
 import 'parse_to_model.dart';
 
@@ -85,7 +87,7 @@ class UserRepository {
   static Future<void> logout() async {
     try {
       final user = await ParseUser.currentUser() as ParseUser;
-      user.logout();
+      await user.logout();
     } catch (err) {
       log('UserRepository.loginWithEmail: $err');
     }
@@ -135,20 +137,20 @@ class UserRepository {
     }
   }
 
-  static Future<void> update(UserModel user) async {
+  static Future<void> update(UserModel userUpdates) async {
     try {
-      final parseUser = ParseUser(null, null, null)..objectId = user.id;
+      final parseUser = ParseUser(null, null, null)..objectId = userUpdates.id;
 
-      if (user.name != null) {
-        parseUser.set(keyUserNickname, user.name);
+      if (userUpdates.name != null) {
+        parseUser.set(keyUserNickname, userUpdates.name);
       }
 
-      if (user.phone != null) {
-        parseUser.set(keyUserPhone, user.phone);
+      if (userUpdates.phone != null) {
+        parseUser.set(keyUserPhone, userUpdates.phone);
       }
 
-      if (user.password != null) {
-        parseUser.set(keyUserPassword, user.password);
+      if (userUpdates.password != null) {
+        parseUser.set(keyUserPassword, userUpdates.password);
       }
 
       final response = await parseUser.update();
@@ -156,8 +158,26 @@ class UserRepository {
       if (!response.success) {
         throw Exception(response.error.toString());
       }
+
+      if (userUpdates.password != null) {
+        parseUser.set(keyUserPassword, userUpdates.password);
+
+        final user = getIt<CurrentUser>().user;
+        if (user == null) return;
+
+        await parseUser.logout();
+        final loginResponse =
+            await ParseUser(user.email, userUpdates.password, user.email)
+                .login();
+
+        if (!loginResponse.success) {
+          throw Exception(response.error.toString());
+        }
+      }
     } catch (err) {
-      log('UserRepository.update: $err');
+      final message = 'UserRepository.update: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 }

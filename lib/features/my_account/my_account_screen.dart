@@ -16,9 +16,8 @@
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:xlo_mobx/common/app_constants.dart';
 
+import '../../common/app_constants.dart';
 import '../../common/singletons/current_user.dart';
 import '../../get_it.dart';
 import '../address/address_screen.dart';
@@ -57,8 +56,8 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                 subtitle: Text(currentUser.user!.email),
                 trailing: IconButton(
                   icon: const Icon(Icons.power_settings_new_rounded),
-                  onPressed: () {
-                    currentUser.logout();
+                  onPressed: () async {
+                    await currentUser.logout();
                     getIt<BaseController>().jumpToPage(AppPage.shopePage);
                   },
                 ),

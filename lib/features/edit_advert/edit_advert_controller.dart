@@ -37,7 +37,7 @@ class EditAdvertController extends ChangeNotifier {
 
   final app = getIt<AppSettings>();
   final currentUser = getIt<CurrentUser>();
-  final mechanicsManager = MechanicsManager.instance;
+  final mechanicsManager = getIt<MechanicsManager>();
 
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
