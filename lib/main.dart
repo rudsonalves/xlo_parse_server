@@ -16,8 +16,6 @@ Future<void> startParseServer() async {
     autoSendSessionId: true,
     debug: true,
   );
-
-  await MechanicsManager.instance.init();
 }
 
 void main() async {
@@ -26,6 +24,7 @@ void main() async {
 
   setupDependencies();
   await getIt<SearchHistory>().init();
+  await getIt<MechanicsManager>().init();
 
   runApp(const MyMaterialApp());
 }

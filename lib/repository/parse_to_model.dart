@@ -19,6 +19,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../common/models/address.dart';
 import '../common/models/advert.dart';
+import '../common/models/favorite.dart';
 import '../common/models/mechanic.dart';
 import '../common/models/user.dart';
 import 'constants.dart';
@@ -110,6 +111,13 @@ class ParseToModel {
       name: parse.get(keyMechanicName),
       description: parse.get(keyMechanicDescription),
       createAt: parse.createdAt,
+    );
+  }
+
+  static favotire(ParseObject parse) {
+    return FavoriteModel(
+      id: parse.objectId,
+      adId: parse.get<ParseObject>(keyFavoriteAd)!.objectId!,
     );
   }
 }

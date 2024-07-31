@@ -1,7 +1,7 @@
 name: xlo_mobx
 description: "A new Flutter project."
 publish_to: 'none'
-version: 0.5.3+23
+version: 0.6.0+24
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
@@ -21,8 +21,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   url_launcher: ^6.3.0
-  carousel_slider: ^4.2.1
   get_it: ^7.7.0
+  flutter_carousel_slider: ^1.1.0
 
 dev_dependencies:
   intl_utils: ^2.8.7

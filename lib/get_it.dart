@@ -25,12 +25,15 @@ import 'common/singletons/search_filter.dart';
 import 'common/singletons/search_history.dart';
 import 'features/base/base_controller.dart';
 import 'manager/address_manager.dart';
+import 'manager/mechanics_manager.dart';
 
 final getIt = GetIt.instance;
 
 void setupDependencies() {
   try {
     getIt.registerSingleton<AppSettings>(AppSettings());
+
+    getIt.registerLazySingleton<MechanicsManager>(() => MechanicsManager());
 
     getIt.registerLazySingleton<CurrentUser>(() => CurrentUser());
 

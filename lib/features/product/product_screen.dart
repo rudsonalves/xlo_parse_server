@@ -122,6 +122,12 @@ class _ProductScreenState extends State<ProductScreen>
           icon: const Icon(Icons.arrow_back_ios_new),
         ),
         elevation: 5,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.favorite_border),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: SlideTransition(

@@ -24,13 +24,14 @@ import '../../common/models/city.dart';
 import '../../common/models/filter.dart';
 import '../../common/models/state.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
+import '../../get_it.dart';
 import '../../manager/mechanics_manager.dart';
 import '../../repository/ibge_repository.dart';
 import 'filters_states.dart';
 
 class FiltersController extends ChangeNotifier {
   FiltersState _state = FiltersStateInitial();
-  final MechanicsManager mechManager = MechanicsManager.instance;
+  final MechanicsManager mechManager = getIt<MechanicsManager>();
 
   FiltersState get state => _state;
 

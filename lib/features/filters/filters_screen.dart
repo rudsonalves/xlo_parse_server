@@ -108,7 +108,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                         focusNode: ctrl.stateFocus,
                       ),
                       TextFormDropdown(
-                        hintText: 'Cidate',
+                        hintText: 'Cidade',
                         controller: ctrl.cityController,
                         items: ctrl.cityNames,
                         submitItem: ctrl.submitCity,

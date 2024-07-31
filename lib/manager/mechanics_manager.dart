@@ -23,10 +23,6 @@ import '../repository/mechanic_repository.dart';
 /// This class manages the list of mechanics, providing methods to initialize,
 /// retrieve mechanic names, and find mechanic names based on their IDs.
 class MechanicsManager {
-  MechanicsManager._();
-  static final _instance = MechanicsManager._();
-  static MechanicsManager get instance => _instance;
-
   final List<MechanicModel> _mechanics = [];
 
   List<MechanicModel> get mechanics => _mechanics;

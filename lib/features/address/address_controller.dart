@@ -83,7 +83,6 @@ class AddressController extends ChangeNotifier {
         await AdvertRepository.moveAdsAddressTo(adsList, moveToId);
       }
       await addressManager.deleteById(removeAddressId);
-      await Future.delayed(Duration(seconds: 3));
       _changeState(AddressStateSuccess());
     } catch (err) {
       log(err.toString());

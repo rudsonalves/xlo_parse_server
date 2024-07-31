@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../get_it.dart';
 import '../../manager/mechanics_manager.dart';
 
 class MecanicsScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class MecanicsScreen extends StatefulWidget {
 }
 
 class _MecanicsScreenState extends State<MecanicsScreen> {
-  final mechanics = MechanicsManager.instance.mechanics;
+  final mechanics = getIt<MechanicsManager>().mechanics;
 
   final selectedItem = <bool>[];
   final select = ValueNotifier<bool>(false);
