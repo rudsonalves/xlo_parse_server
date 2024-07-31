@@ -110,7 +110,7 @@ class _BaseScreenState extends State<BaseScreen> {
   }
 
   Future<void> navToLoginScreen() async {
-    if (ctrl.currentUser.isLoged) {
+    if (ctrl.currentUser.isLogged) {
       ctrl.jumpToPage(AppPage.accountPage);
     } else {
       await Navigator.pushNamed(context, LoginScreen.routeName);

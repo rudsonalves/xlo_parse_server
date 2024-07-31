@@ -18,6 +18,7 @@
 import 'dart:developer';
 
 import 'package:get_it/get_it.dart';
+import 'package:xlo_mobx/manager/favorites_manager.dart';
 
 import 'common/singletons/app_settings.dart';
 import 'common/singletons/current_user.dart';
@@ -36,6 +37,8 @@ void setupDependencies() {
     getIt.registerLazySingleton<MechanicsManager>(() => MechanicsManager());
 
     getIt.registerLazySingleton<CurrentUser>(() => CurrentUser());
+
+    getIt.registerLazySingleton<FavoritesManager>(() => FavoritesManager());
 
     getIt.registerLazySingleton<AddressManager>(() => AddressManager());
 

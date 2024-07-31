@@ -21,6 +21,78 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/07/31 - version: 0.6.1+25
+
+This commit introduces updates, new functionalities, and refactorings across multiple files to improve user management and advertisement features:
+
+1. `lib/common/singletons/current_user.dart`
+   - Added `FavoritesManager` integration for managing user favorites.
+   - Renamed `isLoged` to `isLogged`.
+   - Added `login` method for handling user login logic.
+   - Updated `logout` method to clear user favorites and addresses.
+
+2. `lib/components/custom_drawer/custom_drawer.dart`
+   - Renamed `isLoged` to `isLogged` to ensure consistent naming.
+   - Updated button interactions based on user login status.
+
+3. `lib/components/custom_drawer/widgets/custom_drawer_header.dart`
+   - Renamed `isLoged` to `isLogged` for consistency.
+
+4. `lib/components/others_widgets/shop_grid_view/shop_grid_view.dart`
+   - New file: Added `ShopGridView` widget for displaying advertisements in a grid view.
+
+5. `lib/components/others_widgets/shop_grid_view/widgets/ad_shop_view.dart`
+   - New file: Added `AdShopView` widget for displaying individual advertisements.
+
+6. `lib/components/others_widgets/shop_grid_view/widgets/owner_rating.dart`
+   - New file: Added `OwnerRating` widget to display owner ratings.
+
+7. `lib/components/others_widgets/shop_grid_view/widgets/shop_text_price.dart`
+   - New file: Added `ShopTextPrice` widget to display advertisement prices.
+
+8. `lib/components/others_widgets/shop_grid_view/widgets/shop_text_title.dart`
+   - New file: Added `ShopTextTitle` widget to display advertisement titles.
+
+9. `lib/components/others_widgets/shop_grid_view/widgets/show_image.dart`
+   - New file: Added `ShowImage` widget to handle image display.
+
+10. `lib/features/base/base_screen.dart`
+    - Renamed `isLoged` to `isLogged` to ensure consistent naming.
+
+11. `lib/features/edit_advert/edit_advert_screen.dart`
+    - Updated title to reflect editing state.
+    - Added `StateLoadingMessage` and `StateErrorMessage` for better state handling.
+    - Fixed controller reference in `ImagesListView`.
+
+12. `lib/features/edit_advert/widgets/image_list_view.dart`
+    - Fixed controller reference to `ctrl` for consistency.
+
+13. `lib/features/shop/shop_screen.dart`
+    - Replaced `AdListView` with `ShopGridView` for better advertisement display.
+
+14. `lib/get_it.dart`
+    - Registered `FavoritesManager` for dependency injection.
+
+15. `lib/manager/address_manager.dart`
+    - Added methods `login` and `logout` to manage user login state.
+
+16. `lib/manager/favorites_manager.dart`
+    - New file: Added `FavoritesManager` to manage user favorites, including methods to add, remove, and fetch favorites.
+
+17. `lib/repository/constants.dart`
+    - Updated `maxAdsPerList` to 6 for better pagination.
+
+18. `lib/repository/favorite_repository.dart`
+    - Updated `add` method to use `adId` directly.
+    - Added `getFavorites` method to fetch user's favorite advertisements.
+
+19. `lib/repository/parse_to_model.dart`
+    - Renamed `favotire` to `favorite` for correct spelling.
+    - Added type annotation for `mechanic` method.
+
+These changes collectively enhance user management, improve advertisement handling, and introduce a new favorites feature.
+
+
 ## 2024/07/31 - version: 0.6.0+24
 
 This commit introduces several updates, new functionalities, and refactorings across multiple files:

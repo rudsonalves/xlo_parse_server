@@ -105,7 +105,7 @@ class ParseToModel {
   ///
   /// [parse] - The ParseObject to convert.
   /// Returns a MechanicModel representing the ParseObject.
-  static mechanic(ParseObject parse) {
+  static MechanicModel mechanic(ParseObject parse) {
     return MechanicModel(
       id: parse.objectId,
       name: parse.get(keyMechanicName),
@@ -114,10 +114,12 @@ class ParseToModel {
     );
   }
 
-  static favotire(ParseObject parse) {
+  static FavoriteModel favorite(ParseObject parse) {
+    final adMap = parse.get(keyFavoriteAd);
+
     return FavoriteModel(
       id: parse.objectId,
-      adId: parse.get<ParseObject>(keyFavoriteAd)!.objectId!,
+      adId: adMap['objectId'],
     );
   }
 }

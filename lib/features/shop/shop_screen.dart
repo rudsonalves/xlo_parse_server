@@ -24,6 +24,7 @@ import 'package:flutter/rendering.dart';
 import '../../common/basic_controller/basic_state.dart';
 import '../../common/singletons/current_user.dart';
 import '../../common/theme/app_text_style.dart';
+import '../../components/others_widgets/shop_grid_view/shop_grid_view.dart';
 import '../../components/others_widgets/state_error_message.dart';
 import '../../components/others_widgets/state_loading_message.dart';
 import '../../get_it.dart';
@@ -31,7 +32,6 @@ import '../base/base_controller.dart';
 import '../edit_advert/edit_advert_screen.dart';
 import '../login/login_screen.dart';
 import 'shop_controller.dart';
-import '../../components/others_widgets/ad_list_view/ad_list_view.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -172,8 +172,7 @@ class _ShopScreenState extends State<ShopScreen>
             builder: (context, _) {
               return Stack(
                 children: [
-                  // state HomeState Success
-                  // empty search
+                  // state State Success
                   if (ctrl.ads.isEmpty && ctrl.state is BasicStateSuccess)
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -203,15 +202,16 @@ class _ShopScreenState extends State<ShopScreen>
                       ],
                     ),
                   if (ctrl.ads.isNotEmpty && ctrl.state is BasicStateSuccess)
-                    AdListView(
+                    ShopGridView(
                       ctrl: ctrl,
                       scrollController: _scrollController,
                     ),
+                  // state State Error
                   if (ctrl.state is BasicStateError)
                     const Positioned.fill(
                       child: StateErrorMessage(),
                     ),
-                  // state HomeState Loading
+                  // state State Loading
                   if (ctrl.state is BasicStateLoading)
                     const Positioned.fill(
                       child: StateLoadingMessage(),

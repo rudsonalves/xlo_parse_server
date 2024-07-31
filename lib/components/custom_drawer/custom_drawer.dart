@@ -71,15 +71,15 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.camera,
-              color: currentUSer.isLoged ? null : colorScheme.outline,
+              color: currentUSer.isLogged ? null : colorScheme.outline,
             ),
             title: Text(
               'Adicionar Anúncio',
               style: TextStyle(
-                color: currentUSer.isLoged ? null : colorScheme.outline,
+                color: currentUSer.isLogged ? null : colorScheme.outline,
               ),
             ),
-            onTap: currentUSer.isLoged
+            onTap: currentUSer.isLogged
                 ? () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, EditAdvertScreen.routeName);
@@ -88,15 +88,15 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.chat,
-                color: currentUSer.isLoged ? null : colorScheme.outline),
+                color: currentUSer.isLogged ? null : colorScheme.outline),
             title: Text(
               'Chat',
               style: TextStyle(
-                color: currentUSer.isLoged ? null : colorScheme.outline,
+                color: currentUSer.isLogged ? null : colorScheme.outline,
               ),
             ),
             selected: ctrl.pageController.page == AppPage.chatPage.index,
-            onTap: currentUSer.isLoged
+            onTap: currentUSer.isLogged
                 ? () {
                     ctrl.jumpToPage(AppPage.chatPage);
                     Navigator.pop(context);
@@ -106,16 +106,16 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.favorite,
-              color: currentUSer.isLoged ? null : colorScheme.outline,
+              color: currentUSer.isLogged ? null : colorScheme.outline,
             ),
             title: Text(
               'Favoritos',
               style: TextStyle(
-                color: currentUSer.isLoged ? null : colorScheme.outline,
+                color: currentUSer.isLogged ? null : colorScheme.outline,
               ),
             ),
             selected: ctrl.pageController.page == AppPage.favoritesPage.index,
-            onTap: currentUSer.isLoged
+            onTap: currentUSer.isLogged
                 ? () {
                     ctrl.jumpToPage(AppPage.favoritesPage);
                     Navigator.pop(context);
@@ -124,17 +124,17 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(
-              color: currentUSer.isLoged ? null : colorScheme.outline,
+              color: currentUSer.isLogged ? null : colorScheme.outline,
               Icons.person,
             ),
             title: Text(
               'Minha Conta',
               style: TextStyle(
-                color: currentUSer.isLoged ? null : colorScheme.outline,
+                color: currentUSer.isLogged ? null : colorScheme.outline,
               ),
             ),
             selected: ctrl.pageController.page == AppPage.accountPage.index,
-            onTap: currentUSer.isLoged
+            onTap: currentUSer.isLogged
                 ? () {
                     ctrl.jumpToPage(AppPage.accountPage);
                     Navigator.pop(context);
@@ -144,16 +144,16 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.logout,
-              color: currentUSer.isLoged ? null : colorScheme.outline,
+              color: currentUSer.isLogged ? null : colorScheme.outline,
             ),
             title: Text(
               'Sair',
               style: TextStyle(
-                color: currentUSer.isLoged ? null : colorScheme.outline,
+                color: currentUSer.isLogged ? null : colorScheme.outline,
               ),
             ),
             selected: ctrl.pageController.page == AppPage.accountPage.index,
-            onTap: currentUSer.isLoged
+            onTap: currentUSer.isLogged
                 ? () async {
                     await currentUSer.logout();
                     if (context.mounted) Navigator.pop(context);

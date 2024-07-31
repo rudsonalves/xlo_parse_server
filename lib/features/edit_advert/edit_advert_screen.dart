@@ -19,6 +19,8 @@ import 'package:flutter/material.dart';
 
 import '../../common/models/advert.dart';
 import '../../components/buttons/big_button.dart';
+import '../../components/others_widgets/state_error_message.dart';
+import '../../components/others_widgets/state_loading_message.dart';
 import 'edit_advert_controller.dart';
 import 'edit_advert_state.dart';
 import 'widgets/advert_form.dart';
@@ -72,7 +74,7 @@ class _EditAdvertScreenState extends State<EditAdvertScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.advert != null ? 'Edit' : 'Criar Anúncio'),
+        title: Text(widget.advert != null ? 'Editar Anúncio' : 'Criar Anúncio'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
@@ -93,7 +95,7 @@ class _EditAdvertScreenState extends State<EditAdvertScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ImagesListView(
-                      controller: ctrl,
+                      ctrl: ctrl,
                       validator: true,
                     ),
                     AnimatedBuilder(
@@ -129,30 +131,8 @@ class _EditAdvertScreenState extends State<EditAdvertScreen> {
               ),
             ),
             if (ctrl.state is EditAdvertStateLoading)
-              const Center(
-                child: CircularProgressIndicator(),
-              ),
-            if (ctrl.state is EditAdvertStateError)
-              AlertDialog(
-                icon: Icon(
-                  Icons.error,
-                  size: 80,
-                  color: colorScheme.error,
-                ),
-                title: const Text('Erro'),
-                content: const Text(
-                  'Desculpe, estamos tendo algum proplema.'
-                  ' Por favor, tente mais tarde.',
-                ),
-                actions: [
-                  FilledButton(
-                    onPressed: () {
-                      ctrl.gotoSuccess();
-                    },
-                    child: const Text('Fechar'),
-                  ),
-                ],
-              ),
+              const StateLoadingMessage(),
+            if (ctrl.state is EditAdvertStateError) const StateErrorMessage(),
           ],
         ),
       ),

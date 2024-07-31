@@ -56,7 +56,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    currentUser.isLoged
+                    currentUser.isLogged
                         ? Utils.title(currentUser.user!.name!)
                         : 'Acessar sua conta agora!',
                     style: const TextStyle(
@@ -67,7 +67,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 const SizedBox(height: 6),
                 FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(currentUser.isLoged
+                  child: Text(currentUser.isLogged
                       ? currentUser.user!.email
                       : 'Click aqui!'),
                 ),

@@ -18,17 +18,17 @@
 import 'dart:developer';
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-import 'package:xlo_mobx/repository/constants.dart';
 
 import '../common/models/advert.dart';
 import '../common/models/favorite.dart';
+import 'constants.dart';
 import 'parse_to_model.dart';
 
 class FavoriteRepository {
-  static Future<FavoriteModel?> add(int userId, AdvertModel ad) async {
+  static Future<FavoriteModel?> add(String userId, String adId) async {
     try {
       final parseFav = ParseObject(keyFavoriteTable);
-      final parseAd = ParseObject(keyAdvertTable)..objectId = ad.id;
+      final parseAd = ParseObject(keyAdvertTable)..objectId = adId;
 
       parseFav
         ..set(keyFavoriteOwner, userId)
@@ -38,7 +38,15 @@ class FavoriteRepository {
       if (!response.success) {
         throw Exception(response.error?.message ?? 'unknown error');
       }
-      return ParseToModel.favotire(parseFav);
+
+      if (response.results == null || response.results!.isEmpty) {
+        throw Exception('No results returned from save operation');
+      }
+
+      final savedFav = response.results!.first as ParseObject;
+      log('Saved Favorite: ${savedFav.get(keyFavoriteAd).runtimeType}');
+
+      return ParseToModel.favorite(savedFav);
     } catch (err) {
       final message = 'FavoriteRepository.add: $err';
       log(message);
@@ -58,6 +66,52 @@ class FavoriteRepository {
       final message = 'FavoriteRepository.delete: $err';
       log(message);
       throw Exception(message);
+    }
+  }
+
+  static Future<(List<AdvertModel>, List<FavoriteModel>)> getFavorites(
+      String userId) async {
+    try {
+      final parseFav = ParseObject(keyFavoriteTable);
+
+      final query = QueryBuilder<ParseObject>(parseFav);
+
+      query
+        ..includeObject([keyFavoriteAd])
+        ..includeObject([
+          '$keyFavoriteAd.$keyAdvertOwner',
+          '$keyFavoriteAd.$keyAdvertAddress',
+          '$keyFavoriteAd.$keyAdvertMechanics',
+        ])
+        ..whereEqualTo(keyFavoriteOwner, userId);
+
+      final response = await query.query();
+      if (!response.success) {
+        throw Exception(response.error?.message ?? 'unknow error!');
+      }
+
+      if (response.results == null) {
+        throw Exception('return null');
+      }
+
+      List<AdvertModel> ads = [];
+      List<FavoriteModel> favs = [];
+      for (final ParseObject parseFav in response.results!) {
+        final fav = ParseToModel.favorite(parseFav);
+        final parseAd = parseFav.get(keyFavoriteAd) as ParseObject?;
+        if (parseAd != null) {
+          final adModel = ParseToModel.advert(parseAd);
+          if (adModel != null) {
+            ads.add(adModel);
+            favs.add(fav);
+          }
+        }
+      }
+      return (ads, favs);
+    } catch (err) {
+      final message = 'FavoriteRepository.getAdsFavorites: $err';
+      log(message);
+      return (<AdvertModel>[], <FavoriteModel>[]);
     }
   }
 }
