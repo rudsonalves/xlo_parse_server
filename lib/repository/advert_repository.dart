@@ -24,8 +24,8 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import '../common/models/advert.dart';
 import '../common/models/filter.dart';
 import '../common/models/user.dart';
-import 'constants.dart';
-import 'parse_to_model.dart';
+import 'common/constants.dart';
+import 'common/parse_to_model.dart';
 
 /// This class provides methods to interact with the Parse Server
 /// to retrieve and save advertisements.

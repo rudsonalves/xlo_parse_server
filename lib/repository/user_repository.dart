@@ -22,8 +22,8 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import '../common/models/user.dart';
 import '../common/singletons/current_user.dart';
 import '../get_it.dart';
-import 'constants.dart';
-import 'parse_to_model.dart';
+import 'common/constants.dart';
+import 'common/parse_to_model.dart';
 
 /// This class manages user-related operations in the Parse Server,
 /// such as signing up, logging in, logging out, and getting the current user.
