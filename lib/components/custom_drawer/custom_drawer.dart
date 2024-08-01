@@ -16,6 +16,7 @@
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/features/favorites/favorites_screen.dart';
 
 import '../../common/app_constants.dart';
 import '../../common/singletons/app_settings.dart';
@@ -117,8 +118,8 @@ class CustomDrawer extends StatelessWidget {
             selected: ctrl.pageController.page == AppPage.favoritesPage.index,
             onTap: currentUSer.isLogged
                 ? () {
-                    ctrl.jumpToPage(AppPage.favoritesPage);
                     Navigator.pop(context);
+                    Navigator.pushNamed(context, FavoritesScreen.routeName);
                   }
                 : null,
           ),

@@ -24,6 +24,7 @@ import 'common/models/filter.dart';
 import 'common/singletons/app_settings.dart';
 import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
+import 'features/favorites/favorites_screen.dart';
 import 'features/my_account/my_account_screen.dart';
 import 'features/address/address_screen.dart';
 import 'features/my_ads/my_ads_screen.dart';
@@ -82,6 +83,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
               ShopScreen.routeName: (_) => const ShopScreen(),
               MyAdsScreen.routeName: (_) => const MyAdsScreen(),
               MyDataScreen.routeName: (_) => const MyDataScreen(),
+              FavoritesScreen.routeName: (_) => const FavoritesScreen(),
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {

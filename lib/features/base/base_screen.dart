@@ -25,7 +25,6 @@ import '../../get_it.dart';
 import '../login/login_screen.dart';
 import '../my_account/my_account_screen.dart';
 import '../chat/chat_screen.dart';
-import '../favorites/favorites_screen.dart';
 import '../filters/filters_screen.dart';
 import '../shop/shop_screen.dart';
 import 'base_controller.dart';
@@ -207,7 +206,6 @@ class _BaseScreenState extends State<BaseScreen> {
                   children: const [
                     ShopScreen(),
                     ChatScreen(),
-                    FavoritesScreen(),
                     MyAccountScreen(),
                   ],
                 ),

@@ -57,6 +57,7 @@ void disposeDependencies() {
   getIt<BaseController>().dispose();
   getIt<SearchFilter>().dispose();
   getIt<SearchFilter>().dispose();
+  getIt<FavoritesManager>().dispose();
   getIt<CurrentUser>().dispose();
   getIt<AppSettings>().dispose();
 }

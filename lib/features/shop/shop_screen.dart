@@ -17,7 +17,6 @@
 
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -108,22 +107,6 @@ class _ShopScreenState extends State<ShopScreen>
     ctrl.dispose();
 
     super.dispose();
-  }
-
-  Widget showImage(String image) {
-    if (image.isEmpty) {
-      final color = Theme.of(context).colorScheme.secondaryContainer;
-      return Icon(
-        Icons.image_not_supported_outlined,
-        color: color,
-        size: 150,
-      );
-    } else {
-      return CachedNetworkImage(
-        imageUrl: image,
-        fit: BoxFit.cover,
-      );
-    }
   }
 
   @override

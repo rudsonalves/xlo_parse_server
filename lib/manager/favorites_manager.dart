@@ -34,8 +34,13 @@ class FavoritesManager {
   List<String> get favAdIds => _favIds;
   bool get isLogged => getIt<CurrentUser>().isLogged;
   String? get userId => getIt<CurrentUser>().userId;
+  List<AdvertModel> get ads => _ads;
 
   final favNotifier = ValueNotifier<bool>(true);
+
+  void dispose() {
+    favNotifier.dispose();
+  }
 
   Future<void> login() async {
     if (isLogged) {
