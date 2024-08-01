@@ -21,6 +21,45 @@ samples, guidance on mobile development, and a full API reference.
 
 # ChangeLog
 
+## 2024/08/01 - version: 0.6.1+25
+
+This commit introduces the Favorites feature and refactors various components to enhance functionality and code organization:
+
+1. **`lib/components/custom_drawer/custom_drawer.dart`**
+   - Imported `FavoritesScreen` to enable navigation.
+   - Updated the "Favoritos" list tile to use `Navigator.pushNamed` for navigation.
+
+2. **`lib/features/base/base_controller.dart`**
+   - Removed "Favoritos" from the `titles` list.
+
+3. **`lib/features/base/base_screen.dart`**
+   - Removed the `FavoritesScreen` from the list of screens managed by `BaseScreen`.
+
+4. **`lib/features/favorites/favorites_controller.dart`**
+   - New file: Added `FavoritesController` to manage the state and data of the Favorites feature.
+
+5. **`lib/features/favorites/favorites_screen.dart`**
+   - Implemented the `FavoritesScreen` with state management and display logic using `FavoritesController` and `ShopGridView`.
+
+6. **`lib/features/shop/shop_screen.dart`**
+   - Removed the `showImage` method as it is now redundant with the `ShopGridView` implementation.
+
+7. **`lib/get_it.dart`**
+   - Added disposal of `FavoritesManager` in the `disposeDependencies` method.
+
+8. **`lib/manager/favorites_manager.dart`**
+   - Added the `ads` getter to expose the list of favorite ads.
+   - Added a `dispose` method to properly clean up the `favNotifier`.
+
+9. **`lib/my_material_app.dart`**
+   - Added a route for `FavoritesScreen` in the route table.
+
+10. **`pubspec.yaml`**
+    - Updated the version from `0.6.1+26` to `0.6.2+27`.
+
+These changes collectively add the Favorites feature, allowing users to manage and view their favorite ads. The code refactoring improves maintainability and clarity.
+
+
 ## 2024/07/31 - version: 0.6.1+25
 
 This commit introduces updates, new functionalities, and refactorings across multiple files to improve user management and advertisement features:

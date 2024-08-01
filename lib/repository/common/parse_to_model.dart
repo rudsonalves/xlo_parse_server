@@ -17,11 +17,11 @@
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
-import '../common/models/address.dart';
-import '../common/models/advert.dart';
-import '../common/models/favorite.dart';
-import '../common/models/mechanic.dart';
-import '../common/models/user.dart';
+import '../../common/models/address.dart';
+import '../../common/models/advert.dart';
+import '../../common/models/favorite.dart';
+import '../../common/models/mechanic.dart';
+import '../../common/models/user.dart';
 import 'constants.dart';
 
 /// This class provides static methods to convert Parse objects to application

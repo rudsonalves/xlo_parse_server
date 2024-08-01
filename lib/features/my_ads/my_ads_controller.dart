@@ -22,7 +22,7 @@ import '../../common/models/advert.dart';
 import '../../common/models/filter.dart';
 import '../../repository/advert_repository.dart';
 import '../../common/basic_controller/basic_controller.dart';
-import '../../repository/constants.dart';
+import '../../repository/common/constants.dart';
 
 class MyAdsController extends BasicController {
   AdvertStatus _productStatus = AdvertStatus.active;

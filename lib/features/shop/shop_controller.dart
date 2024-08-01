@@ -26,7 +26,7 @@ import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/search_filter.dart';
 import '../../get_it.dart';
 import '../../repository/advert_repository.dart';
-import '../../repository/constants.dart';
+import '../../repository/common/constants.dart';
 
 class ShopController extends BasicController {
   final app = getIt<AppSettings>();

@@ -20,8 +20,8 @@ import 'dart:developer';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../common/models/mechanic.dart';
-import 'constants.dart';
-import 'parse_to_model.dart';
+import 'common/constants.dart';
+import 'common/parse_to_model.dart';
 
 /// This class provides methods to interact with the Parse Server
 /// to retrieve a list of mechanics.

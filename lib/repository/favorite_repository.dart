@@ -21,8 +21,8 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../common/models/advert.dart';
 import '../common/models/favorite.dart';
-import 'constants.dart';
-import 'parse_to_model.dart';
+import 'common/constants.dart';
+import 'common/parse_to_model.dart';
 
 class FavoriteRepository {
   static Future<FavoriteModel?> add(String userId, String adId) async {
