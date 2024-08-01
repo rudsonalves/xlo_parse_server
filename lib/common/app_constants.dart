@@ -16,3 +16,5 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 enum AppPage { shopePage, chatPage, favoritesPage, accountPage }
+
+const String appTitle = 'BGBazzar';

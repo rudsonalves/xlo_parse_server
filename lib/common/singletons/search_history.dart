@@ -22,8 +22,6 @@ const keySearchHistory = 'SearchHistory';
 const historyMaxLength = 20;
 
 class SearchHistory {
-  SearchHistory();
-
   final List<String> _history = [];
   final search = SearchController();
   late final SharedPreferences prefs;
@@ -48,7 +46,6 @@ class SearchHistory {
 
   Future<void> saveHistory(String? value) async {
     // Add new search string
-
     if (value != null && value.isNotEmpty && value.length >= 3) {
       final searchValue = value.toLowerCase();
       if (!_history.contains(searchValue)) {
@@ -67,7 +64,7 @@ class SearchHistory {
   }
 
   Iterable<String> searchInHistory(String value) {
-    if (value.length < 3 || _history.isEmpty) return [];
+    if (value.isEmpty) return _history;
     final searchValue = value.toLowerCase();
     return _history.where((item) => item.contains(searchValue));
   }

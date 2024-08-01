@@ -1,25 +1,98 @@
 # xlo_parse_server
 
-A new Flutter project.
+## TODO List
+
+- Set a fexed size for ad images and perform other optimizations on images to reduce resource consumption on the Parse Server.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
-[ParseException.ErrorCode Enumeration](https://parseplatform.org/Parse-SDK-dotNET/api/html/T_Parse_ParseException_ErrorCode.htm)
-
 
 # ChangeLog
+
+## 2024/08/01 - version: 0.6.2+27
+
+This commit introduces multiple enhancements and fixes across various components of the project:
+
+1. **`Makefile`**
+   - Added a new `build_profile` target for running the Flutter app in profile mode.
+
+2. **`README.md`**
+   - Updated the TODO list and removed unnecessary sections to streamline the document.
+
+3. **`analysis_options.yaml`**
+   - Configured the analyzer to treat deprecated member use as an error.
+
+4. **`android/app/build.gradle`**
+   - Updated `compileSdk`, `minSdk`, and `targetSdk` versions to 34 and 21 respectively.
+   
+5. **`android/app/src/main/AndroidManifest.xml`**
+   - Added necessary permissions for internet, camera, and external storage access.
+
+6. **`android/build.gradle`**
+   - Updated the Gradle plugin version to 8.5.0.
+
+7. **`android/gradle/wrapper/gradle-wrapper.properties`**
+   - Updated the Gradle distribution URL to use version 8.5.
+
+8. **`flutter_01.png`**
+   - Added a new image resource.
+
+9. **`lib/common/app_constants.dart`**
+   - Introduced a new constant `appTitle` with the value 'BGBazzar'.
+
+10. **`lib/common/singletons/search_filter.dart`**
+    - Refactored the `SearchFilter` class, removing redundant code and adding a `haveFilter` getter.
+
+11. **`lib/common/singletons/search_history.dart`**
+    - Refactored the `SearchHistory` class, removing redundant code and optimizing methods.
+
+12. **`lib/components/custom_drawer/custom_drawer.dart`**
+    - Added navigation methods and refactored the code to improve readability and functionality.
+
+13. **`lib/components/others_widgets/shop_grid_view/widgets/ad_shop_view.dart`**
+    - Adjusted the image size calculation for better UI consistency.
+
+14. **`lib/features/base/base_controller.dart`, `lib/features/base/base_screen.dart`, `lib/features/base/base_state.dart`, `lib/features/base/widgets/old/search_dialog_bar.dart`, `lib/features/base/widgets/old/search_dialog_search_bar.dart`, `lib/features/base/widgets/search_controller.dart`**
+    - Deleted obsolete files related to the base controller and screen.
+
+15. **`lib/features/favorites/favorites_controller.dart`**
+    - Removed TODO comments and unimplemented methods.
+
+16. **`lib/features/login/login_screen.dart`**
+    - Added a back button to the app bar.
+
+17. **`lib/features/my_account/my_account_screen.dart`**
+    - Refactored the logout method and fixed a comment for the logout feature.
+
+18. **`lib/features/product/product_screen.dart`**
+    - Added a comment for the favorite button functionality.
+
+19. **`lib/features/shop/shop_controller.dart`**
+    - Major refactor, including new methods for setting the page title, cleaning search, and handling ads retrieval.
+
+20. **`lib/features/shop/shop_screen.dart`**
+    - Refactored the shop screen, including the app bar, floating action button, and the main content area for better UX and code maintainability.
+
+21. **`lib/features/shop/shop_state.dart`**
+    - Deleted the redundant shop state file.
+
+22. **`lib/features/base/widgets/search_dialog.dart` -> `lib/features/shop/widgets/search/search_dialog.dart`**
+    - Renamed and refactored the search dialog for better modularity.
+
+23. **`lib/features/signup/signup_screen.dart`**
+    - Added a back button to the app bar.
+
+24. **`lib/get_it.dart`**
+    - Updated dependency registration, replacing `BaseController` with `ShopController`.
+
+25. **`lib/my_material_app.dart`**
+    - Changed the initial route to `ShopScreen`.
+
+26. **`pubspec.lock`, `pubspec.yaml`**
+    - Updated `shared_preferences` package to version 2.3.0.
+
+These changes collectively improve the project’s structure, enhance user experience, and maintain code consistency.
+
 
 ## 2024/08/01 - version: 0.6.1+25
 

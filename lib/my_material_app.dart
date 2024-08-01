@@ -17,7 +17,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:xlo_mobx/features/base/base_screen.dart';
 
 import 'common/models/address.dart';
 import 'common/models/advert.dart';
@@ -62,7 +61,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
           return MaterialApp(
             theme: value == Brightness.light ? theme.light() : theme.dark(),
             debugShowCheckedModeBanner: false,
-            initialRoute: BaseScreen.routeName,
+            initialRoute: ShopScreen.routeName,
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
@@ -74,7 +73,6 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             ],
             locale: const Locale('pt', 'BR'),
             routes: {
-              BaseScreen.routeName: (_) => const BaseScreen(),
               ChatScreen.routeName: (_) => const ChatScreen(),
               MyAccountScreen.routeName: (_) => const MyAccountScreen(),
               LoginScreen.routeName: (_) => const LoginScreen(),

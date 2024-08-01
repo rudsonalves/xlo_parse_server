@@ -43,13 +43,11 @@ class FavoritesController extends BasicController {
 
   @override
   Future<void> getMoreAds() {
-    // TODO: implement getMoreAds
     throw UnimplementedError();
   }
 
   @override
   Future<bool> updateAdStatus(AdvertModel ad) {
-    // TODO: implement updateAdStatus
     throw UnimplementedError();
   }
 }

@@ -125,7 +125,8 @@ class _ProductScreenState extends State<ProductScreen>
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.favorite_border),
+            icon: const Icon(Icons.favorite_border),
+            // FIXME: implement favorite in image
           ),
         ],
       ),
