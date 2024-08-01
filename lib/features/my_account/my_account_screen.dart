@@ -38,11 +38,24 @@ class MyAccountScreen extends StatefulWidget {
 class _MyAccountScreenState extends State<MyAccountScreen> {
   final currentUser = getIt<CurrentUser>();
 
+  void _backPage() {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Minha Conta'),
+        centerTitle: true,
+        elevation: 5,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: _backPage,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: SingleChildScrollView(

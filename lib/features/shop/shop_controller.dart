@@ -17,10 +17,9 @@
 
 import 'dart:developer';
 
-import 'package:xlo_mobx/common/models/advert.dart';
-
 import '../../common/basic_controller/basic_controller.dart';
 import '../../common/basic_controller/basic_state.dart';
+import '../../common/models/advert.dart';
 import '../../common/models/filter.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/search_filter.dart';

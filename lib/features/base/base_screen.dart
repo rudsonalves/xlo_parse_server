@@ -23,8 +23,6 @@ import '../../components/custom_drawer/custom_drawer.dart';
 import '../../components/others_widgets/state_loading_message.dart';
 import '../../get_it.dart';
 import '../login/login_screen.dart';
-import '../my_account/my_account_screen.dart';
-import '../chat/chat_screen.dart';
 import '../filters/filters_screen.dart';
 import '../shop/shop_screen.dart';
 import 'base_controller.dart';
@@ -205,8 +203,6 @@ class _BaseScreenState extends State<BaseScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   children: const [
                     ShopScreen(),
-                    ChatScreen(),
-                    MyAccountScreen(),
                   ],
                 ),
               ),

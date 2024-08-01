@@ -16,8 +16,8 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/common/singletons/app_settings.dart';
 
+import '../../../../common/singletons/app_settings.dart';
 import '../../../../get_it.dart';
 
 class OwnerRating extends StatelessWidget {

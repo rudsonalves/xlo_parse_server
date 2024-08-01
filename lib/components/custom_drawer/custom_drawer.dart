@@ -16,13 +16,14 @@
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/features/favorites/favorites_screen.dart';
 
+import '../../features/my_account/my_account_screen.dart';
 import '../../common/app_constants.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../features/base/base_controller.dart';
 import '../../features/edit_advert/edit_advert_screen.dart';
+import '../../features/favorites/favorites_screen.dart';
 import '../../get_it.dart';
 import 'widgets/custom_drawer_header.dart';
 
@@ -88,23 +89,6 @@ class CustomDrawer extends StatelessWidget {
                 : null,
           ),
           ListTile(
-            leading: Icon(Icons.chat,
-                color: currentUSer.isLogged ? null : colorScheme.outline),
-            title: Text(
-              'Chat',
-              style: TextStyle(
-                color: currentUSer.isLogged ? null : colorScheme.outline,
-              ),
-            ),
-            selected: ctrl.pageController.page == AppPage.chatPage.index,
-            onTap: currentUSer.isLogged
-                ? () {
-                    ctrl.jumpToPage(AppPage.chatPage);
-                    Navigator.pop(context);
-                  }
-                : null,
-          ),
-          ListTile(
             leading: Icon(
               Icons.favorite,
               color: currentUSer.isLogged ? null : colorScheme.outline,
@@ -137,8 +121,8 @@ class CustomDrawer extends StatelessWidget {
             selected: ctrl.pageController.page == AppPage.accountPage.index,
             onTap: currentUSer.isLogged
                 ? () {
-                    ctrl.jumpToPage(AppPage.accountPage);
                     Navigator.pop(context);
+                    Navigator.pushNamed(context, MyAccountScreen.routeName);
                   }
                 : null,
           ),

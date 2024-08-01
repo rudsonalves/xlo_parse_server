@@ -18,13 +18,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/components/others_widgets/state_error_message.dart';
-import 'package:xlo_mobx/components/others_widgets/state_loading_message.dart';
-import 'package:xlo_mobx/features/address/address_state.dart';
 
+import '../../components/others_widgets/state_error_message.dart';
+import '../../components/others_widgets/state_loading_message.dart';
 import '../../repository/advert_repository.dart';
 import '../new_address/new_address_screen.dart';
 import 'address_controller.dart';
+import 'address_state.dart';
 import 'widgets/destiny_address_dialog.dart';
 
 class AddressScreen extends StatefulWidget {

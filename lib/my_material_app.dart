@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:xlo_mobx/features/base/base_screen.dart';
 
 import 'common/models/address.dart';
 import 'common/models/advert.dart';
@@ -30,7 +31,6 @@ import 'features/address/address_screen.dart';
 import 'features/my_ads/my_ads_screen.dart';
 import 'features/my_data/my_data_screen.dart';
 import 'features/product/product_screen.dart';
-import 'features/base/base_screen.dart';
 import 'features/filters/filters_screen.dart';
 import 'features/mecanics/mecanics_screen.dart';
 import 'features/chat/chat_screen.dart';

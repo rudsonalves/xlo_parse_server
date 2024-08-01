@@ -16,11 +16,11 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/common/models/advert.dart';
-import 'package:xlo_mobx/features/edit_advert/edit_advert_screen.dart';
-import 'package:xlo_mobx/features/product/widgets/title_product.dart';
 
 import '../../common/basic_controller/basic_state.dart';
+import '../../common/models/advert.dart';
+import '../edit_advert/edit_advert_screen.dart';
+import '../product/widgets/title_product.dart';
 import 'my_ads_controller.dart';
 import 'widgets/my_tab_bar.dart';
 import 'widgets/my_tab_bar_view.dart';
