@@ -17,11 +17,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../common/app_constants.dart';
 import '../../common/singletons/current_user.dart';
 import '../../get_it.dart';
 import '../address/address_screen.dart';
-import '../base/base_controller.dart';
 import '../my_ads/my_ads_screen.dart';
 import '../my_data/my_data_screen.dart';
 import '../product/widgets/title_product.dart';
@@ -38,11 +36,30 @@ class MyAccountScreen extends StatefulWidget {
 class _MyAccountScreenState extends State<MyAccountScreen> {
   final currentUser = getIt<CurrentUser>();
 
+  void _backPage() {
+    Navigator.pop(context);
+  }
+
+  void _logout() async {
+    await currentUser.logout();
+    // FIXME: não esta atualizando o nome do app aou sair
+    if (mounted) Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Minha Conta'),
+        centerTitle: true,
+        elevation: 5,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: _backPage,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: SingleChildScrollView(
@@ -56,10 +73,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                 subtitle: Text(currentUser.user!.email),
                 trailing: IconButton(
                   icon: const Icon(Icons.power_settings_new_rounded),
-                  onPressed: () async {
-                    await currentUser.logout();
-                    getIt<BaseController>().jumpToPage(AppPage.shopePage);
-                  },
+                  onPressed: _logout,
                 ),
               ),
               const Divider(),

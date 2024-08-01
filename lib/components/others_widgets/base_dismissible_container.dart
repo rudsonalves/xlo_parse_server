@@ -16,7 +16,8 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/common/theme/app_text_style.dart';
+
+import '../../common/theme/app_text_style.dart';
 
 Container baseDismissibleContainer(
   BuildContext context, {

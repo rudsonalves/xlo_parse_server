@@ -18,14 +18,14 @@
 import 'dart:developer';
 
 import 'package:get_it/get_it.dart';
-import 'package:xlo_mobx/manager/favorites_manager.dart';
 
 import 'common/singletons/app_settings.dart';
 import 'common/singletons/current_user.dart';
 import 'common/singletons/search_filter.dart';
 import 'common/singletons/search_history.dart';
-import 'features/base/base_controller.dart';
+import 'features/shop/shop_controller.dart';
 import 'manager/address_manager.dart';
+import 'manager/favorites_manager.dart';
 import 'manager/mechanics_manager.dart';
 
 final getIt = GetIt.instance;
@@ -47,14 +47,14 @@ void setupDependencies() {
     getIt.registerLazySingleton<SearchHistory>(() => SearchHistory());
 
     // Pages controllers
-    getIt.registerLazySingleton<BaseController>(() => BaseController());
+    getIt.registerLazySingleton<ShopController>(() => ShopController());
   } catch (err) {
     log('GetIt Locator Error: $err');
   }
 }
 
 void disposeDependencies() {
-  getIt<BaseController>().dispose();
+  getIt<ShopController>().dispose();
   getIt<SearchFilter>().dispose();
   getIt<SearchFilter>().dispose();
   getIt<FavoritesManager>().dispose();

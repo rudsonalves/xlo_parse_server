@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if (user == null || user.id == null) {
           throw Exception(
-              '-1	Error code indicating that an unknown error or an error'
+              '-1	error code indicating that an unknown error or an error'
               ' unrelated to Parse occurred.');
         }
 
@@ -107,7 +107,10 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: const Text('Entrar'),
         centerTitle: true,
-        elevation: 5,
+        leading: IconButton(
+          onPressed: Navigator.of(context).pop,
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
       ),
       body: ListenableBuilder(
         listenable: _controller,

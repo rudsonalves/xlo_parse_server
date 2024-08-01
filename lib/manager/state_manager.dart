@@ -15,8 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:xlo_mobx/repository/ibge_repository.dart';
-
+import '../repository/ibge_repository.dart';
 import '../common/models/state.dart';
 
 /// This class provides a singleton manager for handling states in Brazil.

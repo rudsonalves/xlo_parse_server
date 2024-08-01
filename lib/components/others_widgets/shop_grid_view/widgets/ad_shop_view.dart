@@ -59,7 +59,7 @@ class AdShopView extends StatelessWidget {
             children: [
               ShowImage(
                 image: advert.images[0],
-                size: MediaQuery.of(context).size.width * .48,
+                size: (MediaQuery.of(context).size.width - 8) / 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

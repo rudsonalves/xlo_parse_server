@@ -30,7 +30,6 @@ import 'features/address/address_screen.dart';
 import 'features/my_ads/my_ads_screen.dart';
 import 'features/my_data/my_data_screen.dart';
 import 'features/product/product_screen.dart';
-import 'features/base/base_screen.dart';
 import 'features/filters/filters_screen.dart';
 import 'features/mecanics/mecanics_screen.dart';
 import 'features/chat/chat_screen.dart';
@@ -62,7 +61,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
           return MaterialApp(
             theme: value == Brightness.light ? theme.light() : theme.dark(),
             debugShowCheckedModeBanner: false,
-            initialRoute: BaseScreen.routeName,
+            initialRoute: ShopScreen.routeName,
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
@@ -74,7 +73,6 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             ],
             locale: const Locale('pt', 'BR'),
             routes: {
-              BaseScreen.routeName: (_) => const BaseScreen(),
               ChatScreen.routeName: (_) => const ChatScreen(),
               MyAccountScreen.routeName: (_) => const MyAccountScreen(),
               LoginScreen.routeName: (_) => const LoginScreen(),

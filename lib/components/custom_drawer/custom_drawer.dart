@@ -15,14 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_mobx.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
-import 'package:xlo_mobx/features/favorites/favorites_screen.dart';
+import 'dart:developer';
 
-import '../../common/app_constants.dart';
+import 'package:flutter/material.dart';
+
+import '../../features/my_account/my_account_screen.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
-import '../../features/base/base_controller.dart';
 import '../../features/edit_advert/edit_advert_screen.dart';
+import '../../features/favorites/favorites_screen.dart';
+import '../../features/shop/shop_controller.dart';
 import '../../get_it.dart';
 import 'widgets/custom_drawer_header.dart';
 
@@ -36,7 +38,29 @@ class CustomDrawer extends StatelessWidget {
 
   final app = getIt<AppSettings>();
   final currentUSer = getIt<CurrentUser>();
-  final ctrl = getIt<BaseController>();
+
+  Future<void> _logout(BuildContext context) async {
+    await currentUSer.logout();
+    if (context.mounted) Navigator.pop(context);
+    await Future.delayed(const Duration(milliseconds: 400));
+    log('update...');
+    getIt<ShopController>().setPageTitle();
+  }
+
+  void _navAccountScreen(BuildContext context) {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, MyAccountScreen.routeName);
+  }
+
+  void _navFavoriteScreen(BuildContext context) {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, FavoritesScreen.routeName);
+  }
+
+  void _navEditAdvertScreen(BuildContext context) {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, EditAdvertScreen.routeName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +85,6 @@ class CustomDrawer extends StatelessWidget {
             child: const CustomDrawerHeader(),
           ),
           ListTile(
-            leading: const Icon(Icons.list),
-            title: const Text('Anúncios'),
-            selected: ctrl.pageController.page == AppPage.shopePage.index,
-            onTap: () {
-              ctrl.jumpToPage(AppPage.shopePage);
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
             leading: Icon(
               Icons.camera,
               color: currentUSer.isLogged ? null : colorScheme.outline,
@@ -81,27 +96,7 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             onTap: currentUSer.isLogged
-                ? () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, EditAdvertScreen.routeName);
-                  }
-                : null,
-          ),
-          ListTile(
-            leading: Icon(Icons.chat,
-                color: currentUSer.isLogged ? null : colorScheme.outline),
-            title: Text(
-              'Chat',
-              style: TextStyle(
-                color: currentUSer.isLogged ? null : colorScheme.outline,
-              ),
-            ),
-            selected: ctrl.pageController.page == AppPage.chatPage.index,
-            onTap: currentUSer.isLogged
-                ? () {
-                    ctrl.jumpToPage(AppPage.chatPage);
-                    Navigator.pop(context);
-                  }
+                ? () => _navEditAdvertScreen(context)
                 : null,
           ),
           ListTile(
@@ -115,13 +110,8 @@ class CustomDrawer extends StatelessWidget {
                 color: currentUSer.isLogged ? null : colorScheme.outline,
               ),
             ),
-            selected: ctrl.pageController.page == AppPage.favoritesPage.index,
-            onTap: currentUSer.isLogged
-                ? () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, FavoritesScreen.routeName);
-                  }
-                : null,
+            onTap:
+                currentUSer.isLogged ? () => _navFavoriteScreen(context) : null,
           ),
           ListTile(
             leading: Icon(
@@ -134,13 +124,8 @@ class CustomDrawer extends StatelessWidget {
                 color: currentUSer.isLogged ? null : colorScheme.outline,
               ),
             ),
-            selected: ctrl.pageController.page == AppPage.accountPage.index,
-            onTap: currentUSer.isLogged
-                ? () {
-                    ctrl.jumpToPage(AppPage.accountPage);
-                    Navigator.pop(context);
-                  }
-                : null,
+            onTap:
+                currentUSer.isLogged ? () => _navAccountScreen(context) : null,
           ),
           ListTile(
             leading: Icon(
@@ -153,14 +138,7 @@ class CustomDrawer extends StatelessWidget {
                 color: currentUSer.isLogged ? null : colorScheme.outline,
               ),
             ),
-            selected: ctrl.pageController.page == AppPage.accountPage.index,
-            onTap: currentUSer.isLogged
-                ? () async {
-                    await currentUSer.logout();
-                    if (context.mounted) Navigator.pop(context);
-                    ctrl.jumpToPage(AppPage.shopePage);
-                  }
-                : null,
+            onTap: currentUSer.isLogged ? () => _logout(context) : null,
           ),
         ],
       ),

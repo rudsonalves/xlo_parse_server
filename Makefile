@@ -32,3 +32,8 @@ git_commit:
 
 git_push:
 	git push origin HEAD
+
+build_profile:
+	flutter clean
+	flutter pub get
+	flutter run --profile

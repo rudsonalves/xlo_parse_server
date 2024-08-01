@@ -20,17 +20,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '/features/my_account/my_account_screen.dart';
 import '../../common/basic_controller/basic_state.dart';
 import '../../common/singletons/current_user.dart';
 import '../../common/theme/app_text_style.dart';
+import '../../components/custom_drawer/custom_drawer.dart';
 import '../../components/others_widgets/shop_grid_view/shop_grid_view.dart';
 import '../../components/others_widgets/state_error_message.dart';
 import '../../components/others_widgets/state_loading_message.dart';
 import '../../get_it.dart';
-import '../base/base_controller.dart';
 import '../edit_advert/edit_advert_screen.dart';
 import '../login/login_screen.dart';
 import 'shop_controller.dart';
+import 'widgets/search/search_dialog.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -109,38 +111,112 @@ class _ShopScreenState extends State<ShopScreen>
     super.dispose();
   }
 
+  Future<void> _openSearchDialog() async {
+    String? result = await showSearch<String>(
+      context: context,
+      delegate: SearchDialog(),
+    );
+
+    if (result != null && result.isEmpty) {
+      result = null;
+    }
+    ctrl.setSearch(result ?? '');
+  }
+
+  Widget get titleWidget {
+    return (ctrl.searchString.isNotEmpty)
+        ? GestureDetector(
+            onTap: _openSearchDialog,
+            child: LayoutBuilder(
+              builder: (context, constraints) => SizedBox(
+                width: constraints.biggest.width,
+                child: Text(
+                  ctrl.searchString,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          )
+        : Text(ctrl.pageTitle.value);
+  }
+
+  Future<void> navToLoginScreen() async {
+    if (!ctrl.isLogged) {
+      await Navigator.pushNamed(context, LoginScreen.routeName);
+      ctrl.init();
+    } else {
+      Navigator.pushNamed(context, MyAccountScreen.routeName);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      appBar: AppBar(
+        title: ListenableBuilder(
+          listenable: ctrl.pageTitle,
+          builder: (context, _) {
+            return titleWidget;
+          },
+        ),
+        centerTitle: true,
+        // elevation: 5,
+        actions: [
+          InkWell(
+            borderRadius: BorderRadius.circular(50),
+            onTap: _openSearchDialog,
+            onLongPress: ctrl.cleanSearch,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListenableBuilder(
+                listenable: Listenable.merge([
+                  ctrl.searchFilter.searchNotifier,
+                  ctrl.searchFilter.filterNotifier
+                ]),
+                builder: (context, _) {
+                  return Icon(
+                    ctrl.haveSearch || ctrl.haveFilter
+                        ? Icons.search_off
+                        : Icons.search,
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+      drawer: CustomDrawer(
+        navToLoginScreen: navToLoginScreen,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ValueListenableBuilder(
         valueListenable: currentUser.isLogedListernable,
-        builder: (context, isLoged, _) {
-          return SlideTransition(
-            position: _fabOffsetAnimation,
-            child: isLoged
-                ? FloatingActionButton.extended(
-                    onPressed: () {
-                      Navigator.pushNamed(context, EditAdvertScreen.routeName);
-                    },
-                    backgroundColor:
-                        colorScheme.primaryContainer.withOpacity(0.75),
-                    icon: const Icon(Icons.camera),
-                    label: const Text('Adicionar anúncio'),
-                  )
-                : FloatingActionButton.extended(
-                    onPressed: () async {
-                      await Navigator.pushNamed(context, LoginScreen.routeName);
-                      getIt<BaseController>().init();
-                    },
-                    backgroundColor: colorScheme.tertiaryContainer,
-                    icon: const Icon(Icons.login),
-                    label: const Text('Faça Login'),
-                  ),
-          );
-        },
+        builder: (context, isLoged, _) => SlideTransition(
+          position: _fabOffsetAnimation,
+          child: isLoged
+              ? FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.pushNamed(context, EditAdvertScreen.routeName);
+                  },
+                  backgroundColor:
+                      colorScheme.primaryContainer.withOpacity(0.75),
+                  icon: const Icon(Icons.camera),
+                  label: const Text('Adicionar anúncio'),
+                )
+              : FloatingActionButton.extended(
+                  onPressed: () async {
+                    await Navigator.pushNamed(context, LoginScreen.routeName);
+                    ctrl.init();
+                  },
+                  backgroundColor: colorScheme.tertiaryContainer,
+                  icon: const Icon(Icons.login),
+                  label: const Text('Faça Login'),
+                ),
+        ),
       ),
       body: NotificationListener<ScrollStartNotification>(
         onNotification: (scrollNotification) {
@@ -148,60 +224,57 @@ class _ShopScreenState extends State<ShopScreen>
           _resetTimer();
           return false;
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListenableBuilder(
-            listenable: ctrl,
-            builder: (context, _) {
-              return Stack(
-                children: [
-                  // state State Success
-                  if (ctrl.ads.isEmpty && ctrl.state is BasicStateSuccess)
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Card(
-                            color:
-                                colorScheme.primaryContainer.withOpacity(.45),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                children: [
-                                  const Icon(
-                                    Icons.warning_amber,
-                                    color: Colors.amber,
-                                    size: 80,
-                                  ),
-                                  Text(
-                                    'Nenhum anúncio encontrado',
-                                    style: AppTextStyle.font18Bold,
-                                  ),
-                                ],
+        child: AnimatedBuilder(
+          animation: ctrl,
+          builder: (context, _) => Stack(
+            children: [
+              // state State Success
+              if (ctrl.ads.isEmpty && ctrl.state is BasicStateSuccess)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Card(
+                        color: colorScheme.primaryContainer.withOpacity(.45),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            children: [
+                              const Icon(
+                                Icons.warning_amber,
+                                color: Colors.amber,
+                                size: 80,
                               ),
-                            ),
+                              Text(
+                                'Nenhum anúncio encontrado',
+                                style: AppTextStyle.font18Bold,
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  if (ctrl.ads.isNotEmpty && ctrl.state is BasicStateSuccess)
-                    ShopGridView(
-                      ctrl: ctrl,
-                      scrollController: _scrollController,
-                    ),
-                  // state State Error
-                  if (ctrl.state is BasicStateError)
-                    const Positioned.fill(
-                      child: StateErrorMessage(),
-                    ),
-                  // state State Loading
-                  if (ctrl.state is BasicStateLoading)
-                    const Positioned.fill(
-                      child: StateLoadingMessage(),
-                    ),
-                ],
-              );
-            },
+                  ],
+                ),
+              if (ctrl.ads.isNotEmpty && ctrl.state is BasicStateSuccess)
+                Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: ShopGridView(
+                    ctrl: ctrl,
+                    scrollController: _scrollController,
+                  ),
+                ),
+              // state State Error
+              if (ctrl.state is BasicStateError)
+                const Positioned.fill(
+                  child: StateErrorMessage(),
+                ),
+              // state State Loading
+              if (ctrl.state is BasicStateLoading)
+                const Positioned.fill(
+                  child: StateLoadingMessage(),
+                ),
+            ],
           ),
         ),
       ),

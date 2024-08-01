@@ -17,10 +17,10 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/foundation.dart';
-import 'package:xlo_mobx/manager/favorites_manager.dart';
 
 import '../../get_it.dart';
 import '../../manager/address_manager.dart';
+import '../../manager/favorites_manager.dart';
 import '../../repository/user_repository.dart';
 import '../models/address.dart';
 import '../models/user.dart';

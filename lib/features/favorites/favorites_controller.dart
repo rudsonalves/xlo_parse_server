@@ -15,9 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:xlo_mobx/common/basic_controller/basic_state.dart';
-
 import '../../common/basic_controller/basic_controller.dart';
+import '../../common/basic_controller/basic_state.dart';
 import '../../common/models/advert.dart';
 import '../../get_it.dart';
 import '../../manager/favorites_manager.dart';
@@ -44,13 +43,11 @@ class FavoritesController extends BasicController {
 
   @override
   Future<void> getMoreAds() {
-    // TODO: implement getMoreAds
     throw UnimplementedError();
   }
 
   @override
   Future<bool> updateAdStatus(AdvertModel ad) {
-    // TODO: implement updateAdStatus
     throw UnimplementedError();
   }
 }

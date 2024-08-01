@@ -18,9 +18,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/common/models/user.dart';
-import 'package:xlo_mobx/common/utils/extensions.dart';
 
+import '../../common/models/user.dart';
+import '../../common/utils/extensions.dart';
 import '../../common/models/address.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/masked_text_controller.dart';

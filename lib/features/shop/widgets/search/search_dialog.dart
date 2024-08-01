@@ -19,28 +19,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../common/singletons/app_settings.dart';
-import '../../../common/singletons/search_history.dart';
-import '../../../get_it.dart';
+import '../../../../common/models/filter.dart';
+import '../../../filters/filters_screen.dart';
+import '../../shop_controller.dart';
+import '../../../../common/singletons/app_settings.dart';
+import '../../../../common/singletons/search_history.dart';
+import '../../../../get_it.dart';
 
 class SearchDialog extends SearchDelegate<String> {
   final searchHistory = getIt<SearchHistory>();
-  final app = getIt<AppSettings>();
+  final ctrl = getIt<ShopController>();
+
+  bool get isDark => getIt<AppSettings>().isDark;
+
+  Future<void> _filterSearch(BuildContext context) async {
+    ctrl.filter = await Navigator.pushNamed(
+          context,
+          FiltersScreen.routeName,
+          arguments: ctrl.filter,
+        ) as FilterModel? ??
+        FilterModel();
+  }
+
+  Future<void> _filterClean() async {
+    ctrl.filter = FilterModel();
+  }
 
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      IconButton(
-        onPressed: () {
+      InkWell(
+        onTap: () {
           query = '';
         },
-        icon: const Icon(Icons.clear),
+        borderRadius: BorderRadius.circular(50),
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Icon(Icons.clear),
+        ),
       ),
-      IconButton(
-        isSelected: app.isDark,
-        onPressed: app.toggleBrightnessMode,
-        icon: const Icon(Icons.light_mode),
-        selectedIcon: const Icon(Icons.dark_mode),
+      InkWell(
+        onTap: () => _filterSearch(context),
+        onLongPress: _filterClean,
+        borderRadius: BorderRadius.circular(50),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListenableBuilder(
+            listenable: ctrl.searchFilter.filterNotifier,
+            builder: (context, _) {
+              return Icon(
+                ctrl.filter == FilterModel()
+                    ? Icons.filter_alt_outlined
+                    : Icons.filter_alt_rounded,
+              );
+            },
+          ),
+        ),
       ),
     ];
   }
@@ -65,13 +99,11 @@ class SearchDialog extends SearchDelegate<String> {
 
     return theme.copyWith(
       appBarTheme: AppBarTheme(
-        elevation: 10,
-        systemOverlayStyle: colorScheme.brightness == Brightness.dark
-            ? SystemUiOverlayStyle.light
-            : SystemUiOverlayStyle.dark,
-        backgroundColor: colorScheme.brightness == Brightness.dark
-            ? colorScheme.onSecondary
-            : colorScheme.secondaryContainer,
+        elevation: 5,
+        systemOverlayStyle:
+            isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        backgroundColor:
+            isDark ? colorScheme.onSecondary : colorScheme.secondaryContainer,
         iconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
         titleTextStyle: theme.textTheme.titleLarge,
         toolbarTextStyle: theme.textTheme.bodyMedium,
@@ -95,8 +127,8 @@ class SearchDialog extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final selected = query.isEmpty || query.length < 3
-        ? <String>[]
+    final selected = query.isEmpty
+        ? searchHistory.history
         : searchHistory.searchInHistory(query).toList();
 
     return Card(

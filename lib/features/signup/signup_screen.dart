@@ -99,6 +99,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         title: const Text('Cadastrar'),
         centerTitle: true,
+        leading: IconButton(
+          onPressed: Navigator.of(context).pop,
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
       ),
       body: ListenableBuilder(
         listenable: _controller,
