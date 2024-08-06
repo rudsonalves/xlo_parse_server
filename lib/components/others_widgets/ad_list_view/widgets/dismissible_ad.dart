@@ -29,7 +29,6 @@ class DismissibleAd extends StatelessWidget {
   final IconData? iconRight;
   final String? labelLeft;
   final String? labelRight;
-  final Widget? itemButton;
   final AdvertStatus? statusLeft;
   final AdvertStatus? statusRight;
   final Function(AdvertModel)? updateAdStatus;
@@ -43,7 +42,6 @@ class DismissibleAd extends StatelessWidget {
     this.iconRight,
     this.labelLeft,
     this.labelRight,
-    this.itemButton,
     this.statusLeft,
     this.statusRight,
     this.updateAdStatus,
@@ -69,7 +67,6 @@ class DismissibleAd extends StatelessWidget {
       ),
       child: AdCardView(
         ads: ad,
-        itemButton: itemButton,
       ),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {

@@ -49,7 +49,7 @@ class EditAdvertController extends ChangeNotifier {
 
   final _images = <String>[];
   final _imagesLength = ValueNotifier<int>(0);
-  final List<String> _selectedMechIds = [];
+  final List<int> _selectedMechIds = [];
 
   String _selectedAddressId = '';
   String get selectedAddressId => _selectedAddressId;
@@ -61,10 +61,10 @@ class EditAdvertController extends ChangeNotifier {
   ProductCondition get condition => _condition;
   AdvertStatus get adStatus => _adStatus;
 
-  List<String> get selectedMechIds => _selectedMechIds;
+  List<int> get selectedMechIds => _selectedMechIds;
   List<String> get selectedMachNames => mechanics
       .where((c) => _selectedMechIds.contains(c.id!))
-      .map((c) => c.name!)
+      .map((c) => c.name)
       .toList();
 
   ValueNotifier<int> get imagesLength => _imagesLength;
@@ -130,7 +130,7 @@ class EditAdvertController extends ChangeNotifier {
     }
   }
 
-  void setMechanicsIds(List<String> mechanicsIds) {
+  void setMechanicsIds(List<int> mechanicsIds) {
     _selectedMechIds.clear();
     _selectedMechIds.addAll(
       mechanics.where((c) => mechanicsIds.contains(c.id!)).map((c) => c.id!),

@@ -21,7 +21,7 @@ import '../../get_it.dart';
 import '../../manager/mechanics_manager.dart';
 
 class MecanicsScreen extends StatefulWidget {
-  final List<String> selectedIds;
+  final List<int> selectedIds;
 
   const MecanicsScreen({
     super.key,
@@ -57,8 +57,8 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
     super.dispose();
   }
 
-  List<String> _storeSelectedIds() {
-    final selectedIds = <String>[];
+  List<int> _storeSelectedIds() {
+    final selectedIds = <int>[];
     for (int index = 0; index < selectedItem.length; index++) {
       if (selectedItem[index]) {
         selectedIds.add(mechanics[index].id!);
@@ -111,7 +111,7 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
                               : null,
                         ),
                         child: ListTile(
-                          title: Text(mechanics[index].name!),
+                          title: Text(mechanics[index].name),
                           subtitle: Text(mechanics[index].description ?? ''),
                           onTap: () {
                             selectedItem[index] = !selectedItem[index];

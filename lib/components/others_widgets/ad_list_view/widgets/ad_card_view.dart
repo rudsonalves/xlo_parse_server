@@ -25,12 +25,10 @@ import 'show_image.dart';
 
 class AdCardView extends StatelessWidget {
   final AdvertModel ads;
-  final Widget? itemButton;
 
   const AdCardView({
     super.key,
     required this.ads,
-    this.itemButton,
   });
 
   @override
@@ -56,21 +54,7 @@ class AdCardView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: AdTextTitle(ads.title),
-                        ),
-                        if (itemButton != null)
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              itemButton!,
-                            ],
-                          ),
-                      ],
-                    ),
+                    AdTextTitle(ads.title),
                     AdTextPrice(ads.price),
                     AdTextInfo(
                       date: ads.createdAt,

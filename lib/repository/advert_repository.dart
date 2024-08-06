@@ -248,11 +248,11 @@ class AdvertRepository {
 
       List<ParseFile> parseImages = await _saveImages(advert.images, parseUser);
 
-      final List<ParseObject> parseMechanics = advert.mechanicsId.map((id) {
-        final parse = ParseObject(keyMechanicTable);
-        parse.objectId = id;
-        return parse;
-      }).toList();
+      // final List<ParseObject> parseMechanics = advert.mechanicsId.map((id) {
+      //   final parse = ParseObject(keyMechanicTable);
+      //   parse.objectId = id;
+      //   return parse;
+      // }).toList();
 
       final parseAddress = ParseObject(keyAddressTable);
       parseAddress.objectId = advert.address.id;
@@ -277,7 +277,7 @@ class AdvertRepository {
         ..set<int>(keyAdvertCondition, advert.condition.index)
         ..set<ParseObject>(keyAdvertAddress, parseAddress)
         ..set<List<ParseFile>>(keyAdvertImages, parseImages)
-        ..set<List<ParseObject>>(keyAdvertMechanics, parseMechanics);
+        ..set<List<int>>(keyAdvertMechanics, advert.mechanicsId);
 
       final response = await parseAd.save();
       if (!response.success) {
@@ -308,11 +308,11 @@ class AdvertRepository {
 
       List<ParseFile> parseImages = await _saveImages(advert.images, parseUser);
 
-      final List<ParseObject> parseMechanics = advert.mechanicsId.map((id) {
-        final parse = ParseObject(keyMechanicTable);
-        parse.objectId = id;
-        return parse;
-      }).toList();
+      // final List<ParseObject> parseMechanics = advert.mechanicsId.map((id) {
+      //   final parse = ParseObject(keyMechanicTable);
+      //   parse.objectId = id;
+      //   return parse;
+      // }).toList();
 
       final parseAddress = ParseObject(keyAddressTable);
       parseAddress.objectId = advert.address.id;
@@ -332,7 +332,7 @@ class AdvertRepository {
         ..set<int>(keyAdvertCondition, advert.condition.index)
         ..set<ParseObject>(keyAdvertAddress, parseAddress)
         ..set<List<ParseFile>>(keyAdvertImages, parseImages)
-        ..set<List<ParseObject>>(keyAdvertMechanics, parseMechanics);
+        ..set<List<int>>(keyAdvertMechanics, advert.mechanicsId);
 
       final response = await parseAd.update();
       if (!response.success) {

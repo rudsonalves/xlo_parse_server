@@ -107,7 +107,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
                 case MecanicsScreen.routeName:
                   return MaterialPageRoute(builder: (context) {
-                    final selectedIds = settings.arguments as List<String>;
+                    final selectedIds = settings.arguments as List<int>;
 
                     return MecanicsScreen(
                       selectedIds: selectedIds,
