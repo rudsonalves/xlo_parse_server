@@ -20,7 +20,6 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import '../../common/models/address.dart';
 import '../../common/models/advert.dart';
 import '../../common/models/favorite.dart';
-import '../../common/models/mechanic.dart';
 import '../../common/models/user.dart';
 import 'constants.dart';
 
@@ -87,10 +86,10 @@ class ParseToModel {
       images: (parse.get<List<dynamic>>(keyAdvertImages) as List<dynamic>)
           .map((item) => (item as ParseFile).url!)
           .toList(),
-      mechanicsId:
-          (parse.get<List<dynamic>>(keyAdvertMechanics) as List<dynamic>)
-              .map((item) => (item as ParseObject).objectId!)
-              .toList(),
+      mechanicsId: parse.get<List<int>>(keyAdvertMechanics) as List<int>,
+      // (parse.get<List<dynamic>>(keyAdvertMechanics) as List<dynamic>)
+      //     .map((item) => (item as ParseObject).objectId!)
+      //     .toList(),
       address: address,
       status: AdvertStatus.values
           .firstWhere((s) => s.index == parse.get<int>(keyAdvertStatus)!),
@@ -98,19 +97,6 @@ class ParseToModel {
           .firstWhere((c) => c.index == parse.get<int>(keyAdvertCondition)!),
       views: parse.get<int>(keyAdvertViews, defaultValue: 0)!,
       createdAt: parse.get<DateTime>(keyAdvertCreatedAt)!,
-    );
-  }
-
-  /// Converts a ParseObject representing a mechanic to a MechanicModel.
-  ///
-  /// [parse] - The ParseObject to convert.
-  /// Returns a MechanicModel representing the ParseObject.
-  static MechanicModel mechanic(ParseObject parse) {
-    return MechanicModel(
-      id: parse.objectId,
-      name: parse.get(keyMechanicName),
-      description: parse.get(keyMechanicDescription),
-      createAt: parse.createdAt,
     );
   }
 

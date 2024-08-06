@@ -27,7 +27,7 @@ class FilterModel {
   String city;
   SortOrder sortBy;
   ProductCondition condition;
-  List<String> mechanicsId;
+  List<int> mechanicsId;
   int minPrice;
   int maxPrice;
 
@@ -36,7 +36,7 @@ class FilterModel {
     this.city = '',
     this.sortBy = SortOrder.date,
     this.condition = ProductCondition.all,
-    List<String>? mechanicsId,
+    List<int>? mechanicsId,
     this.minPrice = 0,
     this.maxPrice = 0,
   }) : mechanicsId = mechanicsId ?? [];

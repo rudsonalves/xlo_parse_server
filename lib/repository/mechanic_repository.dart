@@ -17,46 +17,31 @@
 
 import 'dart:developer';
 
-import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
-
 import '../common/models/mechanic.dart';
-import 'common/constants.dart';
-import 'common/parse_to_model.dart';
+import '../store/mech_store.dart';
 
 /// This class provides methods to interact with the Parse Server
 /// to retrieve a list of mechanics.
 class MechanicRepository {
+  static final store = MechStore();
+
   /// Fetches a list of mechanics from the Parse Server.
   ///
   /// Returns a list of `MechanicModel` if the query is successful,
   /// otherwise create an error.
   static Future<List<MechanicModel>> getList() async {
     try {
-      final mechanics = <MechanicModel>[];
+      final result = await store.queryMechs();
 
-      final parseMechanics = ParseObject(keyMechanicTable);
-      final queryBuilder = QueryBuilder<ParseObject>(parseMechanics)
-        ..orderByAscending(
-          keyMechanicName,
-        );
-
-      final response = await queryBuilder.query();
-
-      if (!response.success) {
-        throw Exception(response.error?.message ?? 'unknown error');
-      }
-
-      mechanics.addAll(
-        response.results!.map(
-          (objParse) => ParseToModel.mechanic(objParse),
-        ),
-      );
-
+      final mechanics =
+          result.map((item) => MechanicModel.fromMap(item)).toList();
       return mechanics;
     } catch (err) {
       final message = 'MechanicRepository.getList: $err';
       log(message);
       throw Exception(message);
+      // FIXME: put an empty list retrun hare. If there is no connection the
+      //        program chould be closed.
     }
   }
 }

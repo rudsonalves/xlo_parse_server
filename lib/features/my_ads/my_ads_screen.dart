@@ -24,6 +24,8 @@ import '../product/widgets/title_product.dart';
 import 'my_ads_controller.dart';
 import 'widgets/my_tab_bar.dart';
 import 'widgets/my_tab_bar_view.dart';
+import '/components/others_widgets/state_error_message.dart';
+import '/components/others_widgets/state_loading_message.dart';
 
 class MyAdsScreen extends StatefulWidget {
   const MyAdsScreen({super.key});
@@ -156,13 +158,9 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
                 deleteAd: _deleteAd,
               );
             } else if (ctrl.state is BasicStateLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const StateLoadingMessage();
             }
-            return const Center(
-              child: Text('Error!'),
-            );
+            return const StateErrorMessage();
           },
         ),
       ),

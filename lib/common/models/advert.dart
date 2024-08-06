@@ -30,7 +30,7 @@ class AdvertModel {
   bool hidePhone;
   double price;
   AdvertStatus status;
-  List<String> mechanicsId;
+  List<int> mechanicsId;
   AddressModel address;
   List<String> images;
   ProductCondition condition;

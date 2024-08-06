@@ -49,8 +49,8 @@ class FiltersController extends ChangeNotifier {
   StateBrModel? get selectedState => _selectedState;
   CityModel? get selectesCity => _selectedCity;
 
-  final List<String> _selectedMechIds = [];
-  List<String> get selectedMechIds => _selectedMechIds;
+  final List<int> _selectedMechIds = [];
+  List<int> get selectedMechIds => _selectedMechIds;
 
   final stateController = TextEditingController();
   final cityController = TextEditingController();
@@ -118,7 +118,7 @@ class FiltersController extends ChangeNotifier {
         maxPrice: maxPriceController.currencyValue.toInt(),
       );
 
-  void mechUpdateNames(List<String> mechIds) {
+  void mechUpdateNames(List<int> mechIds) {
     _selectedMechIds.clear();
     _selectedMechIds.addAll(mechIds);
     final mechNames = mechManager.namesFromIdList(_selectedMechIds);

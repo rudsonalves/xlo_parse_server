@@ -28,7 +28,7 @@ class MechanicsManager {
   List<MechanicModel> get mechanics => _mechanics;
 
   List<String> get mechanicsNames =>
-      _mechanics.map((item) => item.name!).toList();
+      _mechanics.map((item) => item.name).toList();
 
   Future<void> init() async {
     _mechanics.addAll(await MechanicRepository.getList());
@@ -38,11 +38,11 @@ class MechanicsManager {
   ///
   /// [id] - The ID of the mechanic.
   /// Returns the name of the mechanic if found, otherwise returns null.
-  String? nameFromId(String id) {
+  String? nameFromId(int id) {
     return _mechanics
         .firstWhere(
           (item) => item.id == id,
-          orElse: () => MechanicModel(id: '', name: null),
+          orElse: () => MechanicModel(id: null, name: ''),
         )
         .name;
   }
@@ -52,7 +52,7 @@ class MechanicsManager {
   /// [ids] - A list of mechanic IDs.
   /// Returns a list of mechanic names corresponding to the provided IDs.
   /// If a mechanic ID does not correspond to a mechanic, it logs an error.
-  List<String> namesFromIdList(List<String> ids) {
+  List<String> namesFromIdList(List<int> ids) {
     List<String> names = [];
     for (final id in ids) {
       final name = nameFromId(id);

@@ -41,9 +41,8 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
   }
 
   void _logout() async {
-    await currentUser.logout();
-    // FIXME: não esta atualizando o nome do app aou sair
     if (mounted) Navigator.pop(context);
+    await currentUser.logout();
   }
 
   @override

@@ -20,8 +20,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../../common/models/advert.dart';
+import '../../../../common/singletons/current_user.dart';
 import '../../../../get_it.dart';
-import '../../../../manager/favorites_manager.dart';
+import '../../fav_button.dart';
 import 'owner_rating.dart';
 import 'shop_text_price.dart';
 import 'shop_text_title.dart';
@@ -31,15 +32,13 @@ class AdShopView extends StatelessWidget {
   final AdvertModel advert;
   final Widget? itemButton;
 
-  AdShopView({
+  const AdShopView({
     super.key,
     required this.advert,
     this.itemButton,
   });
 
-  final favoritesManager = getIt<FavoritesManager>();
-
-  List<String> get favAdIds => favoritesManager.favAdIds;
+  bool get isLogged => getIt<CurrentUser>().isLogged;
 
   @override
   Widget build(BuildContext context) {
@@ -61,25 +60,10 @@ class AdShopView extends StatelessWidget {
                 image: advert.images[0],
                 size: (MediaQuery.of(context).size.width - 8) / 2,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: ListenableBuilder(
-                        listenable: favoritesManager.favNotifier,
-                        builder: (context, _) {
-                          return Icon(
-                            favAdIds.contains(advert.id!)
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                          );
-                        }),
-                    onPressed: () {
-                      favoritesManager.toggleAdFav(advert);
-                    },
-                  ),
-                ],
-              ),
+              if (isLogged)
+                FavStackButton(
+                  ad: advert,
+                ),
             ],
           ),
           Expanded(

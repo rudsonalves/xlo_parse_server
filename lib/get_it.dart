@@ -27,6 +27,7 @@ import 'features/shop/shop_controller.dart';
 import 'manager/address_manager.dart';
 import 'manager/favorites_manager.dart';
 import 'manager/mechanics_manager.dart';
+import 'store/database_manager.dart';
 
 final getIt = GetIt.instance;
 
@@ -45,6 +46,8 @@ void setupDependencies() {
     getIt.registerLazySingleton<SearchFilter>(() => SearchFilter());
 
     getIt.registerLazySingleton<SearchHistory>(() => SearchHistory());
+
+    getIt.registerLazySingleton<DatabaseManager>(() => DatabaseManager());
 
     // Pages controllers
     getIt.registerLazySingleton<ShopController>(() => ShopController());

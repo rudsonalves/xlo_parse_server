@@ -42,13 +42,14 @@ class ShopGridView extends StatefulWidget {
   });
 
   @override
-  State<ShopGridView> createState() => _AdListViewState();
+  State<ShopGridView> createState() => _ShopGridViewState();
 }
 
-class _AdListViewState extends State<ShopGridView> {
+class _ShopGridViewState extends State<ShopGridView> {
   late ScrollController _scrollController;
   late final BasicController ctrl;
-  double scrollPosition = 0;
+  double _scrollPosition = 0;
+  bool _isScrolling = false;
 
   @override
   initState() {
@@ -56,26 +57,33 @@ class _AdListViewState extends State<ShopGridView> {
 
     ctrl = widget.ctrl;
     _scrollController = widget.scrollController;
-    _scrollController.addListener(_scrollListener2);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (ctrl.ads.isEmpty) return;
-      _scrollController.jumpTo(scrollPosition);
-    });
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_scrollListener2);
+    _scrollController.removeListener(_scrollListener);
     super.dispose();
   }
 
-  void _scrollListener2() {
-    if (_scrollController.position.atEdge) {
-      final isTop = _scrollController.position.pixels == 0;
-      if (!isTop) {
-        scrollPosition = _scrollController.position.pixels;
-        ctrl.getMoreAds();
+  Future<void> _scrollListener() async {
+    if (_scrollController.hasClients &&
+        _scrollController.position.atEdge &&
+        !_isScrolling) {
+      final isBottom = _scrollController.position.pixels != 0;
+      if (isBottom) {
+        _scrollPosition = _scrollController.position.pixels;
+        _isScrolling = true;
+        await ctrl.getMoreAds();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          // _scrollController.animateTo(
+          //   _scrollPosition,
+          //   duration: const Duration(microseconds: 300),
+          //   curve: Curves.easeInOut,
+          // );
+          _scrollController.jumpTo(_scrollPosition);
+          _isScrolling = false;
+        });
       }
     }
   }

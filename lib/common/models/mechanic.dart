@@ -17,23 +17,37 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 class MechanicModel {
-  String? id;
-  String? name;
+  int? id;
+  String name;
   String? description;
-  DateTime? createAt;
 
   MechanicModel({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
     this.description,
-    this.createAt,
   });
 
-  @override
-  String toString() {
-    return 'MechanicModel(id: $id,'
-        ' name: $name,'
-        ' description: $description,'
-        ' createAt: $createAt)';
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'description': description,
+    };
   }
+
+  factory MechanicModel.fromMap(Map<String, dynamic> map) {
+    return MechanicModel(
+      id: map['id'] as int,
+      name: map.containsKey('name')
+          ? map['name'] as String
+          : map['nome'] as String,
+      description: map.containsKey('description')
+          ? map['description'] as String?
+          : map['descricao'] as String?,
+    );
+  }
+
+  @override
+  String toString() =>
+      'MechanicModel(id: $id, name: $name, description: $description)';
 }

@@ -68,6 +68,8 @@ class ShopController extends BasicController {
 
       searchFilter.filterNotifier.addListener(getAds);
       searchFilter.searchNotifier.addListener(getAds);
+      currentUser.isLogedListernable.addListener(getAds);
+      currentUser.isLogedListernable.addListener(setPageTitle);
 
       await currentUser.init();
       setPageTitle();
@@ -137,6 +139,7 @@ class ShopController extends BasicController {
     try {
       changeState(BasicStateLoading());
       await _getMoreAds();
+      await Future.delayed(const Duration(microseconds: 100));
       changeState(BasicStateSuccess());
     } catch (err) {
       log(err.toString());

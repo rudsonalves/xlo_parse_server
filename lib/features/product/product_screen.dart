@@ -23,6 +23,9 @@ import 'package:flutter/rendering.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/models/advert.dart';
+import '../../common/singletons/current_user.dart';
+import '../../components/others_widgets/fav_button.dart';
+import '../../get_it.dart';
 import 'widgets/description_product.dart';
 import 'widgets/duo_segmented_button.dart';
 import 'widgets/image_carousel.dart';
@@ -54,6 +57,8 @@ class _ProductScreenState extends State<ProductScreen>
   late Animation<Offset> _fabOffsetAnimation;
   final _scrollController = ScrollController();
   Timer? _timer;
+
+  bool get isLogged => getIt<CurrentUser>().isLogged;
 
   @override
   void initState() {
@@ -122,13 +127,6 @@ class _ProductScreenState extends State<ProductScreen>
           icon: const Icon(Icons.arrow_back_ios_new),
         ),
         elevation: 5,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.favorite_border),
-            // FIXME: implement favorite in image
-          ),
-        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: SlideTransition(
@@ -159,7 +157,12 @@ class _ProductScreenState extends State<ProductScreen>
           controller: _scrollController,
           child: Column(
             children: [
-              ImageCarousel(advert: widget.advert),
+              Stack(
+                children: [
+                  ImageCarousel(advert: widget.advert),
+                  if (isLogged) FavStackButton(ad: widget.advert),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(

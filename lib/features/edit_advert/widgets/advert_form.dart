@@ -50,7 +50,7 @@ class _AdvertFormState extends State<AdvertForm> {
       context,
       MecanicsScreen.routeName,
       arguments: ctrl.selectedMechIds,
-    ) as List<String>?;
+    ) as List<int>?;
 
     if (result != null) {
       ctrl.setMechanicsIds(result);

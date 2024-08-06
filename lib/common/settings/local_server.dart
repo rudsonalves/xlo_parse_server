@@ -16,7 +16,12 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 class LocalServer {
-  static get keyApplicationId => 'xIlTzM1zXBa9pwgltnURbNMX2CPXBFQEDRtc0Cxp';
-  static get keyClientKey => '1EizsYuqYCuEjNE6sxjbaJSzSivnFtCr75o4dM54';
-  static get keyParseServerUrl => 'http://192.168.0.22:1337/parse';
+  // static get keyApplicationId => 'xIlTzM1zXBa9pwgltnURbNMX2CPXBFQEDRtc0Cxp';
+  // static get keyClientKey => '1EizsYuqYCuEjNE6sxjbaJSzSivnFtCr75o4dM54';
+  // static get keyParseServerUrl => 'http://192.168.0.22:1337/parse';
+
+  // back4app.com definitions
+  static get keyApplicationId => 'IYbf1NRGo31PJbm4SUfibVvBS6XX4LyVfXwb6Vbd';
+  static get keyClientKey => 'UXD8yIPFSaVQ3Wk46gPErwcVkl5c40pp00hH306q';
+  static get keyParseServerUrl => 'https://parseapi.back4app.com';
 }

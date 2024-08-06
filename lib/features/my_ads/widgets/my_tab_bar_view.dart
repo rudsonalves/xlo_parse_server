@@ -106,18 +106,6 @@ class _MyTabBarViewState extends State<MyTabBarView> {
     }
   }
 
-  ButtonBehavior? getItemButton(int tabIndex) {
-    switch (tabIndex) {
-      case 0:
-        return ButtonBehavior.edit;
-
-      case 1:
-        return null;
-      default:
-        return ButtonBehavior.delete;
-    }
-  }
-
   AdvertStatus? getStatusLeft(int tabIndex) {
     switch (tabIndex) {
       case 0:
@@ -158,7 +146,7 @@ class _MyTabBarViewState extends State<MyTabBarView> {
             labelRight: getLabelRight(tabIndex),
             iconLeft: getIconLeft(tabIndex),
             iconRight: getIconRight(tabIndex),
-            buttonBehavior: getItemButton(tabIndex),
+            buttonBehavior: tabIndex != 1 ? true : false,
             statusLeft: getStatusLeft(tabIndex),
             statusRight: getStatusRight(tabIndex),
             editAd: widget.editAd,

@@ -71,7 +71,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       context,
       MecanicsScreen.routeName,
       arguments: ctrl.selectedMechIds,
-    ) as List<String>;
+    ) as List<int>;
     ctrl.mechUpdateNames(newMechsIds);
   }
 
