@@ -9,6 +9,213 @@
 
 # ChangeLog
 
+## 2024/08/06 - version: 0.6.5+28
+
+Implement Favorite Button and User-Specific Features, Improve Scrolling and Mechanics Handling
+
+The favorite button now appears only for logged-in users and is positioned over the product images in the current layout. On the "My Ads" page, buttons to edit and delete an ad are available, but only for ads with a pending or sold status. Active products cannot be edited or deleted. In the ShopScreen, reactivity has been added to adjust the display of favorites and the page header name based on whether the user is logged in or not.
+
+Scrolling adjustments have been made to the ShopGridView and AdListView widgets to ensure smoother scrolling when loading new ads. The control of mechanics has been migrated from the Parse server to a local SQLite database. These mechanics consist of relatively static information that does not change frequently, hence they have been incorporated into the app. Data from BGG and the annual ranking table have also been integrated into the application.
+
+These changes enhance user-specific features and optimize the handling of mechanics by migrating data control to a local SQLite database. The integration of user-specific features and the optimization of mechanics handling ensure a more efficient and user-friendly experience. This set of changes introduces significant improvements to user interactions, performance enhancements, and the transition to local storage for mechanics, providing a more robust and efficient application experience.
+
+Deletions primarily focus on removing configuration files and setups specific to Flutter's macOS, windows and Linux descktop implementations, cleaning up the project and reducing dependencies. Additional deletions continue the clean-up process by removing configuration files and assets specific to the macOS platform, further simplifying the project and focusing on the core Flutter application. The final batch of deletions completes the removal of configuration files, scripts, and assets specific to the macOS and Windows platforms. This clean-up aligns the project with the focus on core Flutter application development, eliminating unnecessary platform-specific files.
+
+Below is a breakdown of the changes:
+
+1. .env
+   - Added environment variables for Parse Server configuration:
+     - `PARSE_SERVER_DATABASE_URI`
+     - `PARSE_SERVER_APPLICATION_ID`
+     - `PARSE_SERVER_MASTER_KEY`
+     - `PARSE_SERVER_CLIENT_KEY`
+     - `PARSE_SERVER_JAVASCRIPT_KEY`
+     - `PARSE_SERVER_REST_API_KEY`
+     - `PARSE_SERVER_FILE_KEY`
+     - `PARSE_SERVER_URL`
+     - `PARSE_SERVER_MASTER_KEY_IPS`
+     - `PARSE_PORT`
+
+2. assets/data/bgg.db
+   - Added SQLite database file for mechanics and rank data.
+
+3. docker-compose.yml
+   - Updated Parse Server configuration to use environment variables.
+
+4. lib/common/models/advert.dart
+   - Changed `mechanicsId` type from `List<String>` to `List<int>`.
+
+5. lib/common/models/filter.dart
+   - Changed `mechanicsId` type from `List<String>` to `List<int>`.
+
+6. lib/common/models/mechanic.dart
+   - Updated `MechanicModel` class:
+     - Changed `id` type from `String?` to `int?`.
+     - Changed `name` type from `String?` to `String`.
+     - Added methods `toMap` and `fromMap`.
+
+7. lib/common/settings/local_server.dart
+   - Updated Parse Server URL and keys for back4app.com.
+
+8. lib/components/others_widgets/ad_list_view/ad_list_view.dart
+   - Removed `ButtonBehavior` enum.
+   - Updated item button logic for ads:
+     - Added `_editButton` and `_deleteButton` methods.
+     - Added `_showAd` method for navigation.
+     - Added logic to show buttons based on `buttonBehavior` flag.
+   - Improved scrolling behavior:
+     - Renamed `_scrollListener2` to `_scrollListener`.
+     - Added `_isScrolling` flag to prevent multiple requests.
+
+9. lib/components/others_widgets/shop_grid_view/shop_grid_view.dart
+   - Improved scrolling behavior:
+     - Renamed `_scrollListener2` to `_scrollListener`.
+     - Added `_isScrolling` flag to prevent multiple requests.
+
+10. lib/components/others_widgets/shop_grid_view/widgets/ad_shop_view.dart
+    - Display favorite button for logged-in users only:
+      - Added `isLogged` getter.
+      - Used `FavStackButton` if user is logged in.
+
+11. lib/features/edit_advert/edit_advert_controller.dart
+    - Changed `selectedMechIds` type from `List<String>` to `List<int>`.
+
+12. lib/features/edit_advert/widgets/advert_form.dart
+    - Updated mechanics ID handling.
+
+13. lib/features/filters/filters_controller.dart
+    - Changed `selectedMechIds` type from `List<String>` to `List<int>`.
+
+14. lib/features/filters/filters_screen.dart
+    - Updated mechanics ID handling.
+
+15. lib/features/mecanics/mecanics_screen.dart
+    - Changed `selectedIds` type from `List<String>` to `List<int>`.
+
+16. lib/features/my_account/my_account_screen.dart
+    - Fixed logout behavior:
+      - Moved `currentUser.logout()` to after `Navigator.pop`.
+
+17. lib/features/my_ads/my_ads_screen.dart
+    - Added loading and error states:
+      - Used `StateLoadingMessage` and `StateErrorMessage` components.
+
+18. lib/features/my_ads/widgets/my_tab_bar_view.dart
+    - Simplified item button logic:
+      - Removed `getItemButton` method.
+      - Used boolean flag for `buttonBehavior`.
+
+19. lib/features/product/product_screen.dart
+    - Display favorite button in product images for logged-in users:
+      - Added `isLogged` getter.
+      - Used `FavStackButton` in `Stack`.
+
+20. lib/features/shop/shop_controller.dart
+    - Added listeners for user login status to update ads and page title.
+
+21. lib/get_it.dart
+    - Registered `DatabaseManager` singleton.
+
+22. lib/manager/mechanics_manager.dart
+    - Changed `mechanicsId` type from `List<String>` to `List<int>`.
+    - Updated `nameFromId` method to use `int` type.
+
+23. lib/repository/advert_repository.dart
+    - Changed `mechanicsId` type from `List<String>` to `List<int>` in ad saving methods.
+
+24. lib/repository/common/constants.dart
+    - Increased `maxAdsPerList` from 6 to 20.
+
+25. lib/repository/common/parse_to_model.dart
+    - Changed `mechanicsId` type from `List<String>` to `List<int>` in ad parsing method.
+
+26. lib/repository/mechanic_repository.dart
+    - Refactored to use local SQLite database for mechanics data:
+      - Used `MechStore` for querying mechanics.
+
+27. lib/store/constants/constants.dart
+    - Added constants for SQLite database handling:
+      - Database name, version, and table/column names.
+
+28. lib/store/database_manager.dart
+    - Implemented database manager for initializing and handling SQLite database.
+
+29. lib/store/mech_store.dart
+    - Implemented mechanics store for querying mechanics data from SQLite database.
+
+30. lib/components/others_widgets/fav_button.dart
+    - Created `FavStackButton` widget to handle favorite actions:
+      - Displays favorite icon based on whether the ad is favorited.
+      - Toggles favorite status on button press.
+
+31. lib/repository/mechanic_repository.dart.parse
+    - Added legacy Parse Server mechanic repository code for reference:
+      - Fetches mechanics from Parse Server.
+      - Logs errors if the query fails.
+
+32. linux/.gitignore
+    - Removed unused Linux build directory from version control.
+
+33. linux/CMakeLists.txt
+    - Removed unused Linux build configuration file.
+
+34. lib/common/settings/local_server.dart
+    - Commented out back4app.com configuration details:
+      - Removed hard-coded application ID and client key.
+      - Defined new application ID and client key for back4app.com.
+      - Set Parse Server URL to back4app.com.
+
+35. lib/components/others_widgets/ad_list_view/ad_list_view.dart
+    - Updated `AdListView` to include new button behavior:
+      - Added `_editButton` and `_deleteButton` methods.
+      - Modified `_scrollListener` for smoother scrolling.
+      - Updated layout to include edit and delete buttons for ads.
+
+36. lib/components/others_widgets/shop_grid_view/shop_grid_view.dart
+    - Updated `ShopGridView` for better scrolling performance:
+      - Modified `_scrollListener` for smoother scrolling.
+      - Added `_isScrolling` to prevent duplicate load calls.
+
+37. lib/features/my_ads/my_ads_screen.dart
+    - Enhanced `MyAdsScreen` to display loading and error messages:
+      - Added `StateLoadingMessage` and `StateErrorMessage` for better state handling.
+
+38. lib/features/product/product_screen.dart
+    - Improved `ProductScreen` to include favorite button for logged-in users:
+      - Added `FavStackButton` to the `ImageCarousel` stack.
+
+39. lib/repository/common/constants.dart
+    - Increased `maxAdsPerList` from 6 to 20 to display more ads per load.
+
+40. lib/store/database_manager.dart
+    - Created `DatabaseManager` to handle local SQLite database:
+      - Initializes database from assets if not found.
+      - Provides methods to access and close the database.
+
+41. lib/store/mech_store.dart
+    - Created `MechStore` to handle mechanics storage:
+      - Queries mechanics from local SQLite database.
+      - Fetches mechanic descriptions based on language code.
+
+42. linux/*
+    - Removed linux desktop support.
+
+43. macos/*
+    - Removed macOS descktop support.
+      
+44. windows/*
+    - Removed Windows desktop support.
+      
+45. pubspec.yaml
+    - Modified file.
+      - Added `sqflite` and `path_provider` to dependencies.
+      - Included assets for the project.
+
+These changes enhance user-specific features and optimize the handling of mechanics by migrating data control to a local SQLite database. This set of changes introduces significant improvements to user interactions and performance, ensuring a more efficient and user-friendly experience. The transition to local storage for mechanics provides a more robust and efficient application experience.
+
+Deletions primarily focus on removing configuration files and setup specific to Flutter's macOS and Linux implementations, cleaning up the project and reducing dependencies. Remaining deletions continue the clean-up process by removing additional configuration files and assets specific to the macOS platform, further simplifying the project and focusing on the core Flutter application. The final batch of deletions completes the removal of configuration files, scripts, and assets specific to the macOS and Windows platforms, aligning the project with the focus on core Flutter application development and eliminating unnecessary platform-specific files.
+
+
 ## 2024/08/01 - version: 0.6.2+27
 
 This commit introduces multiple enhancements and fixes across various components of the project:
