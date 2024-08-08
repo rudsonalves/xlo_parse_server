@@ -22,9 +22,9 @@ import 'constants/constants.dart';
 import 'database_manager.dart';
 
 class MechStore {
-  final _databaseManager = getIt<DatabaseManager>();
+  static final _databaseManager = getIt<DatabaseManager>();
 
-  Future<List<Map<String, dynamic>>> queryMechs(
+  static Future<List<Map<String, dynamic>>> queryMechs(
       [String langCode = 'pt_BR']) async {
     final database = await _databaseManager.database;
 
@@ -46,7 +46,8 @@ class MechStore {
     }
   }
 
-  Future<String> queryDescription(int id, [String langCode = 'pt_BR']) async {
+  static Future<String> queryDescription(int id,
+      [String langCode = 'pt_BR']) async {
     final database = await _databaseManager.database;
     final getColumn = (langCode != 'pt_BR') ? mechDescription : mechDescricao;
     try {

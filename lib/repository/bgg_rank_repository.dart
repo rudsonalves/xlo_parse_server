@@ -20,10 +20,8 @@ import '../common/models/bgg_rank.dart';
 import '../store/bgg_rank_store.dart';
 
 class BggRankRepository {
-  static final store = BggRankStore();
-
   static Future<List<BGName>> getBGNames(int year) async {
-    final mapList = await store.queryRankGameNames(year);
+    final mapList = await BggRankStore.queryRankGameNames(year);
 
     if (mapList.isEmpty) {
       throw Exception('Rank database not found.');
@@ -35,7 +33,7 @@ class BggRankRepository {
   }
 
   static Future<BggRankModel?> getBggRankById(int id) async {
-    final map = await store.queryRankFromId(id);
+    final map = await BggRankStore.queryRankFromId(id);
 
     if (map.isEmpty) return null;
     return BggRankModel.fromMap(map);

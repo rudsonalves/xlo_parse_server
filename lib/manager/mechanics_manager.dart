@@ -65,4 +65,11 @@ class MechanicsManager {
 
     return names;
   }
+
+  String namesFromIdListString(List<int> ids) {
+    return namesFromIdList(ids)
+        .toString()
+        .replaceAll('[', '')
+        .replaceAll(']', '');
+  }
 }

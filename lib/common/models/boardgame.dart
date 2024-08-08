@@ -24,7 +24,7 @@ class BoardgameModel {
   final int minplaytime;
   final int maxplaytime;
   final int age;
-  final String? description;
+  String? description;
   final double? average;
   final double? bayesaverage;
   final double? averageweight;
@@ -74,8 +74,9 @@ class BoardgameModel {
       minplaytime: map['minplaytime'] as int,
       maxplaytime: map['maxplaytime'] as int,
       age: map['age'] as int,
-      description:
-          map['description'] != null ? map['description'] as String : null,
+      description: map['description'] != null
+          ? cleanDescription(map['description'] as String)
+          : null,
       average: map['average'] != null ? map['average'] as double : null,
       bayesaverage:
           map['bayesaverage'] != null ? map['bayesaverage'] as double : null,
@@ -84,6 +85,16 @@ class BoardgameModel {
       boardgamemechanic: List<int>.from(map['boardgamemechanic'] as List<int>),
       boardgamecategory: List<int>.from(map['boardgamecategory'] as List<int>),
     );
+  }
+
+  static String cleanDescription(String text) {
+    String description = text.replaceAll('<br/>', '\n');
+
+    while (description[description.length - 1] == '\n') {
+      description = description.substring(0, description.length - 1);
+    }
+
+    return description;
   }
 
   @override

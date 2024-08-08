@@ -125,7 +125,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             BigButton(
                               color: Colors.blue,
                               label: 'Cadastrar com Facebook',
-                              onPress: () {},
+                              onPressed: () {},
                             ),
                             const OrRow(),
                             SignUpForm(

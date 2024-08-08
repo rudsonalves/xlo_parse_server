@@ -260,7 +260,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       BigButton(
                         color: Colors.green,
                         label: 'Filtrar',
-                        onPress: _sendFilter,
+                        onPressed: _sendFilter,
                       ),
                     ],
                   ),

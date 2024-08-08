@@ -19,6 +19,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
+import '../../manager/mechanics_manager.dart';
+import '../../common/models/boardgame.dart';
+import '../../components/custon_field_controllers/numeric_edit_controller.dart';
 import '../../get_it.dart';
 import '../../manager/bgg_rank_manager.dart';
 import '../../repository/bgg_xmlapi_repository.dart';
@@ -28,8 +31,18 @@ class BoardgameController extends ChangeNotifier {
   BoardgameState _state = BoardgameStateInitial();
 
   final rankManager = getIt<BggRankManager>();
+  final mechManager = getIt<MechanicsManager>();
 
-  final bggName = TextEditingController();
+  final nameController = TextEditingController();
+  final minPlayersController = TextEditingController();
+  final maxPlayersController = TextEditingController();
+  final minTimeController = TextEditingController();
+  final maxTimeController = TextEditingController();
+  final ageController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final weightController = NumericEditController();
+  final averageController = NumericEditController();
+  final mechsController = TextEditingController();
 
   BoardgameState get state => _state;
   List<String> get bgNames =>
@@ -41,7 +54,7 @@ class BoardgameController extends ChangeNotifier {
 
   @override
   void dispose() {
-    bggName.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -60,12 +73,32 @@ class BoardgameController extends ChangeNotifier {
     }
   }
 
-  Future<void> getBggInfos() async {
-    if (bggName.text.isEmpty) return;
-    final bgId = rankManager.gameId(bggName.text);
-    if (bgId == null) return;
-    final bggInfo = await BggXMLApiRepository.fentchBoardGame(bgId);
-    log(bggInfo.toString());
+  Future<void> getBggInfo() async {
+    try {
+      _changeState(BoardgameStateLoading());
+      if (nameController.text.isEmpty) return;
+      final bgId = rankManager.gameId(nameController.text);
+      if (bgId == null) return;
+      final bggInfo = await BggXMLApiRepository.fentchBoardGame(bgId);
+      if (bggInfo != null) loadBoardInfo(bggInfo);
+      log(bggInfo.toString());
+      _changeState(BoardgameStateSuccess());
+    } catch (err) {
+      _changeState(BoardgameStateError());
+    }
+  }
+
+  loadBoardInfo(BoardgameModel bggInfo) {
+    minPlayersController.text = bggInfo.minplayers.toString();
+    maxPlayersController.text = bggInfo.maxplayers.toString();
+    minTimeController.text = bggInfo.minplaytime.toString();
+    maxTimeController.text = bggInfo.maxplaytime.toString();
+    ageController.text = bggInfo.age.toString();
+    descriptionController.text = bggInfo.description ?? '';
+    weightController.numericValue = bggInfo.averageweight ?? 0;
+    averageController.numericValue = bggInfo.average ?? 0;
+    mechsController.text =
+        mechManager.namesFromIdListString(bggInfo.boardgamemechanic);
   }
 
   void closeErroMessage() {

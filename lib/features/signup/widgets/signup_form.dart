@@ -91,7 +91,7 @@ class SignUpForm extends StatelessWidget {
           BigButton(
             color: Colors.amber,
             label: 'Registrar',
-            onPress: signupUser,
+            onPressed: signupUser,
           ),
           const Divider(),
           Row(

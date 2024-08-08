@@ -121,8 +121,8 @@ class _EditAdvertScreenState extends State<EditAdvertScreen> {
                         AdvertForm(controller: ctrl),
                         BigButton(
                           color: Colors.orange,
-                          label: widget.advert != null ? 'Atualizar' : 'Enviar',
-                          onPress: _createAnnounce,
+                          label: widget.advert != null ? 'Atualizar' : 'Salvar',
+                          onPressed: _createAnnounce,
                         ),
                       ],
                     ),

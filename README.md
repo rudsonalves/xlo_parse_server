@@ -9,6 +9,104 @@
 
 # ChangeLog
 
+2024/08/08 - version: 0.6.7+30
+
+Refactor and Add New Features
+
+1. assets/data/bgg.db
+   - Updated the database binary file with new data.
+
+2. lib/common/models/boardgame.dart
+   - Changed `description` from `final` to a mutable field.
+   - Updated `fromMap` method to use `cleanDescription` for `description` field.
+   - Added `cleanDescription` method to sanitize and format the description text.
+
+3. lib/components/buttons/big_button.dart
+   - Renamed `onPress` callback to `onPressed` for consistency.
+
+4. lib/components/custon_field_controllers/numeric_edit_controller.dart
+   - Created a new `NumericEditController` class to manage numeric input with validation.
+
+5. lib/components/form_fields/custom_names_form_field.dart
+   - Added `onSubmitted` callback to handle form submission events.
+
+6. lib/components/others_widgets/spin_box_field.dart
+   - Created a new `SpinBoxField` widget for numeric input with increment and decrement functionality.
+
+7. lib/features/boardgames/boardgame_controller.dart
+   - Refactored to replace `bggName` with `nameController`.
+   - Added controllers for various board game properties (`minPlayersController`, `maxPlayersController`, etc.).
+   - Implemented `loadBoardInfo` method to populate controllers from `BoardgameModel`.
+   - Adjusted `getBggInfo` to load board game information into the controller.
+
+8. lib/features/boardgames/boardgame_screen.dart
+   - Integrated new controllers and widgets (`SpinBoxField`, `SubTitleProduct`) for enhanced UI and interaction.
+   - Refactored `AppBar` to include a back button.
+
+9. lib/features/edit_advert/edit_advert_screen.dart
+   - Renamed `onPress` to `onPressed` for consistency in `BigButton` usage.
+   - Adjusted button labels for better clarity.
+
+10. lib/features/edit_advert/widgets/advert_form.dart
+    - Integrated `BigButton` for navigation to `BoardgamesScreen`.
+    - Updated label text to clarify the input fields.
+
+11. lib/features/filters/filters_screen.dart
+    - Renamed `onPress` to `onPressed` for consistency in `BigButton` usage.
+
+12. lib/features/login/login_screen.dart
+    - Renamed `onPress` to `onPressed` for consistency in `BigButton` usage.
+
+13. lib/features/login/widgets/login_form.dart
+    - Renamed `onPress` to `onPressed` for consistency in `BigButton` usage.
+
+14. lib/features/my_data/my_data_screen.dart
+    - Renamed `onPress` to `onPressed` for consistency in `BigButton` usage.
+
+15. lib/features/product/widgets/sub_title_product.dart
+    - Added support for custom colors and padding in `SubTitleProduct`.
+
+16. lib/features/signup/signup_screen.dart
+    - Renamed `onPress` to `onPressed` for consistency in `BigButton` usage.
+
+17. lib/features/signup/widgets/signup_form.dart
+    - Renamed `onPress` to `onPressed` for consistency in `BigButton` usage.
+
+18. lib/manager/mechanics_manager.dart
+    - Added `namesFromIdListString` method to convert list of mechanic IDs to a comma-separated string.
+
+19. lib/repository/bgg_rank_repository.dart
+    - Removed instance of `BggRankStore` and used static methods instead.
+
+20. lib/repository/bgg_xmlapi_repository.dart
+    - Used `BoardgameModel.cleanDescription` to sanitize the description text from the XML API.
+
+21. lib/repository/common/constants.dart
+    - Corrected table names from `AdSale` to `AdsSale` and from `Favorite` to `Favorites`.
+    - Added constants for database version management.
+
+22. lib/repository/common/parse_to_model.dart
+    - Cleaned up commented-out code related to mechanics parsing.
+
+23. lib/repository/mechanic_repository.dart
+    - Removed instance of `MechStore` and used static methods instead.
+
+24. lib/store/bgg_rank_store.dart
+    - Changed all methods to static and updated method signatures accordingly.
+
+25. lib/store/constants/constants.dart
+    - Added constants related to database versioning.
+
+26. lib/store/database_manager.dart
+    - Refactored to include database version checking and copying logic.
+    - Introduced `_copyBggDb` and `getDBVerion` methods for better database management.
+
+27. lib/store/mech_store.dart
+    - Changed all methods to static and updated method signatures accordingly.
+
+This commit includes multiple refactors and feature additions, particularly focused on improving the consistency of the codebase and adding new UI components.
+
+
 2024/08/08 - version: 0.6.6+29
 
 This commit introduces significant enhancements and new functionalities related to BGG ranks and board games, improving the overall functionality and user experience.

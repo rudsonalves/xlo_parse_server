@@ -77,7 +77,9 @@ class BggXMLApiRepository {
           minplaytime: minplaytime ?? 0,
           maxplaytime: maxplaytime ?? 0,
           age: age ?? 0,
-          description: description,
+          description: description != null
+              ? BoardgameModel.cleanDescription(description)
+              : '',
           average: average,
           bayesaverage: bayesaverage,
           averageweight: averageweight,
