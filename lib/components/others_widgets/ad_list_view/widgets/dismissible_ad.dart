@@ -17,21 +17,21 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../common/models/advert.dart';
+import '../../../../common/models/ad.dart';
 import '../../base_dismissible_container.dart';
 import 'ad_card_view.dart';
 
 class DismissibleAd extends StatelessWidget {
-  final AdvertModel ad;
+  final AdModel ad;
   final Color? colorLeft;
   final Color? colorRight;
   final IconData? iconLeft;
   final IconData? iconRight;
   final String? labelLeft;
   final String? labelRight;
-  final AdvertStatus? statusLeft;
-  final AdvertStatus? statusRight;
-  final Function(AdvertModel)? updateAdStatus;
+  final AdStatus? statusLeft;
+  final AdStatus? statusRight;
+  final Function(AdModel)? updateAdStatus;
 
   const DismissibleAd({
     super.key,

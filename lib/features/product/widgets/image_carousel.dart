@@ -19,14 +19,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 
-import '../../../common/models/advert.dart';
+import '../../../common/models/ad.dart';
 
 class ImageCarousel extends StatelessWidget {
-  final AdvertModel advert;
+  final AdModel ad;
 
   const ImageCarousel({
     super.key,
-    required this.advert,
+    required this.ad,
   });
 
   @override
@@ -39,9 +39,9 @@ class ImageCarousel extends StatelessWidget {
       margin: const EdgeInsets.only(top: 8),
       color: colorScheme.surfaceContainer,
       child: CarouselSlider.builder(
-        itemCount: advert.images.length,
+        itemCount: ad.images.length,
         slideBuilder: (index) => CachedNetworkImage(
-          imageUrl: advert.images[index],
+          imageUrl: ad.images[index],
           fit: BoxFit.fill,
         ),
         slideIndicator: CircularSlideIndicator(

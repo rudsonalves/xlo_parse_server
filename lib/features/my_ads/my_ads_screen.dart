@@ -18,8 +18,8 @@
 import 'package:flutter/material.dart';
 
 import '../../common/basic_controller/basic_state.dart';
-import '../../common/models/advert.dart';
-import '../edit_advert/edit_advert_screen.dart';
+import '../../common/models/ad.dart';
+import '../edit_ad/edit_ad_screen.dart';
 import '../product/widgets/title_product.dart';
 import 'my_ads_controller.dart';
 import 'widgets/my_tab_bar.dart';
@@ -51,16 +51,15 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
     Navigator.pop(context);
   }
 
-  void _editAd(AdvertModel ad) async {
-    final result = await Navigator.pushNamed(
-        context, EditAdvertScreen.routeName,
-        arguments: ad) as AdvertModel?;
+  void _editAd(AdModel ad) async {
+    final result = await Navigator.pushNamed(context, EditAdScreen.routeName,
+        arguments: ad) as AdModel?;
     if (result != null) {
       ctrl.updateAd(result);
     }
   }
 
-  Future<void> _deleteAd(AdvertModel ad) async {
+  Future<void> _deleteAd(AdModel ad) async {
     final response = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
@@ -97,8 +96,8 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
     }
   }
 
-  Future<void> _addNewAdvert() async {
-    await Navigator.pushNamed(context, EditAdvertScreen.routeName);
+  Future<void> _addNewAd() async {
+    await Navigator.pushNamed(context, EditAdScreen.routeName);
     ctrl.getAds();
   }
 
@@ -121,7 +120,7 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
           bottom: MyTabBar(setProductStatus: ctrl.setProductStatus),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: _addNewAdvert,
+          onPressed: _addNewAd,
           backgroundColor: colorScheme.primaryContainer.withOpacity(0.75),
           icon: const Icon(Icons.camera),
           label: const Text('Adicionar anúncio'),

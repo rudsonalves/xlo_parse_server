@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'advert.dart';
+import 'ad.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
@@ -49,17 +49,6 @@ class FilterModel {
         mechanicsId.isEmpty &&
         minPrice == 0 &&
         maxPrice == 0;
-  }
-
-  @override
-  String toString() {
-    return 'FilterModel(state: $state,'
-        ' city: $city,'
-        ' sortBy: $sortBy,'
-        ' advertiser: $condition,'
-        ' mechanicsId: $mechanicsId,'
-        ' minPrice: $minPrice,'
-        ' maxPrice: $maxPrice)';
   }
 
   @override

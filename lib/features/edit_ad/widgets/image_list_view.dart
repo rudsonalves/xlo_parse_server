@@ -17,15 +17,15 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../common/models/advert.dart';
-import '../edit_advert_controller.dart';
+import '../../../common/models/ad.dart';
+import '../edit_ad_controller.dart';
 import 'horizontal_image_gallery.dart';
 
 class ImagesListView extends StatelessWidget {
-  final EditAdvertController ctrl;
+  final EditAdController ctrl;
   final bool validator;
-  final Function(AdvertModel ad)? editAd;
-  final Function(AdvertModel ad)? deleteAd;
+  final Function(AdModel ad)? editAd;
+  final Function(AdModel ad)? deleteAd;
 
   const ImagesListView({
     super.key,

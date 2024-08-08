@@ -9,7 +9,92 @@
 
 # ChangeLog
 
-2024/08/08 - version: 0.6.7+30
+## 2024/08/08 - version: 0.6.8+31
+
+Refactor `AdvertModel` to `AdModel` Across Project Files
+
+This commit refactors the codebase by renaming `AdvertModel` to `AdModel`, ensuring consistency and clarity in the model naming convention throughout the project. Modified Files and Changes:
+
+1. `lib/common/basic_controller/basic_controller.dart`
+   - Renamed `AdvertModel` references to `AdModel`.
+
+2. `lib/common/models/advert.dart` → `lib/common/models/ad.dart`
+   - Renamed the file from `advert.dart` to `ad.dart`.
+   - Updated class name from `AdvertModel` to `AdModel`.
+   - Renamed `AdvertStatus` to `AdStatus`.
+
+3. `lib/common/models/filter.dart`
+   - Updated import statement from `advert.dart` to `ad.dart`.
+
+4. `lib/components/custom_drawer/custom_drawer.dart`
+   - Renamed navigation functions from `EditAdvertScreen` to `EditAdScreen`.
+
+5. `lib/components/others_widgets/ad_list_view/ad_list_view.dart`
+   - Updated all references of `AdvertModel` to `AdModel`.
+   - Updated status references from `AdvertStatus` to `AdStatus`.
+
+6. `lib/features/address/address_controller.dart`
+   - Updated repository references from `AdvertRepository` to `AdRepository`.
+
+7. `lib/features/address/address_screen.dart`
+   - Updated repository references from `AdvertRepository` to `AdRepository`.
+
+8. `lib/features/edit_advert/edit_advert_controller.dart` → `lib/features/edit_ad/edit_ad_controller.dart`
+   - Renamed file and updated references from `AdvertModel` to `AdModel`.
+   - Updated repository references from `AdvertRepository` to `AdRepository`.
+
+9. `lib/features/edit_advert/edit_advert_screen.dart` → `lib/features/edit_ad/edit_ad_screen.dart`
+   - Renamed file and updated references from `AdvertModel` to `AdModel`.
+
+10. `lib/features/edit_advert/edit_advert_state.dart` → `lib/features/edit_ad/edit_ad_state.dart`
+    - Renamed file and updated references from `EditAdvertState` to `EditAdState`.
+
+11. `lib/features/edit_advert/widgets/advert_form.dart` → `lib/features/edit_ad/widgets/ad_form.dart`
+    - Renamed file and updated form references from `AdvertForm` to `AdForm`.
+
+12. `lib/features/favorites/favorites_controller.dart`
+    - Updated model references from `AdvertModel` to `AdModel`.
+
+13. `lib/features/filters/filters_controller.dart`
+    - Updated import statements and model references.
+
+14. `lib/features/my_ads/my_ads_controller.dart`
+    - Updated model and repository references to `AdModel` and `AdRepository`.
+
+15. `lib/features/my_ads/my_ads_screen.dart`
+    - Updated navigation and model references to `EditAdScreen` and `AdModel`.
+
+16. `lib/features/product/product_screen.dart`
+    - Updated model references from `AdvertModel` to `AdModel`.
+
+17. `lib/features/shop/shop_controller.dart`
+    - Updated repository and model references to `AdRepository` and `AdModel`.
+
+18. `lib/my_material_app.dart`
+    - Updated routing references from `EditAdvertScreen` to `EditAdScreen`.
+    - Updated model references from `AdvertModel` to `AdModel`.
+
+19. `lib/repository/advert_repository.dart` → `lib/repository/ad_repository.dart`
+    - Renamed file and updated all function references from `AdvertModel` to `AdModel`.
+
+20. `lib/repository/common/constants.dart`
+    - Updated constants related to `Advert` to reflect the `Ad` naming convention.
+
+21. `lib/repository/common/parse_to_model.dart`
+    - Updated parsing functions to reference `AdModel` instead of `AdvertModel`.
+
+22. `lib/repository/favorite_repository.dart`
+    - Updated repository and model references to `AdModel` and `AdRepository`.
+
+This commit is part of the ongoing effort to maintain consistency in the codebase by standardizing model naming conventions.
+
+Note: This refactor only changes the naming conventions and does not introduce any new features or functionality.
+
+
+The changes introduced in this commit ensure a consistent naming convention across the codebase, improving code readability and maintainability. The model `AdvertModel` is now consistently referred to as `AdModel`, and related classes, files, and references have been updated accordingly. This refactor is crucial for future scalability and ease of understanding for developers working on the project.
+
+
+## 2024/08/08 - version: 0.6.7+30
 
 Refactor and Add New Features
 

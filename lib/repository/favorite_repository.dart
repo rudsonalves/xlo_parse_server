@@ -19,7 +19,7 @@ import 'dart:developer';
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
-import '../common/models/advert.dart';
+import '../common/models/ad.dart';
 import '../common/models/favorite.dart';
 import 'common/constants.dart';
 import 'common/parse_to_model.dart';
@@ -28,7 +28,7 @@ class FavoriteRepository {
   static Future<FavoriteModel?> add(String userId, String adId) async {
     try {
       final parseFav = ParseObject(keyFavoriteTable);
-      final parseAd = ParseObject(keyAdvertTable)..objectId = adId;
+      final parseAd = ParseObject(keyAdTable)..objectId = adId;
 
       parseFav
         ..set(keyFavoriteOwner, userId)
@@ -69,7 +69,7 @@ class FavoriteRepository {
     }
   }
 
-  static Future<(List<AdvertModel>, List<FavoriteModel>)> getFavorites(
+  static Future<(List<AdModel>, List<FavoriteModel>)> getFavorites(
       String userId) async {
     try {
       final parseFav = ParseObject(keyFavoriteTable);
@@ -79,9 +79,9 @@ class FavoriteRepository {
       query
         ..includeObject([keyFavoriteAd])
         ..includeObject([
-          '$keyFavoriteAd.$keyAdvertOwner',
-          '$keyFavoriteAd.$keyAdvertAddress',
-          '$keyFavoriteAd.$keyAdvertMechanics',
+          '$keyFavoriteAd.$keyAdOwner',
+          '$keyFavoriteAd.$keyAdAddress',
+          '$keyFavoriteAd.$keyAdMechanics',
         ])
         ..whereEqualTo(keyFavoriteOwner, userId);
 
@@ -94,13 +94,13 @@ class FavoriteRepository {
         throw Exception('return null');
       }
 
-      List<AdvertModel> ads = [];
+      List<AdModel> ads = [];
       List<FavoriteModel> favs = [];
       for (final ParseObject parseFav in response.results!) {
         final fav = ParseToModel.favorite(parseFav);
         final parseAd = parseFav.get(keyFavoriteAd) as ParseObject?;
         if (parseAd != null) {
-          final adModel = ParseToModel.advert(parseAd);
+          final adModel = ParseToModel.ad(parseAd);
           if (adModel != null) {
             ads.add(adModel);
             favs.add(fav);
@@ -111,7 +111,7 @@ class FavoriteRepository {
     } catch (err) {
       final message = 'FavoriteRepository.getAdsFavorites: $err';
       log(message);
-      return (<AdvertModel>[], <FavoriteModel>[]);
+      return (<AdModel>[], <FavoriteModel>[]);
     }
   }
 }

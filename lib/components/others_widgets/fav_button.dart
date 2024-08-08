@@ -17,12 +17,12 @@
 
 import 'package:flutter/material.dart';
 
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../get_it.dart';
 import '../../manager/favorites_manager.dart';
 
 class FavStackButton extends StatelessWidget {
-  final AdvertModel ad;
+  final AdModel ad;
 
   FavStackButton({
     super.key,

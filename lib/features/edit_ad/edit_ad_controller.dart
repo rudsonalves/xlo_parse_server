@@ -20,7 +20,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../common/models/mechanic.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
@@ -28,13 +28,13 @@ import '../../components/custon_field_controllers/currency_text_controller.dart'
 import '../../get_it.dart';
 import '../../manager/bgg_rank_manager.dart';
 import '../../manager/mechanics_manager.dart';
-import '../../repository/advert_repository.dart';
-import 'edit_advert_state.dart';
+import '../../repository/ad_repository.dart';
+import 'edit_ad_state.dart';
 
-class EditAdvertController extends ChangeNotifier {
-  EditAdvertState _state = EditAdvertStateInitial();
+class EditAdController extends ChangeNotifier {
+  EditAdState _state = EditAdStateInitial();
 
-  EditAdvertState get state => _state;
+  EditAdState get state => _state;
 
   final app = getIt<AppSettings>();
   final currentUser = getIt<CurrentUser>();
@@ -57,12 +57,12 @@ class EditAdvertController extends ChangeNotifier {
   String _selectedAddressId = '';
   String get selectedAddressId => _selectedAddressId;
   ProductCondition _condition = ProductCondition.used;
-  AdvertStatus _adStatus = AdvertStatus.pending;
+  AdStatus _adStatus = AdStatus.pending;
 
   List<MechanicModel> get mechanics => mechanicsManager.mechanics;
   List<String> get mechanicsNames => mechanicsManager.mechanicsNames;
   ProductCondition get condition => _condition;
-  AdvertStatus get adStatus => _adStatus;
+  AdStatus get adStatus => _adStatus;
 
   List<int> get selectedMechIds => _selectedMechIds;
   List<String> get selectedMachNames => mechanics
@@ -76,7 +76,7 @@ class EditAdvertController extends ChangeNotifier {
   final _valit = ValueNotifier<bool?>(null);
   ValueNotifier<bool?> get valit => _valit;
 
-  void init(AdvertModel? ad) {
+  void init(AdModel? ad) {
     if (ad != null) {
       nameController.text = ad.title;
       bggName = rankManager.gameName(ad.bggId ?? -1);
@@ -103,7 +103,7 @@ class EditAdvertController extends ChangeNotifier {
     super.dispose();
   }
 
-  void _changeState(EditAdvertState newState) {
+  void _changeState(EditAdState newState) {
     _state = newState;
     notifyListeners();
   }
@@ -149,11 +149,11 @@ class EditAdvertController extends ChangeNotifier {
     return _valit.value!;
   }
 
-  Future<AdvertModel?> updateAds(String id) async {
+  Future<AdModel?> updateAds(String id) async {
     if (!formValit) return null;
     try {
-      _changeState(EditAdvertStateLoading());
-      final ad = AdvertModel(
+      _changeState(EditAdStateLoading());
+      final ad = AdModel(
         id: id,
         owner: currentUser.user!,
         bggId: rankManager.gameId(bggName ?? ''),
@@ -168,21 +168,21 @@ class EditAdvertController extends ChangeNotifier {
         condition: _condition,
         status: _adStatus,
       );
-      await AdvertRepository.update(ad);
-      _changeState(EditAdvertStateSuccess());
+      await AdRepository.update(ad);
+      _changeState(EditAdStateSuccess());
       return ad;
     } catch (err) {
       log(err.toString());
-      _changeState(EditAdvertStateError());
+      _changeState(EditAdStateError());
       return null;
     }
   }
 
-  Future<AdvertModel?> createAds() async {
+  Future<AdModel?> createAds() async {
     if (!formValit) return null;
     try {
-      _changeState(EditAdvertStateLoading());
-      final ad = AdvertModel(
+      _changeState(EditAdStateLoading());
+      final ad = AdModel(
         owner: currentUser.user!,
         bggId: rankManager.gameId(bggName ?? ''),
         images: _images,
@@ -196,12 +196,12 @@ class EditAdvertController extends ChangeNotifier {
         condition: _condition,
         status: _adStatus,
       );
-      await AdvertRepository.save(ad);
-      _changeState(EditAdvertStateSuccess());
+      await AdRepository.save(ad);
+      _changeState(EditAdStateSuccess());
       return ad;
     } catch (err) {
       log(err.toString());
-      _changeState(EditAdvertStateError());
+      _changeState(EditAdStateError());
       return null;
     }
   }
@@ -210,7 +210,7 @@ class EditAdvertController extends ChangeNotifier {
     _condition = newCondition;
   }
 
-  void setAdStatus(AdvertStatus newStatus) {
+  void setAdStatus(AdStatus newStatus) {
     _adStatus = newStatus;
   }
 
@@ -224,6 +224,6 @@ class EditAdvertController extends ChangeNotifier {
   }
 
   void gotoSuccess() {
-    _changeState(EditAdvertStateSuccess());
+    _changeState(EditAdStateSuccess());
   }
 }

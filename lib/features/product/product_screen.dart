@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/others_widgets/fav_button.dart';
 import '../../get_it.dart';
@@ -38,11 +38,11 @@ import 'widgets/user_card_product.dart';
 const double indent = 0;
 
 class ProductScreen extends StatefulWidget {
-  final AdvertModel advert;
+  final AdModel ad;
 
   const ProductScreen({
     super.key,
-    required this.advert,
+    required this.ad,
   });
 
   static const routeName = 'product';
@@ -120,7 +120,7 @@ class _ProductScreenState extends State<ProductScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.advert.title),
+        title: Text(widget.ad.title),
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -132,12 +132,12 @@ class _ProductScreenState extends State<ProductScreen>
       floatingActionButton: SlideTransition(
         position: _fabOffsetAnimation,
         child: DuoSegmentedButton(
-          hideButton1: widget.advert.hidePhone,
+          hideButton1: widget.ad.hidePhone,
           label1: 'Ligar',
           iconData1: Icons.phone,
           callBack1: () {
             final phone =
-                widget.advert.owner.phone!.replaceAll(RegExp(r'[^\d]'), '');
+                widget.ad.owner.phone!.replaceAll(RegExp(r'[^\d]'), '');
             launchUrl(Uri.parse('tel:$phone'));
           },
           label2: 'Chat',
@@ -159,8 +159,8 @@ class _ProductScreenState extends State<ProductScreen>
             children: [
               Stack(
                 children: [
-                  ImageCarousel(advert: widget.advert),
-                  if (isLogged) FavStackButton(ad: widget.advert),
+                  ImageCarousel(ad: widget.ad),
+                  if (isLogged) FavStackButton(ad: widget.ad),
                 ],
               ),
               Padding(
@@ -168,17 +168,17 @@ class _ProductScreenState extends State<ProductScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PriceProduct(price: widget.advert.price),
-                    TitleProduct(title: widget.advert.title),
+                    PriceProduct(price: widget.ad.price),
+                    TitleProduct(title: widget.ad.title),
                     const Divider(indent: indent, endIndent: indent),
-                    DescriptionProduct(description: widget.advert.description),
+                    DescriptionProduct(description: widget.ad.description),
                     const Divider(indent: indent, endIndent: indent),
-                    LocationProduct(address: widget.advert.address),
+                    LocationProduct(address: widget.ad.address),
                     const Divider(indent: indent, endIndent: indent),
                     const SubTitleProduct(subtile: 'Anunciante'),
                     UserCard(
-                      name: widget.advert.owner.name!,
-                      createAt: widget.advert.owner.createAt!,
+                      name: widget.ad.owner.name!,
+                      createAt: widget.ad.owner.createAt!,
                     ),
                     const SizedBox(height: 50),
                   ],

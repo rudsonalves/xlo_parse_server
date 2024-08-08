@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../common/models/filter.dart';
 import '../../components/buttons/big_button.dart';
 import '../mecanics/mecanics_screen.dart';

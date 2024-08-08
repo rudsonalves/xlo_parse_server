@@ -18,15 +18,15 @@
 import 'dart:developer';
 
 import '../../common/basic_controller/basic_state.dart';
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../common/models/filter.dart';
-import '../../repository/advert_repository.dart';
+import '../../repository/ad_repository.dart';
 import '../../common/basic_controller/basic_controller.dart';
 import '../../repository/common/constants.dart';
 
 class MyAdsController extends BasicController {
-  AdvertStatus _productStatus = AdvertStatus.active;
-  AdvertStatus get productStatus => _productStatus;
+  AdStatus _productStatus = AdStatus.active;
+  AdStatus get productStatus => _productStatus;
 
   int _adPage = 0;
 
@@ -35,7 +35,7 @@ class MyAdsController extends BasicController {
 
   @override
   void init() {
-    setProductStatus(AdvertStatus.active);
+    setProductStatus(AdStatus.active);
   }
 
   @override
@@ -51,7 +51,7 @@ class MyAdsController extends BasicController {
   }
 
   Future<void> _getAds() async {
-    final newAds = await AdvertRepository.getMyAds(
+    final newAds = await AdRepository.getMyAds(
       currentUser.user!,
       _productStatus.index,
     );
@@ -65,7 +65,7 @@ class MyAdsController extends BasicController {
     }
   }
 
-  void setProductStatus(AdvertStatus newStatus) {
+  void setProductStatus(AdStatus newStatus) {
     _productStatus = newStatus;
     getAds();
   }
@@ -85,7 +85,7 @@ class MyAdsController extends BasicController {
 
   Future<void> _getMoreAds() async {
     _adPage++;
-    final newAds = await AdvertRepository.get(
+    final newAds = await AdRepository.get(
       filter: FilterModel(),
       search: '',
       page: _adPage,
@@ -99,11 +99,11 @@ class MyAdsController extends BasicController {
   }
 
   @override
-  Future<bool> updateAdStatus(AdvertModel ad) async {
+  Future<bool> updateAdStatus(AdModel ad) async {
     int atePage = _adPage;
     try {
       changeState(BasicStateLoading());
-      final result = await AdvertRepository.updateStatus(ad);
+      final result = await AdRepository.updateStatus(ad);
       await _getAds();
       while (atePage > 0) {
         await _getMoreAds();
@@ -118,16 +118,15 @@ class MyAdsController extends BasicController {
     }
   }
 
-  void updateAd(AdvertModel ad) {
+  void updateAd(AdModel ad) {
     getAds();
   }
 
-  Future<void> deleteAd(AdvertModel ad) async {
+  Future<void> deleteAd(AdModel ad) async {
     try {
       changeState(BasicStateLoading());
-      // await AdvertRepository.delete(ad);
-      ad.status = AdvertStatus.deleted;
-      await AdvertRepository.updateStatus(ad);
+      ad.status = AdStatus.deleted;
+      await AdRepository.updateStatus(ad);
       await _getAds();
       changeState(BasicStateSuccess());
     } catch (err) {

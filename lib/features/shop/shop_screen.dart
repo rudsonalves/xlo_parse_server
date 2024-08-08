@@ -29,7 +29,7 @@ import '../../components/others_widgets/shop_grid_view/shop_grid_view.dart';
 import '../../components/others_widgets/state_error_message.dart';
 import '../../components/others_widgets/state_loading_message.dart';
 import '../../get_it.dart';
-import '../edit_advert/edit_advert_screen.dart';
+import '../edit_ad/edit_ad_screen.dart';
 import '../login/login_screen.dart';
 import 'shop_controller.dart';
 import 'widgets/search/search_dialog.dart';
@@ -200,7 +200,7 @@ class _ShopScreenState extends State<ShopScreen>
           child: isLoged
               ? FloatingActionButton.extended(
                   onPressed: () {
-                    Navigator.pushNamed(context, EditAdvertScreen.routeName);
+                    Navigator.pushNamed(context, EditAdScreen.routeName);
                   },
                   backgroundColor:
                       colorScheme.primaryContainer.withOpacity(0.75),

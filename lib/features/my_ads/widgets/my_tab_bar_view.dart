@@ -17,15 +17,15 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../common/models/advert.dart';
+import '../../../common/models/ad.dart';
 import '../../../components/others_widgets/ad_list_view/ad_list_view.dart';
 import '../my_ads_controller.dart';
 
 class MyTabBarView extends StatefulWidget {
   final MyAdsController ctrl;
   final ScrollController scrollController;
-  final Function(AdvertModel ad) editAd;
-  final Function(AdvertModel ad) deleteAd;
+  final Function(AdModel ad) editAd;
+  final Function(AdModel ad) deleteAd;
 
   const MyTabBarView({
     super.key,
@@ -106,25 +106,25 @@ class _MyTabBarViewState extends State<MyTabBarView> {
     }
   }
 
-  AdvertStatus? getStatusLeft(int tabIndex) {
+  AdStatus? getStatusLeft(int tabIndex) {
     switch (tabIndex) {
       case 0:
-        return AdvertStatus.active;
+        return AdStatus.active;
       case 1:
-        return AdvertStatus.sold;
+        return AdStatus.sold;
       default:
         return null;
     }
   }
 
-  AdvertStatus? getStatusRight(int tabIndex) {
+  AdStatus? getStatusRight(int tabIndex) {
     switch (tabIndex) {
       case 0:
         return null;
       case 1:
-        return AdvertStatus.pending;
+        return AdStatus.pending;
       default:
-        return AdvertStatus.active;
+        return AdStatus.active;
     }
   }
 

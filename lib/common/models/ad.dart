@@ -18,11 +18,11 @@
 import 'address.dart';
 import 'user.dart';
 
-enum AdvertStatus { pending, active, sold, deleted }
+enum AdStatus { pending, active, sold, deleted }
 
 enum ProductCondition { all, used, sealed }
 
-class AdvertModel {
+class AdModel {
   String? id;
   UserModel owner;
   String title;
@@ -30,7 +30,7 @@ class AdvertModel {
   String description;
   bool hidePhone;
   double price;
-  AdvertStatus status;
+  AdStatus status;
   List<int> mechanicsId;
   AddressModel address;
   List<String> images;
@@ -38,7 +38,7 @@ class AdvertModel {
   int views;
   DateTime createdAt;
 
-  AdvertModel({
+  AdModel({
     this.id,
     required this.owner,
     this.bggId,
@@ -50,7 +50,7 @@ class AdvertModel {
     required this.price,
     this.condition = ProductCondition.all,
     this.hidePhone = false,
-    this.status = AdvertStatus.pending,
+    this.status = AdStatus.pending,
     this.views = 0,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();

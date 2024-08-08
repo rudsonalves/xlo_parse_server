@@ -17,14 +17,14 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../common/models/advert.dart';
+import '../../../../common/models/ad.dart';
 import '../../../../features/shop/widgets/ad_text_info.dart';
 import '../../../../features/shop/widgets/ad_text_price.dart';
 import '../../../../features/shop/widgets/ad_text_title.dart';
 import 'show_image.dart';
 
 class AdCardView extends StatelessWidget {
-  final AdvertModel ads;
+  final AdModel ads;
 
   const AdCardView({
     super.key,

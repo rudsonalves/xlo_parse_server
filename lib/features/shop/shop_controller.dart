@@ -24,13 +24,13 @@ import 'package:flutter/widgets.dart';
 import '../../common/app_constants.dart';
 import '../../common/basic_controller/basic_controller.dart';
 import '../../common/basic_controller/basic_state.dart';
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../common/models/filter.dart';
 import '../../common/models/user.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/search_filter.dart';
 import '../../get_it.dart';
-import '../../repository/advert_repository.dart';
+import '../../repository/ad_repository.dart';
 import '../../repository/common/constants.dart';
 
 class ShopController extends BasicController {
@@ -118,7 +118,7 @@ class ShopController extends BasicController {
   }
 
   Future<void> _getAds() async {
-    final newAds = await AdvertRepository.get(
+    final newAds = await AdRepository.get(
       filter: filter,
       search: searchFilter.searchString,
     );
@@ -148,7 +148,7 @@ class ShopController extends BasicController {
   }
 
   Future<void> _getMoreAds() async {
-    final newAds = await AdvertRepository.get(
+    final newAds = await AdRepository.get(
       filter: filter,
       search: searchFilter.searchString,
       page: _adsPage,
@@ -162,7 +162,7 @@ class ShopController extends BasicController {
   }
 
   @override
-  Future<bool> updateAdStatus(AdvertModel ad) {
+  Future<bool> updateAdStatus(AdModel ad) {
     throw UnimplementedError();
   }
 

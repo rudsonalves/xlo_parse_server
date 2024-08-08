@@ -17,7 +17,7 @@
 
 import '../../common/basic_controller/basic_controller.dart';
 import '../../common/basic_controller/basic_state.dart';
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../get_it.dart';
 import '../../manager/favorites_manager.dart';
 
@@ -47,7 +47,7 @@ class FavoritesController extends BasicController {
   }
 
   @override
-  Future<bool> updateAdStatus(AdvertModel ad) {
+  Future<bool> updateAdStatus(AdModel ad) {
     throw UnimplementedError();
   }
 }

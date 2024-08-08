@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'common/models/address.dart';
-import 'common/models/advert.dart';
+import 'common/models/ad.dart';
 import 'common/models/filter.dart';
 import 'common/singletons/app_settings.dart';
 import 'common/theme/theme.dart';
@@ -35,7 +35,7 @@ import 'features/filters/filters_screen.dart';
 import 'features/mecanics/mecanics_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/shop/shop_screen.dart';
-import 'features/edit_advert/edit_advert_screen.dart';
+import 'features/edit_ad/edit_ad_screen.dart';
 import 'features/login/login_screen.dart';
 import 'features/new_address/new_address_screen.dart';
 import 'features/signup/signup_screen.dart';
@@ -87,17 +87,17 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {
-                case EditAdvertScreen.routeName:
+                case EditAdScreen.routeName:
                   return MaterialPageRoute(builder: (context) {
-                    final advert = settings.arguments as AdvertModel?;
-                    return EditAdvertScreen(advert: advert);
+                    final ad = settings.arguments as AdModel?;
+                    return EditAdScreen(ad: ad);
                   });
 
                 case ProductScreen.routeName:
                   return MaterialPageRoute(builder: (context) {
-                    final advert = settings.arguments as AdvertModel;
+                    final ad = settings.arguments as AdModel;
 
-                    return ProductScreen(advert: advert);
+                    return ProductScreen(ad: ad);
                   });
 
                 case FiltersScreen.routeName:
