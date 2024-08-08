@@ -43,7 +43,7 @@ const keyAddressCity = 'city';
 const keyAddressOwner = 'owner';
 const keyAddressCreatedAt = 'createdAt';
 
-const keyAdvertTable = 'AdSale';
+const keyAdvertTable = 'AdsSale';
 const keyAdvertId = 'objectId';
 const keyAdvertOwner = 'owner';
 const keyAdvertTitle = 'title';
@@ -59,7 +59,7 @@ const keyAdvertViews = 'views';
 const keyAdvertCondition = 'condition';
 const keyAdvertCreatedAt = 'createdAt';
 
-const keyFavoriteTable = 'Favorite';
+const keyFavoriteTable = 'Favorites';
 const keyFavoriteId = 'objectId';
 const keyFavoriteOwner = 'owner';
 const keyFavoriteAd = 'ad';

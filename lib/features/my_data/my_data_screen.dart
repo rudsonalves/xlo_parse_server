@@ -125,7 +125,7 @@ class _MyDataScreenState extends State<MyDataScreen> {
                     BigButton(
                       color: Colors.blue.withOpacity(0.75),
                       label: 'Salvar Alterações',
-                      onPress: () {
+                      onPressed: () {
                         Navigator.pop(context);
                         ctrl.updateUserData();
                       },

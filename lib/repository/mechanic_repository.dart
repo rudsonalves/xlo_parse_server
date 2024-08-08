@@ -23,15 +23,13 @@ import '../store/mech_store.dart';
 /// This class provides methods to interact with the Parse Server
 /// to retrieve a list of mechanics.
 class MechanicRepository {
-  static final store = MechStore();
-
   /// Fetches a list of mechanics from the Parse Server.
   ///
   /// Returns a list of `MechanicModel` if the query is successful,
   /// otherwise create an error.
   static Future<List<MechanicModel>> getList() async {
     try {
-      final result = await store.queryMechs();
+      final result = await MechStore.queryMechs();
 
       final mechanics =
           result.map((item) => MechanicModel.fromMap(item)).toList();

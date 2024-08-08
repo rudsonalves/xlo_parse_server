@@ -79,7 +79,7 @@ class LoginForm extends StatelessWidget {
           BigButton(
             color: Colors.amber,
             label: 'Entrar',
-            onPress: userLogin,
+            onPressed: userLogin,
           ),
           const Divider(),
           Row(

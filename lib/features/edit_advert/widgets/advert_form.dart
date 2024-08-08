@@ -16,6 +16,7 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:xlo_mobx/components/buttons/big_button.dart';
 
 import '../../../common/models/advert.dart';
 import '../../../common/validators/validators.dart';
@@ -82,23 +83,24 @@ class _AdvertFormState extends State<AdvertForm> {
             validator: Validator.title,
           ),
           Center(
-            child: FilledButton.tonal(
+            child: BigButton(
+              color: Colors.cyan.withOpacity(0.45),
               onPressed: () {
                 Navigator.pushNamed(context, BoardgamesScreen.routeName);
               },
-              child: const Text('Informações do BoardGame'),
+              label: 'Informações do Jogo',
             ),
           ),
           CustomFormField(
             controller: ctrl.descriptionController,
-            labelText: 'Descrição *',
+            labelText: 'Descreva o estado do Jogo *',
             fullBorder: false,
             maxLines: null,
             floatingLabelBehavior: null,
             textCapitalization: TextCapitalization.sentences,
             validator: Validator.description,
           ),
-          const Text('Estado do Produto'),
+          const Text('Produto'),
           Row(
             children: [
               Expanded(

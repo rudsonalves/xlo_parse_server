@@ -46,3 +46,8 @@ const mechName = "name";
 const mechNome = "nome";
 const mechDescription = "description";
 const mechDescricao = "descricao";
+
+const dbVersionTable = "dbVersion";
+const dbVersionId = "id";
+const dbVersionNumber = "version";
+const dbCurrentVersion = 1002;

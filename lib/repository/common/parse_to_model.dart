@@ -90,9 +90,6 @@ class ParseToModel {
           .map((item) => (item as ParseFile).url!)
           .toList(),
       mechanicsId: mechs.map((e) => e as int).toList(),
-      // (parse.get<List<dynamic>>(keyAdvertMechanics) as List<dynamic>)
-      //     .map((item) => (item as ParseObject).objectId!)
-      //     .toList(),
       address: address,
       status: AdvertStatus.values
           .firstWhere((s) => s.index == parse.get<int>(keyAdvertStatus)!),

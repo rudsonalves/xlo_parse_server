@@ -45,14 +45,40 @@ class DatabaseManager {
     final path = join(directory.path, dbName);
 
     if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
-      ByteData data = await rootBundle.load(dbAssertPath);
-      List<int> bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-      await File(path).writeAsBytes(bytes);
+      await _copyBggDb(path);
     }
 
     _database = await openDatabase(path, readOnly: true);
 
+    final version = await getDBVerion();
+    if (version != dbCurrentVersion) {
+      _database!.close();
+      final dbFile = File(path);
+      await dbFile.delete();
+      await _copyBggDb(path);
+      _database = await openDatabase(path, readOnly: true);
+    }
+
     return _database!;
+  }
+
+  Future<void> _copyBggDb(String path) async {
+    ByteData data = await rootBundle.load(dbAssertPath);
+    List<int> bytes =
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    await File(path).writeAsBytes(bytes);
+  }
+
+  static Future<int?> getDBVerion() async {
+    try {
+      final result = await _database!.query(
+        dbVersionTable,
+        columns: [dbVersionNumber],
+        where: '$dbVersionId = 1',
+      );
+      return result.first[dbVersionNumber] as int;
+    } catch (err) {
+      return null;
+    }
   }
 }

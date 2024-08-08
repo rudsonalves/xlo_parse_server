@@ -16,12 +16,14 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/components/others_widgets/state_error_message.dart';
 
 import '../../components/buttons/big_button.dart';
-import '../../components/form_fields/custom_form_field.dart';
+import '../../components/customs_text/read_more_text.dart';
 import '../../components/form_fields/custom_names_form_field.dart';
+import '../../components/others_widgets/spin_box_field.dart';
+import '../../components/others_widgets/state_error_message.dart';
 import '../../components/others_widgets/state_loading_message.dart';
+import '../product/widgets/sub_title_product.dart';
 import 'boardgame_controller.dart';
 import 'boardgame_state.dart';
 
@@ -44,12 +46,22 @@ class _BoardgamesScreenState extends State<BoardgamesScreen> {
     ctrl.init();
   }
 
+  void _backPage() {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dados do Jogo'),
         centerTitle: true,
+        leading: IconButton(
+          onPressed: Navigator.of(context).pop,
+          icon: const Icon(Icons.arrow_back_ios_rounded),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -62,99 +74,181 @@ class _BoardgamesScreenState extends State<BoardgamesScreen> {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      SubTitleProduct(
+                        subtile: 'Nome no BGG',
+                        color: colorScheme.primary,
+                        padding: const EdgeInsets.only(top: 8, bottom: 0),
+                      ),
                       CustomNamesFormField(
-                        controller: ctrl.bggName,
+                        controller: ctrl.nameController,
                         names: ctrl.bgNames,
-                        labelText: 'Nome no BGG (para Rank)',
                         fullBorder: false,
                         floatingLabelBehavior: null,
                         textCapitalization: TextCapitalization.sentences,
+                        onSubmitted: () {
+                          ctrl.getBggInfo();
+                        },
                       ),
-                      // CustomFormField(
-                      //   labelText: 'Ano de lançamento',
-                      //   fullBorder: false,
-                      //   keyboardType: TextInputType.number,
-                      // ),
-                      const Text('Número de Jogadores'),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                            width: 120,
-                            child: CustomFormField(
-                              labelText: 'Mín',
-                              fullBorder: false,
-                              hintText: '2',
-                              keyboardType: TextInputType.number,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4, bottom: 12),
+                        child: Column(
+                          children: [
+                            SubTitleProduct(
+                              subtile: 'Número de Jogadores',
+                              color: colorScheme.primary,
+                              padding: const EdgeInsets.only(top: 8, bottom: 0),
                             ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Expanded(
+                                  child: SpinBoxField(
+                                    value: 2,
+                                    controller: ctrl.minPlayersController,
+                                  ),
+                                ),
+                                const Text('a'),
+                                Expanded(
+                                  child: SpinBoxField(
+                                    value: 4,
+                                    controller: ctrl.maxPlayersController,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4, bottom: 12),
+                        child: Column(
+                          children: [
+                            SubTitleProduct(
+                              subtile: 'Duração (min)',
+                              color: colorScheme.primary,
+                              padding: const EdgeInsets.only(top: 8, bottom: 0),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Expanded(
+                                  child: SpinBoxField(
+                                    value: 25,
+                                    minValue: 12,
+                                    maxValue: 360,
+                                    controller: ctrl.minTimeController,
+                                  ),
+                                ),
+                                const Text('a'),
+                                Expanded(
+                                  child: SpinBoxField(
+                                    value: 50,
+                                    minValue: 12,
+                                    maxValue: 720,
+                                    controller: ctrl.maxTimeController,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SubTitleProduct(
+                            subtile: 'Idade recomendada',
+                            color: colorScheme.primary,
+                            padding: const EdgeInsets.only(top: 8, bottom: 0),
                           ),
-                          const Text(' a '),
-                          SizedBox(
-                            width: 120,
-                            child: CustomFormField(
-                              labelText: 'Máx',
-                              fullBorder: false,
-                              hintText: '4',
-                              keyboardType: TextInputType.number,
+                          Expanded(
+                            child: SpinBoxField(
+                              value: 10,
+                              minValue: 3,
+                              maxValue: 25,
+                              controller: ctrl.ageController,
                             ),
                           ),
                         ],
                       ),
-                      const Text('Tempo de Jogo'),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      Column(
                         children: [
-                          SizedBox(
-                            width: 120,
-                            child: CustomFormField(
-                              labelText: 'Mín',
-                              fullBorder: false,
-                              hintText: '25',
-                              suffixText: 'min',
-                              keyboardType: TextInputType.number,
-                            ),
+                          SubTitleProduct(
+                            subtile: 'Descrição',
+                            color: colorScheme.primary,
+                            padding: const EdgeInsets.only(top: 8, bottom: 0),
                           ),
-                          const Text(' a '),
-                          SizedBox(
-                            width: 120,
-                            child: CustomFormField(
-                              labelText: 'Máx',
-                              fullBorder: false,
-                              hintText: '50',
-                              suffixText: 'min',
-                              keyboardType: TextInputType.number,
-                            ),
+                          ReadMoreText(
+                            ctrl.descriptionController.text,
+                            trimMode: TrimMode.line,
+                            trimLines: 3,
+                            trimExpandedText: '  [ver menos]',
+                            trimCollapsedText: '  [ver mais]',
+                            colorClickableText: colorScheme.primary,
                           ),
                         ],
                       ),
-                      CustomFormField(
-                        labelText: 'Idade recomendada',
-                        hintText: '10',
-                        prefixText: '+',
-                        suffixText: 'anos',
-                        fullBorder: false,
-                        keyboardType: TextInputType.number,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12, bottom: 12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SubTitleProduct(
+                              subtile: 'Complexidade (0-5): ',
+                              color: colorScheme.primary,
+                              padding: const EdgeInsets.only(top: 8, bottom: 0),
+                            ),
+                            Expanded(
+                              child: SpinBoxField(
+                                controller: ctrl.weightController,
+                                minValue: 0,
+                                maxValue: 5,
+                                increment: 0.1,
+                                fractionDigits: 1,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      CustomFormField(
-                        labelText: 'Descrição',
-                        fullBorder: false,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4, bottom: 12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            SubTitleProduct(
+                              subtile: 'Pontuação (0-10): ',
+                              color: colorScheme.primary,
+                              padding: const EdgeInsets.only(top: 8, bottom: 0),
+                            ),
+                            Expanded(
+                              child: SpinBoxField(
+                                controller: ctrl.averageController,
+                                minValue: 0,
+                                maxValue: 10,
+                                increment: 0.1,
+                                fractionDigits: 1,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      CustomFormField(
-                        labelText: 'Peso do Jogo (0-5)',
-                        fullBorder: false,
-                        keyboardType: TextInputType.number,
-                      ),
-                      CustomFormField(
-                        labelText: 'Nota no BGG (0-10)',
-                        fullBorder: false,
-                        keyboardType: TextInputType.number,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4, bottom: 12),
+                        child: Column(
+                          children: [
+                            SubTitleProduct(
+                              subtile: 'Mecânicas',
+                              color: colorScheme.primary,
+                              padding: const EdgeInsets.only(top: 8, bottom: 0),
+                            ),
+                            Text(ctrl.mechsController.text),
+                          ],
+                        ),
                       ),
                       BigButton(
                         color: Colors.yellow.withOpacity(0.45),
                         label: 'Voltar',
-                        onPress: () {
-                          ctrl.getBggInfos();
-                        },
+                        onPressed: _backPage,
                       ),
                     ],
                   ),

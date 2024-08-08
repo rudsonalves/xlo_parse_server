@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             BigButton(
                               color: Colors.blue,
                               label: 'Entrar com Facebook',
-                              onPress: () {
+                              onPressed: () {
                                 throw Exception('Has not yet been implemented');
                               },
                             ),

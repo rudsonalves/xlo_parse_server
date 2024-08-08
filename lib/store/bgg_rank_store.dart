@@ -22,9 +22,9 @@ import 'constants/constants.dart';
 import 'database_manager.dart';
 
 class BggRankStore {
-  final _databaseManager = getIt<DatabaseManager>();
+  static final _databaseManager = getIt<DatabaseManager>();
 
-  Future<List<Map<String, dynamic>>> queryRankGameNames(int year) async {
+  static Future<List<Map<String, dynamic>>> queryRankGameNames(int year) async {
     final database = await _databaseManager.database;
 
     try {
@@ -43,7 +43,7 @@ class BggRankStore {
     }
   }
 
-  Future<Map<String, dynamic>> queryRankFromId(int id) async {
+  static Future<Map<String, dynamic>> queryRankFromId(int id) async {
     final database = await _databaseManager.database;
 
     try {

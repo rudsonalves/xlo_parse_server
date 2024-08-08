@@ -20,14 +20,14 @@ import 'package:flutter/material.dart';
 class BigButton extends StatelessWidget {
   final Color color;
   final String label;
-  final VoidCallback onPress;
+  final VoidCallback onPressed;
   final FocusNode? focusNode;
 
   const BigButton({
     super.key,
     required this.color,
     required this.label,
-    required this.onPress,
+    required this.onPressed,
     this.focusNode,
   });
 
@@ -40,7 +40,7 @@ class BigButton extends StatelessWidget {
           Expanded(
             child: FilledButton.tonal(
               focusNode: focusNode,
-              onPressed: onPress,
+              onPressed: onPressed,
               style: ButtonStyle(
                 shape: ButtonStyleButton.allOrNull(
                   RoundedRectangleBorder(

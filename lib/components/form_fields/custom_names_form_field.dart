@@ -23,6 +23,7 @@ class CustomNamesFormField extends StatefulWidget {
   final TextEditingController controller;
   final List<String> names;
   final String? Function(String?)? validator;
+  final void Function()? onSubmitted;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final TextCapitalization? textCapitalization;
@@ -41,6 +42,7 @@ class CustomNamesFormField extends StatefulWidget {
     required this.controller,
     required this.names,
     this.validator,
+    this.onSubmitted,
     this.keyboardType,
     this.textInputAction,
     this.nextFocusNode,
@@ -75,6 +77,7 @@ class _CustomNamesFormFieldState extends State<CustomNamesFormField> {
         _showOverlay();
       } else {
         _removeOverlay();
+        if (widget.onSubmitted != null) widget.onSubmitted!();
       }
     });
 
@@ -203,6 +206,9 @@ class _CustomNamesFormFieldState extends State<CustomNamesFormField> {
           onFieldSubmitted: (value) {
             if (widget.nextFocusNode != null) {
               FocusScope.of(context).requestFocus(widget.nextFocusNode);
+              if (widget.onSubmitted != null) {
+                widget.onSubmitted!();
+              }
             }
           },
         ),
