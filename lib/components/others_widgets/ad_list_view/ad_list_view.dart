@@ -19,7 +19,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/basic_controller/basic_controller.dart';
-import '../../../common/models/advert.dart';
+import '../../../common/models/ad.dart';
 import '../../../features/product/product_screen.dart';
 import 'widgets/ad_card_view.dart';
 import 'widgets/dismissible_ad.dart';
@@ -35,10 +35,10 @@ class AdListView extends StatefulWidget {
   final IconData? iconRight;
   final String? labelLeft;
   final String? labelRight;
-  final AdvertStatus? statusLeft;
-  final AdvertStatus? statusRight;
-  final Function(AdvertModel ad)? editAd;
-  final Function(AdvertModel ad)? deleteAd;
+  final AdStatus? statusLeft;
+  final AdStatus? statusRight;
+  final Function(AdModel ad)? editAd;
+  final Function(AdModel ad)? deleteAd;
 
   const AdListView({
     super.key,
@@ -121,7 +121,7 @@ class _AdListViewState extends State<AdListView> {
     }
   }
 
-  Widget _editButon(AdvertModel ad) {
+  Widget _editButon(AdModel ad) {
     return IconButton(
       onPressed: () {
         if (widget.editAd != null) widget.editAd!(ad);
@@ -133,7 +133,7 @@ class _AdListViewState extends State<AdListView> {
     );
   }
 
-  Widget _deleteButton(AdvertModel ad) {
+  Widget _deleteButton(AdModel ad) {
     return IconButton(
       onPressed: () {
         if (widget.deleteAd != null) widget.deleteAd!(ad);
@@ -145,7 +145,7 @@ class _AdListViewState extends State<AdListView> {
     );
   }
 
-  void _showAd(AdvertModel ad) {
+  void _showAd(AdModel ad) {
     Navigator.pushNamed(
       context,
       ProductScreen.routeName,

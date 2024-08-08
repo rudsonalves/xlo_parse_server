@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import '../../features/my_account/my_account_screen.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
-import '../../features/edit_advert/edit_advert_screen.dart';
+import '../../features/edit_ad/edit_ad_screen.dart';
 import '../../features/favorites/favorites_screen.dart';
 import '../../features/shop/shop_controller.dart';
 import '../../get_it.dart';
@@ -57,9 +57,9 @@ class CustomDrawer extends StatelessWidget {
     Navigator.pushNamed(context, FavoritesScreen.routeName);
   }
 
-  void _navEditAdvertScreen(BuildContext context) {
+  void _navEditAdScreen(BuildContext context) {
     Navigator.pop(context);
-    Navigator.pushNamed(context, EditAdvertScreen.routeName);
+    Navigator.pushNamed(context, EditAdScreen.routeName);
   }
 
   @override
@@ -95,9 +95,8 @@ class CustomDrawer extends StatelessWidget {
                 color: currentUSer.isLogged ? null : colorScheme.outline,
               ),
             ),
-            onTap: currentUSer.isLogged
-                ? () => _navEditAdvertScreen(context)
-                : null,
+            onTap:
+                currentUSer.isLogged ? () => _navEditAdScreen(context) : null,
           ),
           ListTile(
             leading: Icon(

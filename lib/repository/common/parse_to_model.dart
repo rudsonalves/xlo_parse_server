@@ -18,7 +18,7 @@
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../../common/models/address.dart';
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../common/models/favorite.dart';
 import '../../common/models/user.dart';
 import 'constants.dart';
@@ -62,41 +62,41 @@ class ParseToModel {
     );
   }
 
-  /// Converts a ParseObject representing an advertisement to an AdvertModel.
+  /// Converts a ParseObject representing an advertisement to an AdModel.
   ///
   /// [parse] - The ParseObject to convert.
-  /// Returns an AdvertModel representing the ParseObject if the address and
+  /// Returns an AdModel representing the ParseObject if the address and
   /// user are not null, otherwise returns null.
-  static AdvertModel? advert(ParseObject parse) {
-    final parseAddress = parse.get<ParseObject?>(keyAdvertAddress);
+  static AdModel? ad(ParseObject parse) {
+    final parseAddress = parse.get<ParseObject?>(keyAdAddress);
     if (parseAddress == null) return null;
     AddressModel? address = ParseToModel.address(parseAddress);
 
-    final parseUser = parse.get<ParseUser?>(keyAdvertOwner);
+    final parseUser = parse.get<ParseUser?>(keyAdOwner);
     if (parseUser == null) return null;
     final user = ParseToModel.user(parseUser);
 
-    final mechs = parse.get<List<dynamic>>(keyAdvertMechanics) ?? [];
+    final mechs = parse.get<List<dynamic>>(keyAdMechanics) ?? [];
 
-    return AdvertModel(
+    return AdModel(
       id: parse.objectId,
       owner: user,
-      title: parse.get<String>(keyAdvertTitle)!,
-      bggId: parse.get<int?>(keyAdvertBggId)!,
-      description: parse.get<String>(keyAdvertDescription)!,
-      price: parse.get<num>(keyAdvertPrice)!.toDouble(),
-      hidePhone: parse.get<bool>(keyAdvertHidePhone)!,
-      images: (parse.get<List<dynamic>>(keyAdvertImages) as List<dynamic>)
+      title: parse.get<String>(keyAdTitle)!,
+      bggId: parse.get<int?>(keyAdBggId)!,
+      description: parse.get<String>(keyAdDescription)!,
+      price: parse.get<num>(keyAdPrice)!.toDouble(),
+      hidePhone: parse.get<bool>(keyAdHidePhone)!,
+      images: (parse.get<List<dynamic>>(keyAdImages) as List<dynamic>)
           .map((item) => (item as ParseFile).url!)
           .toList(),
       mechanicsId: mechs.map((e) => e as int).toList(),
       address: address,
-      status: AdvertStatus.values
-          .firstWhere((s) => s.index == parse.get<int>(keyAdvertStatus)!),
+      status: AdStatus.values
+          .firstWhere((s) => s.index == parse.get<int>(keyAdStatus)!),
       condition: ProductCondition.values
-          .firstWhere((c) => c.index == parse.get<int>(keyAdvertCondition)!),
-      views: parse.get<int>(keyAdvertViews, defaultValue: 0)!,
-      createdAt: parse.get<DateTime>(keyAdvertCreatedAt)!,
+          .firstWhere((c) => c.index == parse.get<int>(keyAdCondition)!),
+      views: parse.get<int>(keyAdViews, defaultValue: 0)!,
+      createdAt: parse.get<DateTime>(keyAdCreatedAt)!,
     );
   }
 

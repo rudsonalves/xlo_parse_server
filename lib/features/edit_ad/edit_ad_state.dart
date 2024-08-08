@@ -15,12 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-abstract class EditAdvertState {}
+abstract class EditAdState {}
 
-class EditAdvertStateInitial extends EditAdvertState {}
+class EditAdStateInitial extends EditAdState {}
 
-class EditAdvertStateLoading extends EditAdvertState {}
+class EditAdStateLoading extends EditAdState {}
 
-class EditAdvertStateSuccess extends EditAdvertState {}
+class EditAdStateSuccess extends EditAdState {}
 
-class EditAdvertStateError extends EditAdvertState {}
+class EditAdStateError extends EditAdState {}

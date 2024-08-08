@@ -19,7 +19,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../common/models/city.dart';
 import '../../common/models/filter.dart';
 import '../../common/models/state.dart';

@@ -21,7 +21,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
-import '../common/models/advert.dart';
+import '../common/models/ad.dart';
 import '../common/models/filter.dart';
 import '../common/models/user.dart';
 import 'common/constants.dart';
@@ -29,7 +29,7 @@ import 'common/parse_to_model.dart';
 
 /// This class provides methods to interact with the Parse Server
 /// to retrieve and save advertisements.
-class AdvertRepository {
+class AdRepository {
   static Future<void> moveAdsAddressTo(
     List<String> adsIdList,
     String moveToId,
@@ -37,18 +37,18 @@ class AdvertRepository {
     try {
       final parseAddress = ParseObject(keyAddressTable)..objectId = moveToId;
       for (String id in adsIdList) {
-        final parseAd = ParseObject(keyAdvertTable)
+        final parseAd = ParseObject(keyAdTable)
           ..objectId = id
-          ..set(keyAdvertAddress, parseAddress.toPointer());
+          ..set(keyAdAddress, parseAddress.toPointer());
 
         final response = await parseAd.update();
 
         if (!response.success) {
-          throw Exception(response.error ?? 'update advert table error');
+          throw Exception(response.error ?? 'update ad table error');
         }
       }
     } catch (err) {
-      final message = 'AdvertRepository.getMyAds: $err';
+      final message = 'AdRepository.getMyAds: $err';
       log(message);
       throw Exception(message);
     }
@@ -57,10 +57,10 @@ class AdvertRepository {
   static Future<List<String>> adsInAddress(String addressId) async {
     final List<String> adsId = [];
     try {
-      final query = QueryBuilder<ParseObject>(ParseObject(keyAdvertTable));
+      final query = QueryBuilder<ParseObject>(ParseObject(keyAdTable));
       final parseAddress = ParseObject(keyAddressTable)..objectId = addressId;
 
-      query.whereEqualTo(keyAdvertAddress, parseAddress.toPointer());
+      query.whereEqualTo(keyAdAddress, parseAddress.toPointer());
 
       final response = await query.query();
 
@@ -80,21 +80,21 @@ class AdvertRepository {
     }
   }
 
-  static Future<bool> updateStatus(AdvertModel ad) async {
+  static Future<bool> updateStatus(AdModel ad) async {
     try {
-      final parse = ParseObject(keyAdvertTable)
+      final parse = ParseObject(keyAdTable)
         ..objectId = ad.id!
-        ..set(keyAdvertStatus, ad.status.index);
+        ..set(keyAdStatus, ad.status.index);
 
       final response = await parse.update();
 
       if (!response.success) {
-        throw Exception(response.error ?? 'update advert table error');
+        throw Exception(response.error ?? 'update ad table error');
       }
 
       return true;
     } catch (err) {
-      final message = 'AdvertRepository.getMyAds: $err';
+      final message = 'AdRepository.getMyAds: $err';
       log(message);
       return false;
     }
@@ -105,9 +105,9 @@ class AdvertRepository {
   /// [user] - The user to apply to the search.
   /// Returns a list of `AdvertModel` if the query is successful, otherwise
   /// returns `null`.
-  static Future<List<AdvertModel>?> getMyAds(UserModel usr, int status) async {
+  static Future<List<AdModel>?> getMyAds(UserModel usr, int status) async {
     try {
-      final query = QueryBuilder<ParseObject>(ParseObject(keyAdvertTable));
+      final query = QueryBuilder<ParseObject>(ParseObject(keyAdTable));
 
       final parseUser = await ParseUser.currentUser() as ParseUser?;
       if (parseUser == null) {
@@ -116,10 +116,10 @@ class AdvertRepository {
 
       query
         ..setLimit(100)
-        ..whereEqualTo(keyAdvertOwner, parseUser.toPointer())
-        ..whereEqualTo(keyAdvertStatus, status)
-        ..orderByDescending(keyAdvertCreatedAt)
-        ..includeObject([keyAdvertOwner, keyAdvertAddress]);
+        ..whereEqualTo(keyAdOwner, parseUser.toPointer())
+        ..whereEqualTo(keyAdStatus, status)
+        ..orderByDescending(keyAdCreatedAt)
+        ..includeObject([keyAdOwner, keyAdAddress]);
 
       final response = await query.query();
       if (!response.success) {
@@ -130,15 +130,15 @@ class AdvertRepository {
         throw Exception('search return a empty list');
       }
 
-      List<AdvertModel> ads = [];
+      List<AdModel> ads = [];
       for (final ParseObject p in response.results!) {
-        final adModel = ParseToModel.advert(p);
+        final adModel = ParseToModel.ad(p);
         if (adModel != null) ads.add(adModel);
       }
 
       return ads;
     } catch (err) {
-      final message = 'AdvertRepository.getMyAds: $err';
+      final message = 'AdRepository.getMyAds: $err';
       log(message);
       return null;
     }
@@ -150,27 +150,27 @@ class AdvertRepository {
   /// [filter] - The filter model to apply to the search.
   /// [search] - The search string to filter advertisements by title.
   /// [page] - The page number to retrieve, used for pagination.
-  /// Returns a list of `AdvertModel` if the query is successful, otherwise
+  /// Returns a list of `AdModel` if the query is successful, otherwise
   /// returns `null`.
-  static Future<List<AdvertModel>?> get({
+  static Future<List<AdModel>?> get({
     required FilterModel filter,
     required String search,
     int page = 0,
   }) async {
-    final query = QueryBuilder<ParseObject>(ParseObject(keyAdvertTable));
+    final query = QueryBuilder<ParseObject>(ParseObject(keyAdTable));
 
     try {
       query.setAmountToSkip(page * maxAdsPerList);
       query.setLimit(maxAdsPerList);
 
-      query.includeObject([keyAdvertOwner, keyAdvertAddress]);
+      query.includeObject([keyAdOwner, keyAdAddress]);
 
-      query.whereEqualTo(keyAdvertStatus, AdvertStatus.active.index);
+      query.whereEqualTo(keyAdStatus, AdStatus.active.index);
 
       // Filter by search String
       if (search.trim().isNotEmpty) {
         query.whereContains(
-          keyAdvertTitle,
+          keyAdTitle,
           search.trim(),
           caseSensitive: false,
         );
@@ -181,34 +181,34 @@ class AdvertRepository {
         for (final mechId in filter.mechanicsId) {
           final mechParse = ParseObject(keyMechanicTable)
             ..set(keyMechanicId, mechId);
-          query.whereEqualTo(keyAdvertMechanics, mechParse.toPointer());
+          query.whereEqualTo(keyAdMechanics, mechParse.toPointer());
         }
       }
 
       switch (filter.sortBy) {
         case SortOrder.price:
           // Filter by price
-          query.orderByAscending(keyAdvertPrice);
+          query.orderByAscending(keyAdPrice);
           break;
         case SortOrder.date:
         default:
           // Filter by date
-          query.orderByDescending(keyAdvertCreatedAt);
+          query.orderByDescending(keyAdCreatedAt);
       }
 
       // Filter minPrice
       if (filter.minPrice > 0) {
-        query.whereGreaterThanOrEqualsTo(keyAdvertPrice, filter.minPrice);
+        query.whereGreaterThanOrEqualsTo(keyAdPrice, filter.minPrice);
       }
 
       // Filter maxPrice
       if (filter.maxPrice > 0) {
-        query.whereLessThanOrEqualTo(keyAdvertPrice, filter.maxPrice);
+        query.whereLessThanOrEqualTo(keyAdPrice, filter.maxPrice);
       }
 
       // Filter by product condition
       if (filter.condition != ProductCondition.all) {
-        query.whereEqualTo(keyAdvertCondition, filter.condition.index);
+        query.whereEqualTo(keyAdCondition, filter.condition.index);
       }
 
       final response = await query.query();
@@ -220,15 +220,15 @@ class AdvertRepository {
         throw Exception('search return a empty list');
       }
 
-      List<AdvertModel> ads = [];
+      List<AdModel> ads = [];
       for (final ParseObject ad in response.results!) {
-        final adModel = ParseToModel.advert(ad);
+        final adModel = ParseToModel.ad(ad);
         if (adModel != null) ads.add(adModel);
       }
 
       return ads;
     } catch (err) {
-      final message = 'AdvertRepository.get: $err';
+      final message = 'AdRepository.get: $err';
       log(message);
       return null;
     }
@@ -236,30 +236,30 @@ class AdvertRepository {
 
   /// Saves an advertisement to the Parse Server.
   ///
-  /// [advert] - The advertisement model to save.
-  /// Returns the saved `AdvertModel` if successful, otherwise throws an
+  /// [ad] - The advertisement model to save.
+  /// Returns the saved `AdModel` if successful, otherwise throws an
   /// exception.
-  static Future<AdvertModel?> save(AdvertModel advert) async {
+  static Future<AdModel?> save(AdModel ad) async {
     try {
       final parseUser = await ParseUser.currentUser() as ParseUser?;
       if (parseUser == null) {
         throw Exception('Current user access error');
       }
 
-      List<ParseFile> parseImages = await _saveImages(advert.images, parseUser);
+      List<ParseFile> parseImages = await _saveImages(ad.images, parseUser);
 
-      // final List<ParseObject> parseMechanics = advert.mechanicsId.map((id) {
+      // final List<ParseObject> parseMechanics = ad.mechanicsId.map((id) {
       //   final parse = ParseObject(keyMechanicTable);
       //   parse.objectId = id;
       //   return parse;
       // }).toList();
 
       final parseAddress = ParseObject(keyAddressTable);
-      parseAddress.objectId = advert.address.id;
+      parseAddress.objectId = ad.address.id;
 
-      final parseAd = ParseObject(keyAdvertTable);
-      if (advert.id != null) {
-        parseAd.objectId = advert.id;
+      final parseAd = ParseObject(keyAdTable);
+      if (ad.id != null) {
+        parseAd.objectId = ad.id;
       }
 
       final parseAcl = ParseACL(owner: parseUser);
@@ -268,17 +268,17 @@ class AdvertRepository {
 
       parseAd
         ..setACL(parseAcl)
-        ..set<ParseUser>(keyAdvertOwner, parseUser)
-        ..set<String>(keyAdvertTitle, advert.title)
-        ..set<int?>(keyAdvertBggId, advert.bggId)
-        ..set<String>(keyAdvertDescription, advert.description)
-        ..set<bool>(keyAdvertHidePhone, advert.hidePhone)
-        ..set<double>(keyAdvertPrice, advert.price)
-        ..set<int>(keyAdvertStatus, advert.status.index)
-        ..set<int>(keyAdvertCondition, advert.condition.index)
-        ..set<ParseObject>(keyAdvertAddress, parseAddress)
-        ..set<List<ParseFile>>(keyAdvertImages, parseImages)
-        ..set<List<int>>(keyAdvertMechanics, advert.mechanicsId);
+        ..set<ParseUser>(keyAdOwner, parseUser)
+        ..set<String>(keyAdTitle, ad.title)
+        ..set<int?>(keyAdBggId, ad.bggId)
+        ..set<String>(keyAdDescription, ad.description)
+        ..set<bool>(keyAdHidePhone, ad.hidePhone)
+        ..set<double>(keyAdPrice, ad.price)
+        ..set<int>(keyAdStatus, ad.status.index)
+        ..set<int>(keyAdCondition, ad.condition.index)
+        ..set<ParseObject>(keyAdAddress, parseAddress)
+        ..set<List<ParseFile>>(keyAdImages, parseImages)
+        ..set<List<int>>(keyAdMechanics, ad.mechanicsId);
 
       final response = await parseAd.save();
       if (!response.success) {
@@ -292,43 +292,43 @@ class AdvertRepository {
         throw Exception(response.error);
       }
 
-      return ParseToModel.advert(parseAd);
+      return ParseToModel.ad(parseAd);
     } catch (err) {
-      final message = 'AdvertRepository.save: $err';
+      final message = 'AdRepository.save: $err';
       log(message);
       throw Exception(message);
     }
   }
 
-  static Future<AdvertModel?> update(AdvertModel advert) async {
+  static Future<AdModel?> update(AdModel ad) async {
     try {
       final parseUser = await ParseUser.currentUser() as ParseUser?;
       if (parseUser == null) {
         throw Exception('Current user access error');
       }
 
-      List<ParseFile> parseImages = await _saveImages(advert.images, parseUser);
+      List<ParseFile> parseImages = await _saveImages(ad.images, parseUser);
 
       final parseAddress = ParseObject(keyAddressTable);
-      parseAddress.objectId = advert.address.id;
+      parseAddress.objectId = ad.address.id;
 
-      if (advert.id == null) {
-        throw Exception('Advert ID cannot be null for update');
+      if (ad.id == null) {
+        throw Exception('Ad ID cannot be null for update');
       }
 
-      final parseAd = ParseObject(keyAdvertTable)..objectId = advert.id!;
+      final parseAd = ParseObject(keyAdTable)..objectId = ad.id!;
 
       parseAd
-        ..set<String>(keyAdvertTitle, advert.title)
-        ..set<int?>(keyAdvertBggId, advert.bggId)
-        ..set<String>(keyAdvertDescription, advert.description)
-        ..set<bool>(keyAdvertHidePhone, advert.hidePhone)
-        ..set<double>(keyAdvertPrice, advert.price)
-        ..set<int>(keyAdvertStatus, advert.status.index)
-        ..set<int>(keyAdvertCondition, advert.condition.index)
-        ..set<ParseObject>(keyAdvertAddress, parseAddress)
-        ..set<List<ParseFile>>(keyAdvertImages, parseImages)
-        ..set<List<int>>(keyAdvertMechanics, advert.mechanicsId);
+        ..set<String>(keyAdTitle, ad.title)
+        ..set<int?>(keyAdBggId, ad.bggId)
+        ..set<String>(keyAdDescription, ad.description)
+        ..set<bool>(keyAdHidePhone, ad.hidePhone)
+        ..set<double>(keyAdPrice, ad.price)
+        ..set<int>(keyAdStatus, ad.status.index)
+        ..set<int>(keyAdCondition, ad.condition.index)
+        ..set<ParseObject>(keyAdAddress, parseAddress)
+        ..set<List<ParseFile>>(keyAdImages, parseImages)
+        ..set<List<int>>(keyAdMechanics, ad.mechanicsId);
 
       final response = await parseAd.update();
       if (!response.success) {
@@ -342,9 +342,9 @@ class AdvertRepository {
         throw Exception(response.error);
       }
 
-      return advert;
+      return ad;
     } catch (err) {
-      final message = 'AdvertRepository.update: $err';
+      final message = 'AdRepository.update: $err';
       log(message);
       throw Exception(message);
     }
@@ -400,15 +400,15 @@ class AdvertRepository {
 
   static Future<void> delete(String ad) async {
     try {
-      final parse = ParseObject(keyAdvertTable)..objectId = ad;
+      final parse = ParseObject(keyAdTable)..objectId = ad;
 
       final response = await parse.delete();
       if (!response.success) {
-        throw Exception(response.error ?? 'delete advert table error');
+        throw Exception(response.error ?? 'delete ad table error');
       }
       return;
     } catch (err) {
-      final message = 'AdvertRepository.delete: $err';
+      final message = 'AdRepository.delete: $err';
       log(message);
     }
   }

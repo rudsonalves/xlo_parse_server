@@ -17,37 +17,37 @@
 
 import 'package:flutter/material.dart';
 
-import '../../common/models/advert.dart';
+import '../../common/models/ad.dart';
 import '../../components/buttons/big_button.dart';
 import '../../components/others_widgets/state_error_message.dart';
 import '../../components/others_widgets/state_loading_message.dart';
-import 'edit_advert_controller.dart';
-import 'edit_advert_state.dart';
-import 'widgets/advert_form.dart';
+import 'edit_ad_controller.dart';
+import 'edit_ad_state.dart';
+import 'widgets/ad_form.dart';
 import 'widgets/image_list_view.dart';
 
-class EditAdvertScreen extends StatefulWidget {
-  final AdvertModel? advert;
+class EditAdScreen extends StatefulWidget {
+  final AdModel? ad;
 
-  const EditAdvertScreen({
+  const EditAdScreen({
     super.key,
-    this.advert,
+    this.ad,
   });
 
   static const routeName = '/insert';
 
   @override
-  State<EditAdvertScreen> createState() => _EditAdvertScreenState();
+  State<EditAdScreen> createState() => _EditAdScreenState();
 }
 
-class _EditAdvertScreenState extends State<EditAdvertScreen> {
-  final ctrl = EditAdvertController();
+class _EditAdScreenState extends State<EditAdScreen> {
+  final ctrl = EditAdController();
 
   @override
   void initState() {
     super.initState();
 
-    ctrl.init(widget.advert);
+    ctrl.init(widget.ad);
   }
 
   @override
@@ -57,15 +57,15 @@ class _EditAdvertScreenState extends State<EditAdvertScreen> {
   }
 
   Future<void> _createAnnounce() async {
-    AdvertModel? advert;
+    AdModel? ad;
     if (!ctrl.formValit) return;
     FocusScope.of(context).unfocus();
-    if (widget.advert != null) {
-      advert = await ctrl.updateAds(widget.advert!.id!);
+    if (widget.ad != null) {
+      ad = await ctrl.updateAds(widget.ad!.id!);
     } else {
-      advert = await ctrl.createAds();
+      ad = await ctrl.createAds();
     }
-    if (mounted) Navigator.pop(context, advert);
+    if (mounted) Navigator.pop(context, ad);
   }
 
   @override
@@ -74,7 +74,7 @@ class _EditAdvertScreenState extends State<EditAdvertScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.advert != null ? 'Editar Anúncio' : 'Criar Anúncio'),
+        title: Text(widget.ad != null ? 'Editar Anúncio' : 'Criar Anúncio'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
@@ -118,10 +118,10 @@ class _EditAdvertScreenState extends State<EditAdvertScreen> {
                     ),
                     Column(
                       children: [
-                        AdvertForm(controller: ctrl),
+                        AdForm(controller: ctrl),
                         BigButton(
                           color: Colors.orange,
-                          label: widget.advert != null ? 'Atualizar' : 'Salvar',
+                          label: widget.ad != null ? 'Atualizar' : 'Salvar',
                           onPressed: _createAnnounce,
                         ),
                       ],
@@ -130,9 +130,8 @@ class _EditAdvertScreenState extends State<EditAdvertScreen> {
                 ),
               ),
             ),
-            if (ctrl.state is EditAdvertStateLoading)
-              const StateLoadingMessage(),
-            if (ctrl.state is EditAdvertStateError)
+            if (ctrl.state is EditAdStateLoading) const StateLoadingMessage(),
+            if (ctrl.state is EditAdStateError)
               StateErrorMessage(
                 closeDialog: ctrl.gotoSuccess,
               ),

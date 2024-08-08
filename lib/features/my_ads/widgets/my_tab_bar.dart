@@ -17,11 +17,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../common/models/advert.dart';
+import '../../../common/models/ad.dart';
 import '../../../common/theme/app_text_style.dart';
 
 class MyTabBar extends StatelessWidget implements PreferredSizeWidget {
-  final void Function(AdvertStatus newStatus) setProductStatus;
+  final void Function(AdStatus newStatus) setProductStatus;
 
   const MyTabBar({
     super.key,
@@ -60,13 +60,13 @@ class MyTabBar extends StatelessWidget implements PreferredSizeWidget {
       onTap: (value) {
         switch (value) {
           case 0:
-            setProductStatus(AdvertStatus.pending);
+            setProductStatus(AdStatus.pending);
             break;
           case 1:
-            setProductStatus(AdvertStatus.active);
+            setProductStatus(AdStatus.active);
             break;
           case 2:
-            setProductStatus(AdvertStatus.sold);
+            setProductStatus(AdStatus.sold);
             break;
         }
       },

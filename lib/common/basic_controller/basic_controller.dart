@@ -17,7 +17,7 @@
 
 import 'package:flutter/foundation.dart';
 
-import '../models/advert.dart';
+import '../models/ad.dart';
 import '../singletons/current_user.dart';
 import '../../get_it.dart';
 import 'basic_state.dart';
@@ -29,8 +29,8 @@ abstract class BasicController extends ChangeNotifier {
 
   final currentUser = getIt<CurrentUser>();
 
-  final List<AdvertModel> _ads = [];
-  List<AdvertModel> get ads => _ads;
+  final List<AdModel> _ads = [];
+  List<AdModel> get ads => _ads;
 
   void changeState(BasicState newState) {
     _state = newState;
@@ -43,5 +43,5 @@ abstract class BasicController extends ChangeNotifier {
 
   Future<void> getMoreAds();
 
-  Future<bool> updateAdStatus(AdvertModel ad);
+  Future<bool> updateAdStatus(AdModel ad);
 }

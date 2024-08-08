@@ -19,7 +19,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../../../common/models/advert.dart';
+import '../../../../common/models/ad.dart';
 import '../../../../common/singletons/current_user.dart';
 import '../../../../get_it.dart';
 import '../../fav_button.dart';
@@ -29,12 +29,12 @@ import 'shop_text_title.dart';
 import 'show_image.dart';
 
 class AdShopView extends StatelessWidget {
-  final AdvertModel advert;
+  final AdModel ad;
   final Widget? itemButton;
 
   const AdShopView({
     super.key,
-    required this.advert,
+    required this.ad,
     this.itemButton,
   });
 
@@ -57,12 +57,12 @@ class AdShopView extends StatelessWidget {
           Stack(
             children: [
               ShowImage(
-                image: advert.images[0],
+                image: ad.images[0],
                 size: (MediaQuery.of(context).size.width - 8) / 2,
               ),
               if (isLogged)
                 FavStackButton(
-                  ad: advert,
+                  ad: ad,
                 ),
             ],
           ),
@@ -77,7 +77,7 @@ class AdShopView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: ShopTextTitle(label: advert.title),
+                        child: ShopTextTitle(label: ad.title),
                       ),
                       if (itemButton != null)
                         Column(
@@ -88,9 +88,9 @@ class AdShopView extends StatelessWidget {
                         ),
                     ],
                   ),
-                  ShopTextPrice(advert.price),
+                  ShopTextPrice(ad.price),
                   OwnerRating(
-                    owner: advert.owner.name,
+                    owner: ad.owner.name,
                     starts: Random().nextInt(5) + 1,
                   ),
                 ],

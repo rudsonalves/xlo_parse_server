@@ -19,7 +19,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/basic_controller/basic_controller.dart';
-import '../../../common/models/advert.dart';
+import '../../../common/models/ad.dart';
 import '../../../features/product/product_screen.dart';
 import 'widgets/ad_shop_view.dart';
 
@@ -29,8 +29,8 @@ class ShopGridView extends StatefulWidget {
   final BasicController ctrl;
   final ScrollController scrollController;
   final ButtonBehavior? buttonBehavior;
-  final Function(AdvertModel ad)? editAd;
-  final Function(AdvertModel ad)? deleteAd;
+  final Function(AdModel ad)? editAd;
+  final Function(AdModel ad)? deleteAd;
 
   const ShopGridView({
     super.key,
@@ -167,7 +167,7 @@ class _ShopGridViewState extends State<ShopGridView> {
             );
           },
           child: AdShopView(
-            advert: ctrl.ads[index],
+            ad: ctrl.ads[index],
           ),
         ),
       ),

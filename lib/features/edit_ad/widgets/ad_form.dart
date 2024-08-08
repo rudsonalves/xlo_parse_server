@@ -18,29 +18,29 @@
 import 'package:flutter/material.dart';
 import 'package:xlo_mobx/components/buttons/big_button.dart';
 
-import '../../../common/models/advert.dart';
+import '../../../common/models/ad.dart';
 import '../../../common/validators/validators.dart';
 import '../../../components/form_fields/custom_form_field.dart';
 import '../../../components/others_widgets/fitted_button_segment.dart';
 import '../../address/address_screen.dart';
 import '../../boardgames/boardgame_screen.dart';
 import '../../mecanics/mecanics_screen.dart';
-import '../edit_advert_controller.dart';
+import '../edit_ad_controller.dart';
 
-class AdvertForm extends StatefulWidget {
-  final EditAdvertController controller;
+class AdForm extends StatefulWidget {
+  final EditAdController controller;
 
-  const AdvertForm({
+  const AdForm({
     super.key,
     required this.controller,
   });
 
   @override
-  State<AdvertForm> createState() => _AdvertFormState();
+  State<AdForm> createState() => _AdFormState();
 }
 
-class _AdvertFormState extends State<AdvertForm> {
-  EditAdvertController get ctrl => widget.controller;
+class _AdFormState extends State<AdForm> {
+  EditAdController get ctrl => widget.controller;
 
   @override
   void initState() {
@@ -190,20 +190,20 @@ class _AdvertFormState extends State<AdvertForm> {
           Row(
             children: [
               Expanded(
-                child: SegmentedButton<AdvertStatus>(
+                child: SegmentedButton<AdStatus>(
                   segments: [
                     FittedButtonSegment(
-                      value: AdvertStatus.pending,
+                      value: AdStatus.pending,
                       label: 'Pendente',
                       iconData: Icons.hourglass_empty,
                     ),
                     FittedButtonSegment(
-                      value: AdvertStatus.active,
+                      value: AdStatus.active,
                       label: 'Ativo',
                       iconData: Icons.verified,
                     ),
                     FittedButtonSegment(
-                      value: AdvertStatus.sold,
+                      value: AdStatus.sold,
                       label: 'Vendido',
                       iconData: Icons.attach_money,
                     ),

@@ -19,7 +19,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 
-import '../common/models/advert.dart';
+import '../common/models/ad.dart';
 import '../common/models/favorite.dart';
 import '../common/singletons/current_user.dart';
 import '../get_it.dart';
@@ -27,14 +27,14 @@ import '../repository/favorite_repository.dart';
 
 class FavoritesManager {
   final List<FavoriteModel> _favs = [];
-  final List<AdvertModel> _ads = [];
+  final List<AdModel> _ads = [];
   final List<String> _favIds = [];
 
   List<FavoriteModel> get favs => _favs;
   List<String> get favAdIds => _favIds;
   bool get isLogged => getIt<CurrentUser>().isLogged;
   String? get userId => getIt<CurrentUser>().userId;
-  List<AdvertModel> get ads => _ads;
+  List<AdModel> get ads => _ads;
 
   final favNotifier = ValueNotifier<bool>(true);
 
@@ -63,7 +63,7 @@ class FavoritesManager {
 
   Future<void> getFavorites() async {
     try {
-      final List<AdvertModel> ads;
+      final List<AdModel> ads;
       final List<FavoriteModel> favs;
       (ads, favs) = await FavoriteRepository.getFavorites(userId!);
 
@@ -81,7 +81,7 @@ class FavoritesManager {
     }
   }
 
-  Future<void> toggleAdFav(AdvertModel ad) async {
+  Future<void> toggleAdFav(AdModel ad) async {
     if (_favIds.contains(ad.id!)) {
       _remove(ad);
     } else {
@@ -89,7 +89,7 @@ class FavoritesManager {
     }
   }
 
-  Future<void> _add(AdvertModel ad) async {
+  Future<void> _add(AdModel ad) async {
     try {
       final fav = await FavoriteRepository.add(userId!, ad.id!);
 
@@ -104,7 +104,7 @@ class FavoritesManager {
     }
   }
 
-  Future<void> _remove(AdvertModel ad) async {
+  Future<void> _remove(AdModel ad) async {
     try {
       final favId = _getFavId(ad);
       if (favId != null) {
