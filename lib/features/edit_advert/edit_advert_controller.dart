@@ -26,6 +26,7 @@ import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
 import '../../get_it.dart';
+import '../../manager/bgg_rank_manager.dart';
 import '../../manager/mechanics_manager.dart';
 import '../../repository/advert_repository.dart';
 import 'edit_advert_state.dart';
@@ -38,9 +39,11 @@ class EditAdvertController extends ChangeNotifier {
   final app = getIt<AppSettings>();
   final currentUser = getIt<CurrentUser>();
   final mechanicsManager = getIt<MechanicsManager>();
+  final rankManager = getIt<BggRankManager>();
 
   final formKey = GlobalKey<FormState>();
-  final titleController = TextEditingController();
+  final nameController = TextEditingController();
+  String? bggName;
   final descriptionController = TextEditingController();
   final mechanicsController = TextEditingController();
   final addressController = TextEditingController();
@@ -75,7 +78,8 @@ class EditAdvertController extends ChangeNotifier {
 
   void init(AdvertModel? ad) {
     if (ad != null) {
-      titleController.text = ad.title;
+      nameController.text = ad.title;
+      bggName = rankManager.gameName(ad.bggId ?? -1);
       descriptionController.text = ad.description;
       hidePhone.value = ad.hidePhone;
       priceController.currencyValue = ad.price;
@@ -89,7 +93,7 @@ class EditAdvertController extends ChangeNotifier {
 
   @override
   void dispose() {
-    titleController.dispose();
+    nameController.dispose();
     descriptionController.dispose();
     mechanicsController.dispose();
     addressController.dispose();
@@ -152,8 +156,9 @@ class EditAdvertController extends ChangeNotifier {
       final ad = AdvertModel(
         id: id,
         owner: currentUser.user!,
+        bggId: rankManager.gameId(bggName ?? ''),
         images: _images,
-        title: titleController.text,
+        title: nameController.text,
         description: descriptionController.text,
         mechanicsId: _selectedMechIds,
         address: currentUser.addresses
@@ -179,8 +184,9 @@ class EditAdvertController extends ChangeNotifier {
       _changeState(EditAdvertStateLoading());
       final ad = AdvertModel(
         owner: currentUser.user!,
+        bggId: rankManager.gameId(bggName ?? ''),
         images: _images,
-        title: titleController.text,
+        title: nameController.text,
         description: descriptionController.text,
         mechanicsId: _selectedMechIds,
         address: currentUser.addresses

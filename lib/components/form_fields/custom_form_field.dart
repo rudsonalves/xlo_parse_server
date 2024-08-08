@@ -33,6 +33,8 @@ class CustomFormField extends StatelessWidget {
   final bool readOnly;
   final Widget? suffixIcon;
   final String? errorText;
+  final String? suffixText;
+  final String? prefixText;
 
   CustomFormField({
     super.key,
@@ -51,6 +53,8 @@ class CustomFormField extends StatelessWidget {
     this.suffixIcon,
     this.errorText,
     this.textCapitalization,
+    this.suffixText,
+    this.prefixText,
   });
 
   final errorString = ValueNotifier<String?>(null);
@@ -73,6 +77,8 @@ class CustomFormField extends StatelessWidget {
           hintText: hintText,
           errorText: errorText,
           suffixIcon: suffixIcon,
+          suffixText: suffixText,
+          prefixText: prefixText,
           border: fullBorder
               ? OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),

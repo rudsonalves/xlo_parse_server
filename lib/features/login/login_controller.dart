@@ -61,4 +61,8 @@ class LoginController extends ChangeNotifier {
       throw Exception(err);
     }
   }
+
+  void closeErroMessage() {
+    _changeState(LoginStateSuccess());
+  }
 }

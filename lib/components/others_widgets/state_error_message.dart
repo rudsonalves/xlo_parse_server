@@ -18,8 +18,11 @@
 import 'package:flutter/material.dart';
 
 class StateErrorMessage extends StatelessWidget {
+  final void Function() closeDialog;
+
   const StateErrorMessage({
     super.key,
+    required this.closeDialog,
   });
 
   @override
@@ -47,6 +50,14 @@ class StateErrorMessage extends StatelessWidget {
                     const Text(
                       'Desculpe. Ocorreu algum problema.\n'
                       ' Tente mais tarde.',
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: FilledButton.icon(
+                        onPressed: closeDialog,
+                        label: const Text('Fechar'),
+                        icon: const Icon(Icons.close),
+                      ),
                     ),
                   ],
                 ),

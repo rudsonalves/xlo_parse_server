@@ -38,12 +38,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _controller = LoginController();
+  final ctrl = LoginController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    _controller.dispose();
+    ctrl.dispose();
 
     super.dispose();
   }
@@ -55,10 +55,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (valid) {
       try {
-        final user = await _controller.login(
+        final user = await ctrl.login(
           UserModel(
-            email: _controller.emailController.text,
-            password: _controller.passwordController.text,
+            email: ctrl.emailController.text,
+            password: ctrl.passwordController.text,
           ),
         );
 
@@ -101,9 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: _controller.app.isDark
-          ? null
-          : colorScheme.onPrimary.withOpacity(0.85),
+      backgroundColor:
+          ctrl.app.isDark ? null : colorScheme.onPrimary.withOpacity(0.85),
       appBar: AppBar(
         title: const Text('Entrar'),
         centerTitle: true,
@@ -113,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       body: ListenableBuilder(
-        listenable: _controller,
+        listenable: ctrl,
         builder: (context, _) {
           return Stack(
             children: [
@@ -121,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Center(
                   child: SingleChildScrollView(
                     child: Card(
-                      color: _controller.app.isDark
+                      color: ctrl.app.isDark
                           ? colorScheme.primary.withOpacity(.15)
                           : null,
                       margin: const EdgeInsets.all(20),
@@ -140,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             const OrRow(),
                             LoginForm(
                               formKey: _formKey,
-                              controller: _controller,
+                              controller: ctrl,
                               userLogin: _userLogin,
                               navSignUp: _navSignUp,
                               navLostPassword: _navLostPassword,
@@ -152,13 +151,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              if (_controller.state is LoginStateLoading)
+              if (ctrl.state is LoginStateLoading)
                 const Positioned.fill(
                   child: StateLoadingMessage(),
                 ),
-              if (_controller.state is LoginStateError)
-                const Positioned.fill(
-                  child: StateErrorMessage(),
+              if (ctrl.state is LoginStateError)
+                Positioned.fill(
+                  child: StateErrorMessage(
+                    closeDialog: ctrl.closeErroMessage,
+                  ),
                 ),
             ],
           );

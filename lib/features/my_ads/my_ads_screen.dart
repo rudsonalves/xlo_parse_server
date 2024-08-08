@@ -160,7 +160,9 @@ class _MyAdsScreenState extends State<MyAdsScreen> {
             } else if (ctrl.state is BasicStateLoading) {
               return const StateLoadingMessage();
             }
-            return const StateErrorMessage();
+            return StateErrorMessage(
+              closeDialog: ctrl.closeErroMessage,
+            );
           },
         ),
       ),

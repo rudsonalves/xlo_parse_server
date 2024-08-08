@@ -132,7 +132,10 @@ class _EditAdvertScreenState extends State<EditAdvertScreen> {
             ),
             if (ctrl.state is EditAdvertStateLoading)
               const StateLoadingMessage(),
-            if (ctrl.state is EditAdvertStateError) const StateErrorMessage(),
+            if (ctrl.state is EditAdvertStateError)
+              StateErrorMessage(
+                closeDialog: ctrl.gotoSuccess,
+              ),
           ],
         ),
       ),

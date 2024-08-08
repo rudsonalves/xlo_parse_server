@@ -270,6 +270,7 @@ class AdvertRepository {
         ..setACL(parseAcl)
         ..set<ParseUser>(keyAdvertOwner, parseUser)
         ..set<String>(keyAdvertTitle, advert.title)
+        ..set<int?>(keyAdvertBggId, advert.bggId)
         ..set<String>(keyAdvertDescription, advert.description)
         ..set<bool>(keyAdvertHidePhone, advert.hidePhone)
         ..set<double>(keyAdvertPrice, advert.price)
@@ -308,12 +309,6 @@ class AdvertRepository {
 
       List<ParseFile> parseImages = await _saveImages(advert.images, parseUser);
 
-      // final List<ParseObject> parseMechanics = advert.mechanicsId.map((id) {
-      //   final parse = ParseObject(keyMechanicTable);
-      //   parse.objectId = id;
-      //   return parse;
-      // }).toList();
-
       final parseAddress = ParseObject(keyAddressTable);
       parseAddress.objectId = advert.address.id;
 
@@ -325,6 +320,7 @@ class AdvertRepository {
 
       parseAd
         ..set<String>(keyAdvertTitle, advert.title)
+        ..set<int?>(keyAdvertBggId, advert.bggId)
         ..set<String>(keyAdvertDescription, advert.description)
         ..set<bool>(keyAdvertHidePhone, advert.hidePhone)
         ..set<double>(keyAdvertPrice, advert.price)

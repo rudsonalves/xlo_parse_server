@@ -135,4 +135,8 @@ class MyAdsController extends BasicController {
       changeState(BasicStateError());
     }
   }
+
+  void closeErroMessage() {
+    changeState(BasicStateSuccess());
+  }
 }

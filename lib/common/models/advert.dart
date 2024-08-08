@@ -26,6 +26,7 @@ class AdvertModel {
   String? id;
   UserModel owner;
   String title;
+  int? bggId;
   String description;
   bool hidePhone;
   double price;
@@ -40,6 +41,7 @@ class AdvertModel {
   AdvertModel({
     this.id,
     required this.owner,
+    this.bggId,
     required this.images,
     required this.title,
     required this.description,
@@ -57,6 +59,7 @@ class AdvertModel {
   String toString() {
     return 'AdModel(id: $id,'
         ' owner: $owner,'
+        ' bggId: $bggId,'
         ' images: ${images.toString()},'
         ' title: $title,'
         ' description: $description,'

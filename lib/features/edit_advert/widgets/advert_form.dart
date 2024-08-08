@@ -22,6 +22,7 @@ import '../../../common/validators/validators.dart';
 import '../../../components/form_fields/custom_form_field.dart';
 import '../../../components/others_widgets/fitted_button_segment.dart';
 import '../../address/address_screen.dart';
+import '../../boardgames/boardgame_screen.dart';
 import '../../mecanics/mecanics_screen.dart';
 import '../edit_advert_controller.dart';
 
@@ -72,12 +73,21 @@ class _AdvertFormState extends State<AdvertForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomFormField(
-            controller: ctrl.titleController,
-            labelText: 'Título *',
+            controller: ctrl.nameController,
+            labelText: 'Nome do Jogo *',
             fullBorder: false,
+            maxLines: null,
             floatingLabelBehavior: null,
             textCapitalization: TextCapitalization.sentences,
             validator: Validator.title,
+          ),
+          Center(
+            child: FilledButton.tonal(
+              onPressed: () {
+                Navigator.pushNamed(context, BoardgamesScreen.routeName);
+              },
+              child: const Text('Informações do BoardGame'),
+            ),
           ),
           CustomFormField(
             controller: ctrl.descriptionController,

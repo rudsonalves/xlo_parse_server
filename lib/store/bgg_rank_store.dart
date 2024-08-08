@@ -21,22 +21,19 @@ import '../get_it.dart';
 import 'constants/constants.dart';
 import 'database_manager.dart';
 
-class MechStore {
+class BggRankStore {
   final _databaseManager = getIt<DatabaseManager>();
 
-  Future<List<Map<String, dynamic>>> queryMechs(
-      [String langCode = 'pt_BR']) async {
+  Future<List<Map<String, dynamic>>> queryRankGameNames(int year) async {
     final database = await _databaseManager.database;
 
-    final getColumns = (langCode != 'pt_BR')
-        ? [mechId, mechName, mechDescription]
-        : [mechId, mechNome, mechDescricao];
-    final orderByName = (langCode != 'pt_BR') ? mechName : mechNome;
     try {
       List<Map<String, dynamic>> result = await database.query(
-        mechTable,
-        columns: getColumns,
-        orderBy: orderByName,
+        rankTable,
+        columns: [rankId, rankGameName],
+        where: '$rankYearPublished > ?',
+        whereArgs: [year],
+        orderBy: rankGameName,
       );
 
       return result;
@@ -46,22 +43,18 @@ class MechStore {
     }
   }
 
-  Future<String> queryDescription(int id, [String langCode = 'pt_BR']) async {
+  Future<Map<String, dynamic>> queryRankFromId(int id) async {
     final database = await _databaseManager.database;
-    final getColumn = (langCode != 'pt_BR') ? mechDescription : mechDescricao;
-    try {
-      final result = await database.query(
-        mechTable,
-        columns: [getColumn],
-        where: '$mechId = ?',
-        whereArgs: [id],
-      );
 
-      if (result.isEmpty) return '';
-      return result[0][getColumn] as String;
+    try {
+      List<Map<String, dynamic>> result = await database
+          .query(rankTable, where: '$rankId = ?', whereArgs: [id]);
+
+      if (result.isEmpty) return {};
+      return result.first;
     } catch (err) {
       log('Error: $err');
-      return '';
+      return {};
     }
   }
 }

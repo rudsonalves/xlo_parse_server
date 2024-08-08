@@ -123,7 +123,7 @@ class _DestinyAddressDialogState extends State<DestinyAddressDialog> {
                 }
               },
             ),
-            ButtonBar(
+            OverflowBar(
               children: [
                 FilledButton.tonal(
                   onPressed: () => Navigator.pop(context, selected),
