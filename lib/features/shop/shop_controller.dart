@@ -66,13 +66,13 @@ class ShopController extends BasicController {
       changeState(BasicStateLoading());
       await _getAds();
 
+      await currentUser.init();
+      setPageTitle();
+
       searchFilter.filterNotifier.addListener(getAds);
       searchFilter.searchNotifier.addListener(getAds);
       currentUser.isLogedListernable.addListener(getAds);
       currentUser.isLogedListernable.addListener(setPageTitle);
-
-      await currentUser.init();
-      setPageTitle();
 
       changeState(BasicStateSuccess());
     } catch (err) {
@@ -164,5 +164,9 @@ class ShopController extends BasicController {
   @override
   Future<bool> updateAdStatus(AdvertModel ad) {
     throw UnimplementedError();
+  }
+
+  void closeErroMessage() {
+    changeState(BasicStateSuccess());
   }
 }

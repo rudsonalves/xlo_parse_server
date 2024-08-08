@@ -25,12 +25,12 @@ flutter_clean:
 	flutter clean && flutter pub get
 
 git_diff:
+	git add .
 	git diff --cached > ~/diff
 
-git_commit:
-	git commit -F ~/commit.txt
-
 git_push:
+	git add .
+	git commit -F ~/commit.txt
 	git push origin HEAD
 
 build_profile:

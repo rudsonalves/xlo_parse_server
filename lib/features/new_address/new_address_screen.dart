@@ -102,7 +102,7 @@ class _AddressScreenState extends State<NewAddressScreen> {
                           controller: controller,
                           errorText: errorText,
                         ),
-                        ButtonBar(
+                        OverflowBar(
                           children: [
                             ElevatedButton.icon(
                               onPressed: _saveAddressFrom,

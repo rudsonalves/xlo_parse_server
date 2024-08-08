@@ -89,4 +89,8 @@ class AddressController extends ChangeNotifier {
       _changeState(AddressStateError());
     }
   }
+
+  void closeErroMessage() {
+    _changeState(AddressStateSuccess());
+  }
 }

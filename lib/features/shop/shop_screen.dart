@@ -266,8 +266,10 @@ class _ShopScreenState extends State<ShopScreen>
                 ),
               // state State Error
               if (ctrl.state is BasicStateError)
-                const Positioned.fill(
-                  child: StateErrorMessage(),
+                Positioned.fill(
+                  child: StateErrorMessage(
+                    closeDialog: ctrl.closeErroMessage,
+                  ),
                 ),
               // state State Loading
               if (ctrl.state is BasicStateLoading)

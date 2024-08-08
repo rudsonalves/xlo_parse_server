@@ -108,7 +108,7 @@ class _AddressScreenState extends State<AddressScreen> {
       ),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
-      floatingActionButton: ButtonBar(
+      floatingActionButton: OverflowBar(
         children: [
           FloatingActionButton.extended(
             onPressed: _addAddress,
@@ -150,7 +150,8 @@ class _AddressScreenState extends State<AddressScreen> {
                 ),
                 if (ctrl.state is AddressStateLoading)
                   const StateLoadingMessage(),
-                if (ctrl.state is AddressStateError) const StateErrorMessage(),
+                if (ctrl.state is AddressStateError)
+                  StateErrorMessage(closeDialog: ctrl.closeErroMessage),
               ],
             );
           },

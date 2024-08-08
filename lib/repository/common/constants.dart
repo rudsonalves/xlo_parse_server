@@ -47,6 +47,7 @@ const keyAdvertTable = 'AdSale';
 const keyAdvertId = 'objectId';
 const keyAdvertOwner = 'owner';
 const keyAdvertTitle = 'title';
+const keyAdvertBggId = 'bggId';
 const keyAdvertDescription = 'description';
 const keyAdvertHidePhone = 'hidePhone';
 const keyAdvertPrice = 'price';

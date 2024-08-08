@@ -123,7 +123,7 @@ class _MecanicsScreenState extends State<MecanicsScreen> {
                   },
                 ),
               ),
-              ButtonBar(
+              OverflowBar(
                 alignment: MainAxisAlignment.spaceAround,
                 children: [
                   FilledButton.tonalIcon(

@@ -9,6 +9,172 @@
 
 # ChangeLog
 
+2024/08/08 - version: 0.6.6+29
+
+This commit introduces significant enhancements and new functionalities related to BGG ranks and board games, improving the overall functionality and user experience.
+
+
+1. Makefile
+   - Added `git add .` to `git_diff` target.
+   - Modified `git_push` to include `git add .` and changed commit file from `commit.txt` to `commit`.
+
+2. lib/common/models/advert.dart
+   - Imported `foundation.dart`.
+   - Added `bggId` field to `AdvertModel`.
+   - Modified constructor to include `bggId`.
+   - Updated `toString` method to include `bggId`.
+
+3. lib/common/models/bgg_rank.dart
+   - Created new model `BggRankModel` with fields `id`, `gameName`, `yearPublished`, `rank`, `bayesAverage`, `average`, `usersRated`, `isExpansion`, `abstractsRank`, `cgsRank`, `childrensGamesrank`, `familyGamesRank`, `partyGamesRank`, `strategyGamesRank`, `thematicRank`, `warGamesRank`.
+   - Added factory methods `fromMap` and `toMap`.
+   - Implemented `toString` method.
+
+4. lib/common/models/boardgame.dart
+   - Created new model `BoardgameModel` with fields `name`, `yearpublished`, `minplayers`, `maxplayers`, `minplaytime`, `maxplaytime`, `age`, `description`, `average`, `bayesaverage`, `averageweight`, `boardgamemechanic`, `boardgamecategory`.
+   - Added factory methods `fromMap` and `toMap`.
+   - Implemented `toString` method.
+
+5. lib/components/form_fields/custom_form_field.dart
+   - Added `suffixText` and `prefixText` parameters.
+   - Updated constructor to include `suffixText` and `prefixText`.
+   - Modified `build` method to use `suffixText` and `prefixText`.
+
+6. lib/components/form_fields/custom_names_form_field.dart
+   - Created new widget `CustomNamesFormField`.
+   - Added fields `labelText`, `hintText`, `controller`, `names`, `validator`, `keyboardType`, `textInputAction`, `textCapitalization`, `nextFocusNode`, `fullBorder`, `maxLines`, `floatingLabelBehavior`, `readOnly`, `suffixIcon`, `errorText`.
+   - Implemented `StatefulWidget` logic to show suggestions based on input.
+
+7. lib/components/others_widgets/state_error_message.dart
+   - Added `closeDialog` callback to `StateErrorMessage`.
+   - Updated constructor to include `closeDialog`.
+   - Added a button to close the dialog.
+
+8. lib/features/address/address_controller.dart
+   - Added `closeErroMessage` method to change state to `AddressStateSuccess`.
+
+9. lib/features/address/address_screen.dart
+   - Replaced `ButtonBar` with `OverflowBar`.
+   - Updated to use `StateErrorMessage` with `closeDialog` callback.
+
+10. lib/features/address/widgets/destiny_address_dialog.dart
+    - Replaced `ButtonBar` with `OverflowBar`.
+
+11. lib/features/boardgames/boardgame_controller.dart
+    - Created `BoardgameController` with `BoardgameState`, `rankManager`, and `bggName`.
+    - Added methods to handle BGG rank initialization and fetching.
+
+12. lib/features/boardgames/boardgame_screen.dart
+    - Created `BoardgamesScreen` to display board game details.
+    - Integrated `BoardgameController` for managing state and interactions.
+
+13. lib/features/boardgames/boardgame_state.dart
+    - Created `BoardgameState` abstract class with `BoardgameStateInitial`, `BoardgameStateLoading`, `BoardgameStateSuccess`, and `BoardgameStateError`.
+
+14. lib/features/edit_advert/edit_advert_controller.dart
+    - Added `bggName` and `rankManager` fields.
+    - Modified `init` method to include `bggName`.
+    - Updated methods to handle `bggId`.
+
+15. lib/features/edit_advert/edit_advert_screen.dart
+    - Replaced `ButtonBar` with `OverflowBar`.
+    - Added navigation to `BoardgamesScreen`.
+
+16. lib/features/edit_advert/widgets/advert_form.dart
+    - Added `CustomFormField` for board game name.
+    - Added button to navigate to `BoardgamesScreen`.
+
+17. lib/features/login/login_controller.dart
+    - Added `closeErroMessage` method to change state to `LoginStateSuccess`.
+
+18. lib/features/login/login_screen.dart
+    - Updated controller usage to match naming conventions.
+
+19. lib/features/mecanics/mecanics_screen.dart
+    - Replaced `ButtonBar` with `OverflowBar`.
+
+20. lib/features/my_ads/my_ads_controller.dart
+    - Added `closeErroMessage` method to change state to `BasicStateSuccess`.
+
+21. lib/features/my_ads/my_ads_screen.dart
+    - Updated to use `StateErrorMessage` with `closeDialog` callback.
+
+22. lib/features/new_address/new_address_screen.dart
+    - Replaced `ButtonBar` with `OverflowBar`.
+
+23. lib/features/shop/shop_controller.dart
+    - Added `closeErroMessage` method to change state to `BasicStateSuccess`.
+
+24. lib/features/shop/shop_screen.dart
+    - Updated to use `StateErrorMessage` with `closeDialog` callback.
+
+25. lib/get_it.dart
+    - Registered `BggRankManager` in dependency injection.
+
+26. lib/manager/bgg_rank_manager.dart
+    - Created `BggRankManager` to handle BGG rank data fetching and management.
+
+27. lib/my_material_app.dart
+    - Added route for `BoardgamesScreen`.
+
+28. lib/repository/advert_repository.dart
+    - Updated to set `bggId` in `AdvertRepository`.
+
+29. lib/repository/bgg_rank_repository.dart
+    - Created `BggRankRepository` for interacting with BGG rank data.
+
+30. lib/repository/bgg_xmlapi_repository.dart
+    - Created `BggXMLApiRepository` to fetch and parse BGG XML API data.
+
+31. lib/repository/common/constants.dart
+    - Added `keyAdvertBggId`.
+
+32. lib/repository/common/parse_to_model.dart
+    - Updated to parse `bggId` in `AdvertModel`.
+
+33. lib/store/bgg_rank_store.dart
+    - Created `BggRankStore` for database interactions related to BGG ranks.
+
+34. lib/store/constants/constants.dart
+    - Updated constant `rankGameName`.
+
+35. lib/store/mech_store.dart
+    - Added spacing for readability.
+
+36. pubspec.yaml
+    - Added `xml` dependency for XML parsing.
+
+37. lib/common/models/advert.dart
+    - Added import for `foundation.dart` to support `listEquals`.
+
+38. lib/features/address/widgets/destiny_address_dialog.dart
+    - Replaced `ButtonBar` with `OverflowBar` for consistent UI.
+
+39. lib/features/boardgames/boardgame_screen.dart
+    - Improved layout and added detailed fields for board game information.
+
+40. lib/features/edit_advert/edit_advert_screen.dart
+    - Enhanced form validation and user feedback for better user experience.
+
+41. lib/features/my_ads/my_ads_screen.dart
+    - Added proper handling of error messages using `StateErrorMessage`.
+
+42. lib/features/new_address/new_address_screen.dart
+    - Updated UI components for better usability.
+
+43. lib/repository/advert_repository.dart
+    - Improved error handling and added support for `bggId`.
+
+44. lib/repository/bgg_xmlapi_repository.dart
+    - Added comprehensive error logging to facilitate debugging.
+
+45. lib/store/bgg_rank_store.dart
+    - Optimized database queries for better performance.
+
+These changes ensure a more robust and user-friendly application, addressing several pain points and enhancing the overall functionality.
+
+Additionally, several improvements and bug fixes have been made across various files to enhance code quality and maintainability.
+
+
 ## 2024/08/06 - version: 0.6.5+28
 
 Implement Favorite Button and User-Specific Features, Improve Scrolling and Mechanics Handling

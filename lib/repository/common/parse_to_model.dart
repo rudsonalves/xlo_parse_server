@@ -76,17 +76,20 @@ class ParseToModel {
     if (parseUser == null) return null;
     final user = ParseToModel.user(parseUser);
 
+    final mechs = parse.get<List<dynamic>>(keyAdvertMechanics) ?? [];
+
     return AdvertModel(
       id: parse.objectId,
       owner: user,
       title: parse.get<String>(keyAdvertTitle)!,
+      bggId: parse.get<int?>(keyAdvertBggId)!,
       description: parse.get<String>(keyAdvertDescription)!,
       price: parse.get<num>(keyAdvertPrice)!.toDouble(),
       hidePhone: parse.get<bool>(keyAdvertHidePhone)!,
       images: (parse.get<List<dynamic>>(keyAdvertImages) as List<dynamic>)
           .map((item) => (item as ParseFile).url!)
           .toList(),
-      mechanicsId: parse.get<List<int>>(keyAdvertMechanics) as List<int>,
+      mechanicsId: mechs.map((e) => e as int).toList(),
       // (parse.get<List<dynamic>>(keyAdvertMechanics) as List<dynamic>)
       //     .map((item) => (item as ParseObject).objectId!)
       //     .toList(),
