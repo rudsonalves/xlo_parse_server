@@ -23,6 +23,7 @@ import '../../components/form_fields/custom_names_form_field.dart';
 import '../../components/others_widgets/spin_box_field.dart';
 import '../../components/others_widgets/state_error_message.dart';
 import '../../components/others_widgets/state_loading_message.dart';
+import '../bgg_search/bgg_search_screen.dart';
 import '../product/widgets/sub_title_product.dart';
 import 'boardgame_controller.dart';
 import 'boardgame_state.dart';
@@ -44,6 +45,12 @@ class _BoardgamesScreenState extends State<BoardgamesScreen> {
     super.initState();
 
     ctrl.init();
+  }
+
+  @override
+  void dispose() {
+    ctrl.dispose();
+    super.dispose();
   }
 
   void _backPage() {
@@ -75,19 +82,33 @@ class _BoardgamesScreenState extends State<BoardgamesScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SubTitleProduct(
-                        subtile: 'Nome no BGG',
+                        subtile: 'Nome do Jogo',
                         color: colorScheme.primary,
                         padding: const EdgeInsets.only(top: 8, bottom: 0),
                       ),
-                      CustomNamesFormField(
-                        controller: ctrl.nameController,
-                        names: ctrl.bgNames,
-                        fullBorder: false,
-                        floatingLabelBehavior: null,
-                        textCapitalization: TextCapitalization.sentences,
-                        onSubmitted: () {
-                          ctrl.getBggInfo();
-                        },
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomNamesFormField(
+                              controller: ctrl.nameController,
+                              names: ctrl.bgNames,
+                              fullBorder: false,
+                              floatingLabelBehavior: null,
+                              textCapitalization: TextCapitalization.sentences,
+                              onSubmitted: () {
+                                ctrl.getBggInfo();
+                              },
+                            ),
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, BggSearchScreen.routeName);
+                            },
+                            label: const Text('BGG'),
+                            icon: const Icon(Icons.search),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 12),
@@ -213,7 +234,7 @@ class _BoardgamesScreenState extends State<BoardgamesScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 12),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SubTitleProduct(
                               subtile: 'Pontuação (0-10): ',

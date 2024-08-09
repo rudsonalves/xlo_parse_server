@@ -17,35 +17,45 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../components/customs_text/read_more_text.dart';
-import 'sub_title_product.dart';
+import '../../../common/models/bgg_boards.dart';
 
-class DescriptionProduct extends StatelessWidget {
-  final String description;
+class SearchCard extends StatelessWidget {
+  final List<BGGBoardsModel> bggSearchList;
+  final void Function(int id) getBoardInfo;
 
-  const DescriptionProduct({
+  const SearchCard({
     super.key,
-    required this.description,
+    required this.getBoardInfo,
+    required this.bggSearchList,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SubTitleProduct(subtile: 'Descrição:'),
-        ReadMoreText(
-          description,
-          trimMode: TrimMode.line,
-          trimLines: 5,
-          trimExpandedText: '  [ver menos]',
-          trimCollapsedText: '  [ver mais]',
-          colorClickableText: colorScheme.primary,
+    return SizedBox(
+      height: 200,
+      child: Card(
+        color: colorScheme.surfaceContainer,
+        margin: const EdgeInsets.all(8),
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: bggSearchList.length,
+          itemBuilder: (context, index) {
+            final bggBoard = bggSearchList[index];
+
+            return ListTile(
+              onTap: () {
+                getBoardInfo(bggBoard.objectid);
+              },
+              title: Text(bggBoard.name),
+              subtitle: Text(
+                'Publicado em ${bggBoard.yearpublished ?? '***'}',
+              ),
+            );
+          },
         ),
-      ],
+      ),
     );
   }
 }

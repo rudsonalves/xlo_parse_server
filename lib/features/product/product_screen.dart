@@ -137,7 +137,7 @@ class _ProductScreenState extends State<ProductScreen>
           iconData1: Icons.phone,
           callBack1: () {
             final phone =
-                widget.ad.owner.phone!.replaceAll(RegExp(r'[^\d]'), '');
+                widget.ad.owner!.phone!.replaceAll(RegExp(r'[^\d]'), '');
             launchUrl(Uri.parse('tel:$phone'));
           },
           label2: 'Chat',
@@ -173,12 +173,12 @@ class _ProductScreenState extends State<ProductScreen>
                     const Divider(indent: indent, endIndent: indent),
                     DescriptionProduct(description: widget.ad.description),
                     const Divider(indent: indent, endIndent: indent),
-                    LocationProduct(address: widget.ad.address),
+                    LocationProduct(address: widget.ad.address!),
                     const Divider(indent: indent, endIndent: indent),
                     const SubTitleProduct(subtile: 'Anunciante'),
                     UserCard(
-                      name: widget.ad.owner.name!,
-                      createAt: widget.ad.owner.createAt!,
+                      name: widget.ad.owner!.name!,
+                      createAt: widget.ad.owner!.createAt!,
                     ),
                     const SizedBox(height: 50),
                   ],

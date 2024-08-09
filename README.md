@@ -9,6 +9,106 @@
 
 # ChangeLog
 
+## 2024/08/08 - version: 0.6.9+32
+
+Integrated Boardgame Functionality and Enhanced AdModel Structure
+
+1. lib/common/models/ad.dart
+   - Imported `boardgame.dart`.
+   - Updated `AdModel`:
+     - Changed `owner` to be nullable.
+     - Added `boardgame`, `yearpublished`, `minplayers`, `maxplayers`, `minplaytime`, `maxplaytime`, `age`, `designer`, and `artist` fields.
+     - Modified the constructor to initialize the new fields.
+     - Updated `toString` method to include the new fields.
+
+2. lib/common/models/bgg_boards.dart
+   - Created `BGGBoardsModel` class with `objectid`, `name`, and `yearpublished` fields.
+
+3. lib/common/models/boardgame.dart
+   - Updated `BoardgameModel`:
+     - Added new nullable fields `id`, `designer`, and `artist`.
+     - Renamed `boardgamemechanic` to `mechanics`.
+     - Renamed `boardgamecategory` to `categories`.
+     - Removed `toMap` and `fromMap` methods.
+
+4. lib/components/others_widgets/ad_list_view/widgets/ad_card_view.dart
+   - Updated `AdCardView`:
+     - Made `address` fields nullable when accessing `city` and `state`.
+
+5. lib/components/others_widgets/shop_grid_view/widgets/ad_shop_view.dart
+   - Updated `AdShopView`:
+     - Made `owner` nullable when accessing `name`.
+
+6. lib/features/bgg_search/bgg_search_controller.dart
+   - Created `BggController`:
+     - Added state management for BGG search and selection.
+     - Implemented search functionality using `BggXMLApiRepository`.
+     - Added methods to handle errors and fetch board game details.
+
+7. lib/features/bgg_search/bgg_search_screen.dart
+   - Created `BggSearchScreen`:
+     - Implemented UI for searching and displaying BGG board games.
+     - Integrated `BggController` for state management and data handling.
+
+8. lib/features/bgg_search/bgg_search_state.dart
+   - Created state classes for BGG search:
+     - Added `BggSearchStateInitial`, `BggSearchStateLoading`, `BggSearchStateSuccess`, and `BggSearchStateError`.
+
+9. lib/features/bgg_search/widgets/bg_info_card.dart
+   - Created `BGInfoCard` widget:
+     - Displays detailed information about a selected board game.
+
+10. lib/features/bgg_search/widgets/search_card.dart
+    - Created `SearchCard` widget:
+      - Displays a list of search results from BGG.
+
+11. lib/features/boardgames/boardgame_controller.dart
+    - Updated `BoardgameController`:
+      - Added disposal for additional controllers.
+      - Adjusted `getBggInfo` to handle new mechanics field in `BoardgameModel`.
+
+12. lib/features/boardgames/boardgame_screen.dart
+    - Updated `BoardgamesScreen`:
+      - Added BGG search button and navigation to `BggSearchScreen`.
+      - Disposed of `BoardgameController` properly.
+
+13. lib/features/edit_ad/edit_ad_controller.dart
+    - Updated `EditAdController`:
+      - Integrated `BoardgameModel` data into Ad creation and editing.
+      - Added `setBggInfo` method to apply board game information to an ad.
+
+14. lib/features/edit_ad/widgets/ad_form.dart
+    - Updated `AdForm`:
+      - Added functionality to fetch and apply BGG information using the new BGG search feature.
+
+15. lib/features/product/product_screen.dart
+    - Updated `ProductScreen`:
+      - Made `owner` and `address` fields nullable when accessed.
+
+16. lib/features/product/widgets/description_product.dart
+    - Updated `DescriptionProduct`:
+      - Changed subtitle text to "Descrição:".
+
+17. lib/features/product/widgets/sub_title_product.dart
+    - Updated `SubTitleProduct`:
+      - Adjusted the font size and style for subtitles.
+
+18. lib/my_material_app.dart
+    - Added route for `BggSearchScreen`.
+
+19. lib/repository/ad_repository.dart
+    - Updated `AdRepository`:
+      - Made `address` fields nullable when saving and updating ads.
+
+20. lib/repository/bgg_xmlapi_repository.dart
+    - Updated `BggXMLApiRepository`:
+      - Added methods to fetch and parse board game data from BGG XML API.
+      - Created a search method to retrieve board games by name.
+
+This commit enhances the application by integrating Boardgame functionality into the Ad model, allowing for more detailed and relevant data management.
+
+
+
 ## 2024/08/08 - version: 0.6.8+31
 
 Refactor `AdvertModel` to `AdModel` Across Project Files

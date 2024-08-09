@@ -90,7 +90,7 @@ class AdShopView extends StatelessWidget {
                   ),
                   ShopTextPrice(ad.price),
                   OwnerRating(
-                    owner: ad.owner.name,
+                    owner: ad.owner!.name,
                     starts: Random().nextInt(5) + 1,
                   ),
                 ],

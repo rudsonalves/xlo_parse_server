@@ -16,14 +16,15 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:xlo_mobx/components/buttons/big_button.dart';
 
+import '../../../common/models/boardgame.dart';
+import '../../../components/buttons/big_button.dart';
 import '../../../common/models/ad.dart';
 import '../../../common/validators/validators.dart';
 import '../../../components/form_fields/custom_form_field.dart';
 import '../../../components/others_widgets/fitted_button_segment.dart';
 import '../../address/address_screen.dart';
-import '../../boardgames/boardgame_screen.dart';
+import '../../bgg_search/bgg_search_screen.dart';
 import '../../mecanics/mecanics_screen.dart';
 import '../edit_ad_controller.dart';
 
@@ -66,6 +67,17 @@ class _AdFormState extends State<AdForm> {
     ctrl.setSelectedAddress(addressName);
   }
 
+  Future<void> _getBGGInfo() async {
+    final bg = await Navigator.pushNamed(
+      context,
+      BggSearchScreen.routeName,
+    ) as BoardgameModel?;
+
+    if (bg != null) {
+      ctrl.setBggInfo(bg);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -85,9 +97,7 @@ class _AdFormState extends State<AdForm> {
           Center(
             child: BigButton(
               color: Colors.cyan.withOpacity(0.45),
-              onPressed: () {
-                Navigator.pushNamed(context, BoardgamesScreen.routeName);
-              },
+              onPressed: _getBGGInfo,
               label: 'Informações do Jogo',
             ),
           ),
