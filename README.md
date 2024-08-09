@@ -9,7 +9,7 @@
 
 # ChangeLog
 
-## 2024/08/08 - version: 0.6.9+32
+## 2024/08/09 - version: 0.6.9+32
 
 Integrated Boardgame Functionality and Enhanced AdModel Structure
 
@@ -109,7 +109,7 @@ This commit enhances the application by integrating Boardgame functionality into
 
 
 
-## 2024/08/08 - version: 0.6.8+31
+## 2024/08/09 - version: 0.6.8+31
 
 Refactor `AdvertModel` to `AdModel` Across Project Files
 
