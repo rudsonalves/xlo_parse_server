@@ -20,6 +20,7 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 
+import '../common/models/bgg_boards.dart';
 import '../common/models/boardgame.dart';
 
 class BggXMLApiRepository {
@@ -27,14 +28,9 @@ class BggXMLApiRepository {
 
   static Future<BoardgameModel?> fentchBoardGame(int id) async {
     final url = '$baseUrl/boardgame/$id?&stats=1';
-    log(url);
-
     final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      return _parseBoardGame(response.body);
-    } else {
-      return null;
-    }
+    if (response.statusCode != 200) return null;
+    return _parseBoardGame(response.body);
   }
 
   static BoardgameModel? _parseBoardGame(String xmlString) {
@@ -54,6 +50,8 @@ class BggXMLApiRepository {
       final minplaytime = _getIntElement(boardgame, 'minplaytime');
       final maxplaytime = _getIntElement(boardgame, 'maxplaytime');
       final age = _getIntElement(boardgame, 'age');
+      final designer = _getStringElements(boardgame, 'boardgamedesigner');
+      final artist = _getStringElements(boardgame, 'boardgameartist');
       final description = _getStringElement(boardgame, 'description');
 
       double? average, bayesaverage, averageweight;
@@ -77,14 +75,16 @@ class BggXMLApiRepository {
           minplaytime: minplaytime ?? 0,
           maxplaytime: maxplaytime ?? 0,
           age: age ?? 0,
+          designer: designer,
+          artist: artist,
           description: description != null
               ? BoardgameModel.cleanDescription(description)
               : '',
           average: average,
           bayesaverage: bayesaverage,
           averageweight: averageweight,
-          boardgamemechanic: boardgamemechanic,
-          boardgamecategory: boardgamecategory);
+          mechanics: boardgamemechanic,
+          categories: boardgamecategory);
     } catch (err) {
       log(err.toString());
       return null;
@@ -134,6 +134,54 @@ class BggXMLApiRepository {
     } catch (err) {
       log(err.toString());
       return null;
+    }
+  }
+
+  static String? _getStringElements(XmlElement element, String key) {
+    try {
+      final tags = element.findAllElements(key);
+      if (tags.isEmpty) return null;
+      String itens = '';
+      for (final tag in tags) {
+        itens = itens.isEmpty ? tag.innerText : '$itens, ${tag.innerText}';
+      }
+      return itens;
+    } catch (err) {
+      log(err.toString());
+      return null;
+    }
+  }
+
+  static Future<List<BGGBoardsModel>> searchInBGG(String search) async {
+    try {
+      final uri = Uri.parse('$baseUrl/search?search=$search');
+
+      final response = await http.get(uri);
+      if (response.statusCode != 200) return [];
+
+      final List<BGGBoardsModel> bggList = [];
+      final document = XmlDocument.parse(response.body);
+      final boardgames = document.findAllElements('boardgame');
+      for (final boardgame in boardgames) {
+        final objectid = int.parse(boardgame.getAttribute('objectid') ?? '0');
+        final name = boardgame.findElements('name').first.innerText;
+        final yearElement = boardgame.findElements('yearpublished');
+
+        final yearPublished = yearElement.isNotEmpty
+            ? int.parse(yearElement.first.innerText)
+            : null;
+        bggList.add(
+          BGGBoardsModel(
+            objectid: objectid,
+            name: name,
+            yearpublished: yearPublished,
+          ),
+        );
+      }
+      return bggList;
+    } catch (err) {
+      log(err.toString());
+      return [];
     }
   }
 }

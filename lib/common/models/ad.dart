@@ -16,6 +16,7 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'address.dart';
+import 'boardgame.dart';
 import 'user.dart';
 
 enum AdStatus { pending, active, sold, deleted }
@@ -24,7 +25,8 @@ enum ProductCondition { all, used, sealed }
 
 class AdModel {
   String? id;
-  UserModel owner;
+  UserModel? owner;
+  BoardgameModel? boardgame;
   String title;
   int? bggId;
   String description;
@@ -32,23 +34,42 @@ class AdModel {
   double price;
   AdStatus status;
   List<int> mechanicsId;
-  AddressModel address;
+  AddressModel? address;
   List<String> images;
   ProductCondition condition;
+
+  int? yearpublished;
+  int? minplayers;
+  int? maxplayers;
+  int? minplaytime;
+  int? maxplaytime;
+  int? age;
+  String? designer;
+  String? artist;
+
   int views;
   DateTime createdAt;
 
   AdModel({
     this.id,
-    required this.owner,
+    this.owner,
+    this.boardgame,
     this.bggId,
     required this.images,
     required this.title,
     required this.description,
     required this.mechanicsId,
-    required this.address,
+    this.address,
     required this.price,
     this.condition = ProductCondition.all,
+    this.yearpublished,
+    this.minplayers,
+    this.maxplayers,
+    this.minplaytime,
+    this.maxplaytime,
+    this.age,
+    this.designer,
+    this.artist,
     this.hidePhone = false,
     this.status = AdStatus.pending,
     this.views = 0,
@@ -59,8 +80,9 @@ class AdModel {
   String toString() {
     return 'AdModel(id: $id,'
         ' owner: $owner,'
+        ' boardgame: $boardgame,'
         ' bggId: $bggId,'
-        ' images: ${images.toString()},'
+        ' images: $images,'
         ' title: $title,'
         ' description: $description,'
         ' mechanics: $mechanicsId,'

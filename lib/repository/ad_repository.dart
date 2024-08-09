@@ -255,7 +255,7 @@ class AdRepository {
       // }).toList();
 
       final parseAddress = ParseObject(keyAddressTable);
-      parseAddress.objectId = ad.address.id;
+      parseAddress.objectId = ad.address!.id;
 
       final parseAd = ParseObject(keyAdTable);
       if (ad.id != null) {
@@ -310,7 +310,7 @@ class AdRepository {
       List<ParseFile> parseImages = await _saveImages(ad.images, parseUser);
 
       final parseAddress = ParseObject(keyAddressTable);
-      parseAddress.objectId = ad.address.id;
+      parseAddress.objectId = ad.address!.id;
 
       if (ad.id == null) {
         throw Exception('Ad ID cannot be null for update');

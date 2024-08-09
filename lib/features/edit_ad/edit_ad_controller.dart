@@ -21,6 +21,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../common/models/ad.dart';
+import '../../common/models/boardgame.dart';
 import '../../common/models/mechanic.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
@@ -50,6 +51,14 @@ class EditAdController extends ChangeNotifier {
   final priceController = CurrencyTextController();
   final hidePhone = ValueNotifier<bool>(false);
 
+  AdModel ad = AdModel(
+    images: [],
+    title: '',
+    description: '',
+    mechanicsId: [],
+    price: 0,
+  );
+
   final _images = <String>[];
   final _imagesLength = ValueNotifier<int>(0);
   final List<int> _selectedMechIds = [];
@@ -76,18 +85,19 @@ class EditAdController extends ChangeNotifier {
   final _valit = ValueNotifier<bool?>(null);
   ValueNotifier<bool?> get valit => _valit;
 
-  void init(AdModel? ad) {
-    if (ad != null) {
-      nameController.text = ad.title;
-      bggName = rankManager.gameName(ad.bggId ?? -1);
-      descriptionController.text = ad.description;
-      hidePhone.value = ad.hidePhone;
-      priceController.currencyValue = ad.price;
-      setAdStatus(ad.status);
-      setMechanicsIds(ad.mechanicsId);
-      setSelectedAddress(ad.address.name);
-      setImages(ad.images);
-      setCondition(ad.condition);
+  void init(AdModel? editAd) {
+    if (editAd != null) {
+      ad = editAd;
+      nameController.text = editAd.title;
+      bggName = rankManager.gameName(editAd.bggId ?? -1);
+      descriptionController.text = editAd.description;
+      hidePhone.value = editAd.hidePhone;
+      priceController.currencyValue = editAd.price;
+      setAdStatus(editAd.status);
+      setMechanicsIds(editAd.mechanicsId);
+      setSelectedAddress(editAd.address!.name);
+      setImages(editAd.images);
+      setCondition(editAd.condition);
     }
   }
 
@@ -134,6 +144,22 @@ class EditAdController extends ChangeNotifier {
     }
   }
 
+  void setBggInfo(BoardgameModel bg) {
+    _changeState(EditAdStateLoading());
+    setMechanicsIds(bg.mechanics);
+    nameController.text = bg.name;
+    ad.title = bg.name;
+    ad.yearpublished = bg.yearpublished;
+    ad.minplayers = bg.minplayers;
+    ad.maxplayers = bg.maxplayers;
+    ad.minplaytime = bg.minplaytime;
+    ad.maxplaytime = bg.maxplaytime;
+    ad.age = bg.age;
+    ad.designer = bg.designer;
+    ad.artist = bg.artist;
+    _changeState(EditAdStateSuccess());
+  }
+
   void setMechanicsIds(List<int> mechanicsIds) {
     _selectedMechIds.clear();
     _selectedMechIds.addAll(
@@ -153,21 +179,21 @@ class EditAdController extends ChangeNotifier {
     if (!formValit) return null;
     try {
       _changeState(EditAdStateLoading());
-      final ad = AdModel(
-        id: id,
-        owner: currentUser.user!,
-        bggId: rankManager.gameId(bggName ?? ''),
-        images: _images,
-        title: nameController.text,
-        description: descriptionController.text,
-        mechanicsId: _selectedMechIds,
-        address: currentUser.addresses
-            .firstWhere((address) => address.id == _selectedAddressId),
-        price: priceController.currencyValue,
-        hidePhone: hidePhone.value,
-        condition: _condition,
-        status: _adStatus,
-      );
+
+      ad.id = id;
+      ad.owner = currentUser.user!;
+      ad.bggId = rankManager.gameId(bggName ?? '');
+      ad.images = _images;
+      ad.title = nameController.text;
+      ad.description = descriptionController.text;
+      ad.mechanicsId = _selectedMechIds;
+      ad.address = currentUser.addresses
+          .firstWhere((address) => address.id == _selectedAddressId);
+      ad.price = priceController.currencyValue;
+      ad.hidePhone = hidePhone.value;
+      ad.condition = _condition;
+      ad.status = _adStatus;
+
       await AdRepository.update(ad);
       _changeState(EditAdStateSuccess());
       return ad;
@@ -182,20 +208,20 @@ class EditAdController extends ChangeNotifier {
     if (!formValit) return null;
     try {
       _changeState(EditAdStateLoading());
-      final ad = AdModel(
-        owner: currentUser.user!,
-        bggId: rankManager.gameId(bggName ?? ''),
-        images: _images,
-        title: nameController.text,
-        description: descriptionController.text,
-        mechanicsId: _selectedMechIds,
-        address: currentUser.addresses
-            .firstWhere((address) => address.id == _selectedAddressId),
-        price: priceController.currencyValue,
-        hidePhone: hidePhone.value,
-        condition: _condition,
-        status: _adStatus,
-      );
+
+      ad.owner = currentUser.user!;
+      ad.bggId = rankManager.gameId(bggName ?? '');
+      ad.images = _images;
+      ad.title = nameController.text;
+      ad.description = descriptionController.text;
+      ad.mechanicsId = _selectedMechIds;
+      ad.address = currentUser.addresses
+          .firstWhere((address) => address.id == _selectedAddressId);
+      ad.price = priceController.currencyValue;
+      ad.hidePhone = hidePhone.value;
+      ad.condition = _condition;
+      ad.status = _adStatus;
+
       await AdRepository.save(ad);
       _changeState(EditAdStateSuccess());
       return ad;

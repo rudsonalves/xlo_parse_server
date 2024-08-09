@@ -15,31 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
+class BGGBoardsModel {
+  final int objectid;
+  final String name;
+  final int? yearpublished;
 
-import '../../../common/theme/app_text_style.dart';
-
-class SubTitleProduct extends StatelessWidget {
-  final String subtile;
-  final Color? color;
-  final EdgeInsetsGeometry? padding;
-
-  const SubTitleProduct({
-    super.key,
-    required this.subtile,
-    this.color,
-    this.padding,
+  BGGBoardsModel({
+    required this.objectid,
+    required this.name,
+    this.yearpublished,
   });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          padding != null ? padding! : const EdgeInsets.symmetric(vertical: 8),
-      child: Text(
-        subtile,
-        style: AppTextStyle.font16.copyWith(color: color),
-      ),
-    );
-  }
 }

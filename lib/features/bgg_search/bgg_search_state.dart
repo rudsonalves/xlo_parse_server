@@ -15,31 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
+abstract class BggSearchState {}
 
-import '../../../common/theme/app_text_style.dart';
+class BggSearchStateInitial extends BggSearchState {}
 
-class SubTitleProduct extends StatelessWidget {
-  final String subtile;
-  final Color? color;
-  final EdgeInsetsGeometry? padding;
+class BggSearchStateLoading extends BggSearchState {}
 
-  const SubTitleProduct({
-    super.key,
-    required this.subtile,
-    this.color,
-    this.padding,
-  });
+class BggSearchStateSuccess extends BggSearchState {}
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          padding != null ? padding! : const EdgeInsets.symmetric(vertical: 8),
-      child: Text(
-        subtile,
-        style: AppTextStyle.font16.copyWith(color: color),
-      ),
-    );
-  }
-}
+class BggSearchStateError extends BggSearchState {}

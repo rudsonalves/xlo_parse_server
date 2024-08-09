@@ -55,6 +55,15 @@ class BoardgameController extends ChangeNotifier {
   @override
   void dispose() {
     nameController.dispose();
+    minPlayersController.dispose();
+    maxPlayersController.dispose();
+    minTimeController.dispose();
+    maxTimeController.dispose();
+    ageController.dispose();
+    descriptionController.dispose();
+    weightController.dispose();
+    averageController.dispose();
+    mechsController.dispose();
     super.dispose();
   }
 
@@ -97,8 +106,7 @@ class BoardgameController extends ChangeNotifier {
     descriptionController.text = bggInfo.description ?? '';
     weightController.numericValue = bggInfo.averageweight ?? 0;
     averageController.numericValue = bggInfo.average ?? 0;
-    mechsController.text =
-        mechManager.namesFromIdListString(bggInfo.boardgamemechanic);
+    mechsController.text = mechManager.namesFromIdListString(bggInfo.mechanics);
   }
 
   void closeErroMessage() {

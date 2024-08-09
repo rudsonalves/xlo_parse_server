@@ -17,6 +17,7 @@
 // along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
 
 class BoardgameModel {
+  final int? id;
   final String name;
   final int yearpublished;
   final int minplayers;
@@ -24,14 +25,17 @@ class BoardgameModel {
   final int minplaytime;
   final int maxplaytime;
   final int age;
+  final String? designer;
+  final String? artist;
   String? description;
   final double? average;
   final double? bayesaverage;
   final double? averageweight;
-  final List<int> boardgamemechanic;
-  final List<int> boardgamecategory;
+  final List<int> mechanics;
+  final List<int> categories;
 
   BoardgameModel({
+    this.id,
     required this.name,
     required this.yearpublished,
     required this.minplayers,
@@ -39,53 +43,15 @@ class BoardgameModel {
     required this.minplaytime,
     required this.maxplaytime,
     required this.age,
+    this.designer,
+    this.artist,
     this.description,
     this.average,
     this.bayesaverage,
     this.averageweight,
-    required this.boardgamemechanic,
-    required this.boardgamecategory,
+    required this.mechanics,
+    required this.categories,
   });
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'name': name,
-      'yearpublished': yearpublished,
-      'minplayers': minplayers,
-      'maxplayers': maxplayers,
-      'minplaytime': minplaytime,
-      'maxplaytime': maxplaytime,
-      'age': age,
-      'description': description,
-      'average': average,
-      'bayesaverage': bayesaverage,
-      'averageweight': averageweight,
-      'boardgamemechanic': boardgamemechanic,
-      'boardgamecategory': boardgamecategory,
-    };
-  }
-
-  factory BoardgameModel.fromMap(Map<String, dynamic> map) {
-    return BoardgameModel(
-      name: map['name'] as String,
-      yearpublished: map['yearpublished'] as int,
-      minplayers: map['minplayers'] as int,
-      maxplayers: map['maxplayers'] as int,
-      minplaytime: map['minplaytime'] as int,
-      maxplaytime: map['maxplaytime'] as int,
-      age: map['age'] as int,
-      description: map['description'] != null
-          ? cleanDescription(map['description'] as String)
-          : null,
-      average: map['average'] != null ? map['average'] as double : null,
-      bayesaverage:
-          map['bayesaverage'] != null ? map['bayesaverage'] as double : null,
-      averageweight:
-          map['averageweight'] != null ? map['averageweight'] as double : null,
-      boardgamemechanic: List<int>.from(map['boardgamemechanic'] as List<int>),
-      boardgamecategory: List<int>.from(map['boardgamecategory'] as List<int>),
-    );
-  }
 
   static String cleanDescription(String text) {
     String description = text.replaceAll('<br/>', '\n');
@@ -99,18 +65,22 @@ class BoardgameModel {
 
   @override
   String toString() {
-    return 'BoardgameModel(name: $name,\n'
+    return 'BoardgameModel('
+        ' id: $id,\n'
+        ' name: $name,\n'
         ' yearpublished: $yearpublished,\n'
         ' minplayers: $minplayers,\n'
         ' maxplayers: $maxplayers,\n'
         ' minplaytime: $minplaytime,\n'
         ' maxplaytime: $maxplaytime,\n'
         ' age: $age,\n'
+        ' designer: $designer,\n'
+        ' artist: $artist,\n'
         ' description: $description,\n'
         ' average: $average,\n'
         ' bayesaverage: $bayesaverage,\n'
         ' averageweight: $averageweight,\n'
-        ' boardgamemechanic: $boardgamemechanic,\n'
-        ' boardgamecategory: $boardgamecategory)';
+        ' boardgamemechanic: $mechanics,\n'
+        ' boardgamecategory: $categories)';
   }
 }

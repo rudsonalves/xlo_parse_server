@@ -1,7 +1,7 @@
 name: xlo_mobx
 description: "A new Flutter project."
 publish_to: 'none'
-version: 0.6.8+31
+version: 0.6.9+32
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
