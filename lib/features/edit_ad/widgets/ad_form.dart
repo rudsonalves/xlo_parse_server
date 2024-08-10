@@ -25,7 +25,7 @@ import '../../../components/form_fields/custom_form_field.dart';
 import '../../../components/others_widgets/fitted_button_segment.dart';
 import '../../address/address_screen.dart';
 import '../../bgg_search/bgg_search_screen.dart';
-import '../../mecanics/mecanics_screen.dart';
+import '../../mechanics/mechanics_screen.dart';
 import '../edit_ad_controller.dart';
 
 class AdForm extends StatefulWidget {
@@ -49,14 +49,14 @@ class _AdFormState extends State<AdForm> {
   }
 
   Future<void> _addMecanics() async {
-    final result = await Navigator.pushNamed(
+    final mechIds = await Navigator.pushNamed(
       context,
-      MecanicsScreen.routeName,
+      MechanicsScreen.routeName,
       arguments: ctrl.selectedMechIds,
     ) as List<int>?;
 
-    if (result != null) {
-      ctrl.setMechanicsIds(result);
+    if (mechIds != null) {
+      ctrl.setMechanicsIds(mechIds);
       if (mounted) FocusScope.of(context).nextFocus();
     }
   }

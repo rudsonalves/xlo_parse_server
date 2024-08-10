@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import '../../common/models/ad.dart';
 import '../../common/models/filter.dart';
 import '../../components/buttons/big_button.dart';
-import '../mecanics/mecanics_screen.dart';
+import '../mechanics/mechanics_screen.dart';
 import 'filters_controller.dart';
 import 'filters_states.dart';
 import 'widgets/text_form_dropdown.dart';
@@ -69,7 +69,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   Future<void> _selectMechanics() async {
     final newMechsIds = await Navigator.pushNamed(
       context,
-      MecanicsScreen.routeName,
+      MechanicsScreen.routeName,
       arguments: ctrl.selectedMechIds,
     ) as List<int>;
     ctrl.mechUpdateNames(newMechsIds);

@@ -160,11 +160,9 @@ class EditAdController extends ChangeNotifier {
     _changeState(EditAdStateSuccess());
   }
 
-  void setMechanicsIds(List<int> mechanicsIds) {
+  void setMechanicsIds(List<int> mechIds) {
     _selectedMechIds.clear();
-    _selectedMechIds.addAll(
-      mechanics.where((c) => mechanicsIds.contains(c.id!)).map((c) => c.id!),
-    );
+    _selectedMechIds.addAll(mechIds);
     mechanicsController.text = selectedMachNames.join(', ');
   }
 
