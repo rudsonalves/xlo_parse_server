@@ -72,4 +72,8 @@ class MechanicsManager {
         .replaceAll('[', '')
         .replaceAll(']', '');
   }
+
+  MechanicModel mechanicOfId(int id) {
+    return _mechanics.firstWhere((item) => item.id == id);
+  }
 }

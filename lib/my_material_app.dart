@@ -33,7 +33,7 @@ import 'features/my_ads/my_ads_screen.dart';
 import 'features/my_data/my_data_screen.dart';
 import 'features/product/product_screen.dart';
 import 'features/filters/filters_screen.dart';
-import 'features/mecanics/mecanics_screen.dart';
+import 'features/mechanics/mechanics_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/shop/shop_screen.dart';
 import 'features/edit_ad/edit_ad_screen.dart';
@@ -109,11 +109,11 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
                     return FiltersScreen(filter);
                   });
 
-                case MecanicsScreen.routeName:
+                case MechanicsScreen.routeName:
                   return MaterialPageRoute(builder: (context) {
                     final selectedIds = settings.arguments as List<int>;
 
-                    return MecanicsScreen(
+                    return MechanicsScreen(
                       selectedIds: selectedIds,
                     );
                   });
