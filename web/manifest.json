@@ -1,6 +1,6 @@
 {
-    "name": "xlo_parse_server",
-    "short_name": "xlo_parse_server",
+    "name": "bgbazzar",
+    "short_name": "bgbazzar",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

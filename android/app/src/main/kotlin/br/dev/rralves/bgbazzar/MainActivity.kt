@@ -1,4 +1,4 @@
-package br.dev.rralves.xlo_parse_server
+package br.dev.rralves.bgbazzar
 
 import io.flutter.embedding.android.FlutterActivity
 

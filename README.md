@@ -1,4 +1,4 @@
-# xlo_parse_server
+# bgbazzar
 
 ## TODO List
 
@@ -8,6 +8,96 @@
 
 
 # ChangeLog
+
+## 2024/08/12 - version: 0.6.11+34
+
+Refactor project to rename from `xlo_parse_server` to `bgbazzar` and update related files
+
+1. README.md
+   - Renamed project title from `xlo_parse_server` to `bgbazzar`.
+   - Updated references in the TODO list and project description.
+
+2. android/app/build.gradle
+   - Changed `namespace` from `br.dev.rralves.xlo_parse_server` to `br.dev.rralves.bgbazzar`.
+   - Updated `applicationId` to `br.dev.rralves.bgbazzar`.
+
+3. android/app/src/main/AndroidManifest.xml
+   - Updated `package` attribute to `br.dev.rralves.bgbazzar`.
+   - Changed `android:label` to `bgbazzar`.
+
+4. android/app/src/main/kotlin/br/dev/rralves/bgbazzar/MainActivity.kt
+   - Renamed package from `br.dev.rralves.xlo_parse_server` to `br.dev.rralves.bgbazzar`.
+
+5. ios/Runner.xcodeproj/project.pbxproj
+   - Updated `PRODUCT_BUNDLE_IDENTIFIER` references from `com.example.xloParseServer` to `br.dev.rralves.xloParseServer`.
+
+6. ios/Runner/AppDelegate.swift
+   - Changed the annotation from `@UIApplicationMain` to `@main`.
+
+7. lib/common/abstracts/data_result.dart
+   - Added a new abstract class `DataResult` for handling either success or failure outcomes, inspired by Swift and Dart implementations.
+   - Introduced `Failure`, `GenericFailure`, `APIFailure`, `_SuccessResult`, and `_FailureResult` classes.
+
+8. lib/common/models/ad.dart
+   - Removed `bggId` property from `AdModel`.
+   - Reorganized `toString` method to include new properties like `yearpublished`, `minplayers`, `maxplayers`, `minplaytime`, `maxplaytime`, `age`, `designer`, and `artist`.
+
+9. lib/common/models/boardgame.dart
+   - Refactored properties: replaced `id`, `name`, `yearpublished`, `minplayers`, `maxplayers`, `minplaytime`, `maxplaytime`, `age`, `designer`, `artist` with new names and types for better clarity.
+   - Updated `toString` method to reflect these changes.
+
+10. lib/components/others_widgets/ad_list_view/widgets/dismissible_ad.dart
+    - Added a `FIXME` comment to indicate the need to select direction to disable unnecessary shifts.
+
+11. lib/features/bgg_search/bgg_search_screen.dart
+    - Replaced `BigButton` with `OverflowBar` to allow more granular control of buttons like `Selecionar` and `Cancelar`.
+
+12. lib/features/bgg_search/widgets/bg_info_card.dart
+    - Reorganized UI layout in `BGInfoCard`, added image display, and adjusted text fields with new board game properties.
+    - Improved layout responsiveness and added `TextOverflow.ellipsis` to designer and artist fields.
+
+13. lib/features/boardgames/boardgame_controller.dart
+    - Updated method `loadBoardInfo` to accommodate new property names for board game details.
+
+14. lib/features/edit_ad/edit_ad_controller.dart
+    - Removed `bggId` handling from the ad editing logic.
+    - Updated properties to use new naming conventions like `publishYear`, `minPlayers`, `maxPlayers`, etc.
+
+15. lib/repository/ad_repository.dart
+    - Removed deprecated `bggId` from the ad repository.
+    - Added logic to save additional properties such as `yearpublished`, `minplayers`, `maxplayers`, `minplaytime`, `maxplaytime`, `age`, `designer`, and `artist`.
+
+16. lib/repository/bgg_xmlapi_repository.dart
+    - Included `image` property in the parsing logic.
+    - Removed unnecessary properties and refined model creation logic for `BoardgameModel`.
+
+17. lib/repository/boardgame_repository.dart
+    - Added new repository class `BoardgameRepository` to handle CRUD operations for board games.
+
+18. lib/repository/common/constants.dart
+    - Added constants related to `BoardgameModel` to handle new properties.
+
+19. lib/repository/common/parse_to_model.dart
+    - Added parsing logic for `BoardgameModel`.
+    - Removed `bggId` related parsing from ad model creation.
+
+20. pubspec.yaml
+    - Renamed project from `xlo_mobx` to `bgbazzar`.
+    - Added `equatable` package dependency.
+
+21. test/common/abstracts/data_result_test.dart
+    - Added test cases for `DataResult` class, including success, failure, and edge cases.
+
+22. test/repository/ibge_repository_test.dart
+    - Updated import path from `xlo_mobx` to `bgbazzar`.
+
+23. web/index.html
+    - Renamed project references from `xlo_parse_server` to `bgbazzar`.
+
+24. web/manifest.json
+    - Updated `name` and `short_name` from `xlo_parse_server` to `bgbazzar`.
+
+The project has been successfully refactored to transition from `xlo_parse_server` to `bgbazzar`, with corresponding updates across all relevant files.
 
 ## 2024/08/09 - version: 0.6.9+32
 
@@ -1682,7 +1772,7 @@ Updated various project files to enhance functionality and improve maintainabili
 2. **android/app/src/main/AndroidManifest.xml**
    - Added `package` attribute to the manifest tag.
 
-3. **android/app/src/main/kotlin/com/example/xlo_parse_server/MainActivity.kt**
+3. **android/app/src/main/kotlin/com/example/bgbazzar/MainActivity.kt**
    - Updated package name.
 
 4. **android/build.gradle**

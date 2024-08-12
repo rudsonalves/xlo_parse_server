@@ -1,19 +1,19 @@
 // Copyright (C) 2024 Rudson Alves
 //
-// This file is part of xlo_parse_server.
+// This file is part of bgbazzar.
 //
-// xlo_parse_server is free software: you can redistribute it and/or modify
+// bgbazzar is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// xlo_parse_server is distributed in the hope that it will be useful,
+// bgbazzar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
+// along with bgbazzar.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:developer';
 import 'dart:io';
@@ -248,12 +248,6 @@ class AdRepository {
 
       List<ParseFile> parseImages = await _saveImages(ad.images, parseUser);
 
-      // final List<ParseObject> parseMechanics = ad.mechanicsId.map((id) {
-      //   final parse = ParseObject(keyMechanicTable);
-      //   parse.objectId = id;
-      //   return parse;
-      // }).toList();
-
       final parseAddress = ParseObject(keyAddressTable);
       parseAddress.objectId = ad.address!.id;
 
@@ -270,12 +264,19 @@ class AdRepository {
         ..setACL(parseAcl)
         ..set<ParseUser>(keyAdOwner, parseUser)
         ..set<String>(keyAdTitle, ad.title)
-        ..set<int?>(keyAdBggId, ad.bggId)
         ..set<String>(keyAdDescription, ad.description)
         ..set<bool>(keyAdHidePhone, ad.hidePhone)
         ..set<double>(keyAdPrice, ad.price)
         ..set<int>(keyAdStatus, ad.status.index)
         ..set<int>(keyAdCondition, ad.condition.index)
+        ..set<int?>(keyAdYearpublished, ad.yearpublished)
+        ..set<int?>(keyAdMinplayers, ad.minplayers)
+        ..set<int?>(keyAdMaxplayers, ad.maxplayers)
+        ..set<int?>(keyAdMinplaytime, ad.minplaytime)
+        ..set<int?>(keyAdMaxplaytime, ad.maxplaytime)
+        ..set<int?>(keyAdAge, ad.age)
+        ..set<String?>(keyAdDesigner, ad.designer)
+        ..set<String?>(keyAdArtist, ad.artist)
         ..set<ParseObject>(keyAdAddress, parseAddress)
         ..set<List<ParseFile>>(keyAdImages, parseImages)
         ..set<List<int>>(keyAdMechanics, ad.mechanicsId);
@@ -296,7 +297,7 @@ class AdRepository {
     } catch (err) {
       final message = 'AdRepository.save: $err';
       log(message);
-      throw Exception(message);
+      rethrow;
     }
   }
 
@@ -320,12 +321,19 @@ class AdRepository {
 
       parseAd
         ..set<String>(keyAdTitle, ad.title)
-        ..set<int?>(keyAdBggId, ad.bggId)
         ..set<String>(keyAdDescription, ad.description)
         ..set<bool>(keyAdHidePhone, ad.hidePhone)
         ..set<double>(keyAdPrice, ad.price)
         ..set<int>(keyAdStatus, ad.status.index)
         ..set<int>(keyAdCondition, ad.condition.index)
+        ..set<int?>(keyAdYearpublished, ad.yearpublished)
+        ..set<int?>(keyAdMinplayers, ad.minplayers)
+        ..set<int?>(keyAdMaxplayers, ad.maxplayers)
+        ..set<int?>(keyAdMinplaytime, ad.minplaytime)
+        ..set<int?>(keyAdMaxplaytime, ad.maxplaytime)
+        ..set<int?>(keyAdAge, ad.age)
+        ..set<String?>(keyAdDesigner, ad.designer)
+        ..set<String?>(keyAdArtist, ad.artist)
         ..set<ParseObject>(keyAdAddress, parseAddress)
         ..set<List<ParseFile>>(keyAdImages, parseImages)
         ..set<List<int>>(keyAdMechanics, ad.mechanicsId);
@@ -346,7 +354,7 @@ class AdRepository {
     } catch (err) {
       final message = 'AdRepository.update: $err';
       log(message);
-      throw Exception(message);
+      rethrow;
     }
   }
 
@@ -394,7 +402,7 @@ class AdRepository {
       return parseImages;
     } catch (err) {
       log('exception in _saveImages: $err');
-      throw Exception(err);
+      rethrow;
     }
   }
 
