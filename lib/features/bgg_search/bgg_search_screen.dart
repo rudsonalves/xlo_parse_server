@@ -1,24 +1,23 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
-// This file is part of xlo_parse_server.
+// This file is part of bgbazzar.
 //
-// xlo_parse_server is free software: you can redistribute it and/or modify
+// bgbazzar is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// xlo_parse_server is distributed in the hope that it will be useful,
+// bgbazzar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
+// along with bgbazzar.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 
-import '../../components/buttons/big_button.dart';
 import '../../components/others_widgets/state_error_message.dart';
 import '../../components/others_widgets/state_loading_message.dart';
 import 'bgg_search_controller.dart';
@@ -60,7 +59,7 @@ class _BggSearchScreenState extends State<BggSearchScreen> {
         title: const Text('BGG Search'),
         centerTitle: true,
         leading: IconButton(
-          onPressed: _backPage,
+          onPressed: _backPageWithGame,
           icon: const Icon(Icons.arrow_back_ios_rounded),
         ),
       ),
@@ -94,10 +93,21 @@ class _BggSearchScreenState extends State<BggSearchScreen> {
                         if (ctrl.selectedGame != null)
                           BGInfoCard(ctrl.selectedGame!),
                         if (ctrl.selectedGame != null)
-                          BigButton(
-                            label: 'Selecionar',
-                            color: Colors.blueAccent.withOpacity(0.45),
-                            onPressed: _backPageWithGame,
+                          OverflowBar(
+                            alignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              FilledButton.tonalIcon(
+                                onPressed: _backPageWithGame,
+                                label: const Text('Selecionar'),
+                                icon: const Icon(
+                                    Icons.check_circle_outline_rounded),
+                              ),
+                              FilledButton.tonalIcon(
+                                onPressed: _backPage,
+                                label: const Text('Cancelar'),
+                                icon: const Icon(Icons.cancel),
+                              ),
+                            ],
                           ),
                       ],
                     ),

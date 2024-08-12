@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.dev.rralves.xlo_parse_server">
+    package="br.dev.rralves.bgbazzar">
 
     <!-- Permissões necessárias -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:label="xlo_parse_server"
+        android:label="bgbazzar"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true">

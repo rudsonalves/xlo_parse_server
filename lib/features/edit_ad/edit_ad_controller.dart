@@ -1,19 +1,19 @@
 // Copyright (C) 2024 Rudson Alves
 //
-// This file is part of xlo_parse_server.
+// This file is part of bgbazzar.
 //
-// xlo_parse_server is free software: you can redistribute it and/or modify
+// bgbazzar is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// xlo_parse_server is distributed in the hope that it will be useful,
+// bgbazzar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
+// along with bgbazzar.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:developer';
 import 'dart:io';
@@ -89,7 +89,6 @@ class EditAdController extends ChangeNotifier {
     if (editAd != null) {
       ad = editAd;
       nameController.text = editAd.title;
-      bggName = rankManager.gameName(editAd.bggId ?? -1);
       descriptionController.text = editAd.description;
       hidePhone.value = editAd.hidePhone;
       priceController.currencyValue = editAd.price;
@@ -149,12 +148,12 @@ class EditAdController extends ChangeNotifier {
     setMechanicsIds(bg.mechanics);
     nameController.text = bg.name;
     ad.title = bg.name;
-    ad.yearpublished = bg.yearpublished;
-    ad.minplayers = bg.minplayers;
-    ad.maxplayers = bg.maxplayers;
-    ad.minplaytime = bg.minplaytime;
-    ad.maxplaytime = bg.maxplaytime;
-    ad.age = bg.age;
+    ad.yearpublished = bg.publishYear;
+    ad.minplayers = bg.minPlayers;
+    ad.maxplayers = bg.maxPlayers;
+    ad.minplaytime = bg.minTime;
+    ad.maxplaytime = bg.maxTime;
+    ad.age = bg.minAge;
     ad.designer = bg.designer;
     ad.artist = bg.artist;
     _changeState(EditAdStateSuccess());
@@ -180,7 +179,6 @@ class EditAdController extends ChangeNotifier {
 
       ad.id = id;
       ad.owner = currentUser.user!;
-      ad.bggId = rankManager.gameId(bggName ?? '');
       ad.images = _images;
       ad.title = nameController.text;
       ad.description = descriptionController.text;
@@ -208,7 +206,6 @@ class EditAdController extends ChangeNotifier {
       _changeState(EditAdStateLoading());
 
       ad.owner = currentUser.user!;
-      ad.bggId = rankManager.gameId(bggName ?? '');
       ad.images = _images;
       ad.title = nameController.text;
       ad.description = descriptionController.text;

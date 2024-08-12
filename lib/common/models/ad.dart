@@ -1,19 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
-// This file is part of xlo_parse_server.
+// This file is part of bgbazzar.
 //
-// xlo_parse_server is free software: you can redistribute it and/or modify
+// bgbazzar is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// xlo_parse_server is distributed in the hope that it will be useful,
+// bgbazzar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
+// along with bgbazzar.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'address.dart';
 import 'boardgame.dart';
@@ -28,7 +29,6 @@ class AdModel {
   UserModel? owner;
   BoardgameModel? boardgame;
   String title;
-  int? bggId;
   String description;
   bool hidePhone;
   double price;
@@ -54,7 +54,6 @@ class AdModel {
     this.id,
     this.owner,
     this.boardgame,
-    this.bggId,
     required this.images,
     required this.title,
     required this.description,
@@ -81,16 +80,23 @@ class AdModel {
     return 'AdModel(id: $id,'
         ' owner: $owner,'
         ' boardgame: $boardgame,'
-        ' bggId: $bggId,'
-        ' images: $images,'
         ' title: $title,'
         ' description: $description,'
-        ' mechanics: $mechanicsId,'
-        ' address: $address,'
-        ' price: $price,'
         ' hidePhone: $hidePhone,'
+        ' price: $price,'
         ' status: $status,'
+        ' mechanicsId: $mechanicsId,'
+        ' address: $address,'
+        ' images: $images,'
         ' condition: $condition,'
+        ' yearpublished: $yearpublished,'
+        ' minplayers: $minplayers,'
+        ' maxplayers: $maxplayers,'
+        ' minplaytime: $minplaytime,'
+        ' maxplaytime: $maxplaytime,'
+        ' age: $age,'
+        ' designer: $designer,'
+        ' artist: $artist,'
         ' views: $views,'
         ' createdAt: $createdAt)';
   }

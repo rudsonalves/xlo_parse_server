@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:xlo_mobx/repository/ibge_repository.dart';
+import 'package:bgbazzar/repository/ibge_repository.dart';
 
 void main() {
   group('ibge repository ...', () {

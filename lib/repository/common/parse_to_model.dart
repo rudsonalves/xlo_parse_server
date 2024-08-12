@@ -1,24 +1,25 @@
 // Copyright (C) 2024 Rudson Alves
 //
-// This file is part of xlo_parse_server.
+// This file is part of bgbazzar.
 //
-// xlo_parse_server is free software: you can redistribute it and/or modify
+// bgbazzar is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// xlo_parse_server is distributed in the hope that it will be useful,
+// bgbazzar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
+// along with bgbazzar.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../../common/models/address.dart';
 import '../../common/models/ad.dart';
+import '../../common/models/boardgame.dart';
 import '../../common/models/favorite.dart';
 import '../../common/models/user.dart';
 import 'constants.dart';
@@ -82,7 +83,6 @@ class ParseToModel {
       id: parse.objectId,
       owner: user,
       title: parse.get<String>(keyAdTitle)!,
-      bggId: parse.get<int?>(keyAdBggId)!,
       description: parse.get<String>(keyAdDescription)!,
       price: parse.get<num>(keyAdPrice)!.toDouble(),
       hidePhone: parse.get<bool>(keyAdHidePhone)!,
@@ -95,6 +95,14 @@ class ParseToModel {
           .firstWhere((s) => s.index == parse.get<int>(keyAdStatus)!),
       condition: ProductCondition.values
           .firstWhere((c) => c.index == parse.get<int>(keyAdCondition)!),
+      yearpublished: parse.get<int?>(keyAdYearpublished),
+      minplayers: parse.get<int?>(keyAdMinplayers),
+      maxplayers: parse.get<int?>(keyAdMaxplayers),
+      minplaytime: parse.get<int?>(keyAdMinplaytime),
+      maxplaytime: parse.get<int?>(keyAdMaxplaytime),
+      age: parse.get<int?>(keyAdAge),
+      designer: parse.get<String?>(keyAdDesigner),
+      artist: parse.get<String?>(keyAdArtist),
       views: parse.get<int>(keyAdViews, defaultValue: 0)!,
       createdAt: parse.get<DateTime>(keyAdCreatedAt)!,
     );
@@ -106,6 +114,26 @@ class ParseToModel {
     return FavoriteModel(
       id: parse.objectId,
       adId: adMap['objectId'],
+    );
+  }
+
+  static boardgameModel(ParseObject parse) {
+    return BoardgameModel(
+      id: parse.objectId,
+      name: parse.get<String>(keyBgName)!,
+      image: parse.get<ParseFile>(keyBgImage)!.url!,
+      publishYear: parse.get<int>(keyBgPublishYear)!,
+      minPlayers: parse.get<int>(keyBgMinPlayers)!,
+      maxPlayers: parse.get<int>(keyBgMaxPlayers)!,
+      minTime: parse.get<int>(keyBgMinTime)!,
+      maxTime: parse.get<int>(keyBgMaxTime)!,
+      minAge: parse.get<int>(keyBgMinAge)!,
+      designer: parse.get<String?>(keyBgDesigner)!,
+      artist: parse.get<String?>(keyBgArtist)!,
+      description: parse.get<String?>(keyBgDescription)!,
+      scoring: parse.get<double?>(keyBgScoring)!,
+      weight: parse.get<double?>(keyBgWeight)!,
+      mechanics: parse.get<List<int>>(keyBgMechanics)!,
     );
   }
 }

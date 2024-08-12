@@ -1,20 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright (C) 2024 Rudson Alves
 //
-// This file is part of xlo_parse_server.
+// This file is part of bgbazzar.
 //
-// xlo_parse_server is free software: you can redistribute it and/or modify
+// bgbazzar is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// xlo_parse_server is distributed in the hope that it will be useful,
+// bgbazzar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with xlo_parse_server.  If not, see <https://www.gnu.org/licenses/>.
+// along with bgbazzar.  If not, see <https://www.gnu.org/licenses/>.
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
@@ -44,6 +44,7 @@ class BggXMLApiRepository {
       log(nameElement.toString());
       final name = nameElement.innerText;
 
+      final image = _getStringElement(boardgame, 'image');
       final yearpublished = _getIntElement(boardgame, 'yearpublished');
       final minplayers = _getIntElement(boardgame, 'minplayers');
       final maxplayers = _getIntElement(boardgame, 'maxplayers');
@@ -54,37 +55,33 @@ class BggXMLApiRepository {
       final artist = _getStringElements(boardgame, 'boardgameartist');
       final description = _getStringElement(boardgame, 'description');
 
-      double? average, bayesaverage, averageweight;
+      double? average, averageweight;
       final ratingsElement = boardgame.findAllElements('ratings').firstOrNull;
       if (ratingsElement != null) {
         average = _getDoubleElement(ratingsElement, 'average');
-        bayesaverage = _getDoubleElement(ratingsElement, 'bayesaverage');
         averageweight = _getDoubleElement(ratingsElement, 'averageweight');
       }
 
       final boardgamemechanic =
           _getIntListElement(boardgame, 'boardgamemechanic');
-      final boardgamecategory =
-          _getIntListElement(boardgame, 'boardgamecategory');
 
       return BoardgameModel(
           name: name,
-          yearpublished: yearpublished ?? 0,
-          minplayers: minplayers ?? 0,
-          maxplayers: maxplayers ?? 0,
-          minplaytime: minplaytime ?? 0,
-          maxplaytime: maxplaytime ?? 0,
-          age: age ?? 0,
+          image: image ?? '',
+          publishYear: yearpublished ?? 0,
+          minPlayers: minplayers ?? 0,
+          maxPlayers: maxplayers ?? 0,
+          minTime: minplaytime ?? 0,
+          maxTime: maxplaytime ?? 0,
+          minAge: age ?? 0,
           designer: designer,
           artist: artist,
           description: description != null
               ? BoardgameModel.cleanDescription(description)
               : '',
-          average: average,
-          bayesaverage: bayesaverage,
-          averageweight: averageweight,
-          mechanics: boardgamemechanic,
-          categories: boardgamecategory);
+          scoring: average,
+          weight: averageweight,
+          mechanics: boardgamemechanic);
     } catch (err) {
       log(err.toString());
       return null;
