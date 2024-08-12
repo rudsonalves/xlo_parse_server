@@ -21,7 +21,7 @@ import '../../common/models/user.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/current_user.dart';
 import '../../get_it.dart';
-import '../../repository/user_repository.dart';
+import '../../repository/parse_server/user_repository.dart';
 import 'login_state.dart';
 
 class LoginController extends ChangeNotifier {

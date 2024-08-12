@@ -21,7 +21,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import '../common/models/viacep_address.dart';
+import '../../common/models/viacep_address.dart';
 
 /// This class provides methods to interact with the ViaCEP API
 /// to retrieve address information based on a given CEP (Brazilian postal code).

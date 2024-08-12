@@ -26,7 +26,7 @@ import '../../common/models/state.dart';
 import '../../components/custon_field_controllers/currency_text_controller.dart';
 import '../../get_it.dart';
 import '../../manager/mechanics_manager.dart';
-import '../../repository/ibge_repository.dart';
+import '../../repository/gov_api/ibge_repository.dart';
 import 'filters_states.dart';
 
 class FiltersController extends ChangeNotifier {

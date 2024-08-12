@@ -18,7 +18,7 @@
 import 'dart:developer';
 
 import '../common/models/mechanic.dart';
-import '../repository/mechanic_repository.dart';
+import '../repository/sqlite/mechanic_repository.dart';
 
 /// This class manages the list of mechanics, providing methods to initialize,
 /// retrieve mechanic names, and find mechanic names based on their IDs.

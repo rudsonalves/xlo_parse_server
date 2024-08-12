@@ -20,8 +20,8 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 
-import '../common/models/bgg_boards.dart';
-import '../common/models/boardgame.dart';
+import '../../common/models/bgg_boards.dart';
+import '../../common/models/boardgame.dart';
 
 class BggXMLApiRepository {
   static const baseUrl = 'https://api.geekdo.com/xmlapi';

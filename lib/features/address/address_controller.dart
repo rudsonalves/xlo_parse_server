@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import '../../common/models/address.dart';
 import '../../get_it.dart';
 import '../../manager/address_manager.dart';
-import '../../repository/ad_repository.dart';
+import '../../repository/parse_server/ad_repository.dart';
 import 'address_state.dart';
 
 class AddressController extends ChangeNotifier {

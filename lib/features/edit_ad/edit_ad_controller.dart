@@ -29,7 +29,7 @@ import '../../components/custon_field_controllers/currency_text_controller.dart'
 import '../../get_it.dart';
 import '../../manager/bgg_rank_manager.dart';
 import '../../manager/mechanics_manager.dart';
-import '../../repository/ad_repository.dart';
+import '../../repository/parse_server/ad_repository.dart';
 import 'edit_ad_state.dart';
 
 class EditAdController extends ChangeNotifier {

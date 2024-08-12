@@ -23,7 +23,7 @@ import '../../common/models/address.dart';
 import '../../common/singletons/current_user.dart';
 import '../../components/custon_field_controllers/masked_text_controller.dart';
 import '../../get_it.dart';
-import '../../repository/viacep_repository.dart';
+import '../../repository/gov_api/viacep_repository.dart';
 import 'new_address_state.dart';
 
 class NewAddressController extends ChangeNotifier {
