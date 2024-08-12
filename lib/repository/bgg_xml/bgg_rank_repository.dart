@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with bgbazzar.  If not, see <https://www.gnu.org/licenses/>.
 
-import '../common/models/bgg_rank.dart';
-import '../store/bgg_rank_store.dart';
+import '../../common/models/bgg_rank.dart';
+import '../sqlite/store/bgg_rank_store.dart';
 
 class BggRankRepository {
   static Future<List<BGName>> getBGNames(int year) async {

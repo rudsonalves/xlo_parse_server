@@ -19,7 +19,7 @@
 import '../common/models/address.dart';
 import '../common/singletons/current_user.dart';
 import '../get_it.dart';
-import '../repository/address_repository.dart';
+import '../repository/parse_server/address_repository.dart';
 
 /// Custom exception to handle duplicate address names.
 class DuplicateNameException implements Exception {

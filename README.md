@@ -9,6 +9,61 @@
 
 # ChangeLog
 
+## 2024/08/12 - version: 0.6.12+35
+
+Refactor project structure by organizing repositories into more descriptive directories
+
+1. lib/repository/bgg_rank_repository.dart
+   - Renamed and moved to `lib/repository/bgg_xml/bgg_rank_repository.dart` to better reflect its association with BGG XML API.
+
+2. lib/repository/bgg_xmlapi_repository.dart
+   - Renamed and moved to `lib/repository/bgg_xml/bgg_xmlapi_repository.dart` to align with other BGG-related repositories.
+
+3. lib/repository/ibge_repository.dart
+   - Renamed and moved to `lib/repository/gov_api/ibge_repository.dart` to categorize it under government APIs.
+
+4. lib/repository/viacep_repository.dart
+   - Renamed and moved to `lib/repository/gov_api/viacep_repository.dart` to keep it alongside other government-related APIs.
+
+5. lib/repository/ad_repository.dart
+   - Renamed and moved to `lib/repository/parse_server/ad_repository.dart` to clearly indicate its reliance on Parse Server.
+
+6. lib/repository/address_repository.dart
+   - Renamed and moved to `lib/repository/parse_server/address_repository.dart` for better organization under Parse Server.
+
+7. lib/repository/boardgame_repository.dart
+   - Renamed and moved to `lib/repository/parse_server/boardgame_repository.dart` to group all Parse Server-related repositories together.
+
+8. lib/repository/common/constants.dart
+   - Renamed and moved to `lib/repository/parse_server/common/constants.dart` to keep constants within the Parse Server directory.
+
+9. lib/repository/common/parse_to_model.dart
+   - Renamed and moved to `lib/repository/parse_server/common/parse_to_model.dart` to keep model parsing logic within Parse Server.
+
+10. lib/repository/favorite_repository.dart
+    - Renamed and moved to `lib/repository/parse_server/favorite_repository.dart` to be consistent with other Parse Server repositories.
+
+11. lib/repository/user_repository.dart
+    - Renamed and moved to `lib/repository/parse_server/user_repository.dart` to maintain consistency in the Parse Server directory.
+
+12. lib/repository/mechanic_repository.dart
+    - Renamed and moved to `lib/repository/sqlite/mechanic_repository.dart` to clarify its use of SQLite.
+
+13. lib/store/bgg_rank_store.dart
+    - Renamed and moved to `lib/repository/sqlite/store/bgg_rank_store.dart` to better categorize store-related files under SQLite.
+
+14. lib/store/constants/constants.dart
+    - Renamed and moved to `lib/repository/sqlite/store/constants/constants.dart` to align with SQLite-related stores.
+
+15. lib/store/database_manager.dart
+    - Renamed and moved to `lib/repository/sqlite/store/database_manager.dart` to centralize database management under SQLite.
+
+16. lib/store/mech_store.dart
+    - Renamed and moved to `lib/repository/sqlite/store/mech_store.dart` to group all mechanic-related stores within SQLite.
+
+This commit reorganizes the project structure by categorizing repositories and stores into more descriptive directories, improving the clarity and maintainability of the codebase.
+
+
 ## 2024/08/12 - version: 0.6.11+34
 
 Refactor project to rename from `xlo_parse_server` to `bgbazzar` and update related files

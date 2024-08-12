@@ -30,8 +30,8 @@ import '../../common/models/user.dart';
 import '../../common/singletons/app_settings.dart';
 import '../../common/singletons/search_filter.dart';
 import '../../get_it.dart';
-import '../../repository/ad_repository.dart';
-import '../../repository/common/constants.dart';
+import '../../repository/parse_server/ad_repository.dart';
+import '../../repository/parse_server/common/constants.dart';
 
 class ShopController extends BasicController {
   final app = getIt<AppSettings>();

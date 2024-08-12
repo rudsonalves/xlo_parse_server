@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 
 import '../../components/others_widgets/state_error_message.dart';
 import '../../components/others_widgets/state_loading_message.dart';
-import '../../repository/ad_repository.dart';
+import '../../repository/parse_server/ad_repository.dart';
 import '../new_address/new_address_screen.dart';
 import 'address_controller.dart';
 import 'address_state.dart';

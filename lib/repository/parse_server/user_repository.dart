@@ -19,9 +19,9 @@ import 'dart:developer';
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
-import '../common/models/user.dart';
-import '../common/singletons/current_user.dart';
-import '../get_it.dart';
+import '../../common/models/user.dart';
+import '../../common/singletons/current_user.dart';
+import '../../get_it.dart';
 import 'common/constants.dart';
 import 'common/parse_to_model.dart';
 

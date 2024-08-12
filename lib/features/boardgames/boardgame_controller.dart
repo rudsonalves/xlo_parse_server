@@ -24,7 +24,7 @@ import '../../common/models/boardgame.dart';
 import '../../components/custon_field_controllers/numeric_edit_controller.dart';
 import '../../get_it.dart';
 import '../../manager/bgg_rank_manager.dart';
-import '../../repository/bgg_xmlapi_repository.dart';
+import '../../repository/bgg_xml/bgg_xmlapi_repository.dart';
 import 'boardgame_state.dart';
 
 class BoardgameController extends ChangeNotifier {

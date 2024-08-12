@@ -16,7 +16,7 @@
 // along with bgbazzar.  If not, see <https://www.gnu.org/licenses/>.
 
 import '../common/models/bgg_rank.dart';
-import '../repository/bgg_rank_repository.dart';
+import '../repository/bgg_xml/bgg_rank_repository.dart';
 
 class BggRankManager {
   final repository = BggRankRepository();

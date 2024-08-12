@@ -21,9 +21,9 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
-import '../common/models/ad.dart';
-import '../common/models/filter.dart';
-import '../common/models/user.dart';
+import '../../common/models/ad.dart';
+import '../../common/models/filter.dart';
+import '../../common/models/user.dart';
 import 'common/constants.dart';
 import 'common/parse_to_model.dart';
 

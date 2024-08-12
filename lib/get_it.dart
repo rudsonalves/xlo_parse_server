@@ -28,7 +28,7 @@ import 'manager/address_manager.dart';
 import 'manager/bgg_rank_manager.dart';
 import 'manager/favorites_manager.dart';
 import 'manager/mechanics_manager.dart';
-import 'store/database_manager.dart';
+import 'repository/sqlite/store/database_manager.dart';
 
 final getIt = GetIt.instance;
 

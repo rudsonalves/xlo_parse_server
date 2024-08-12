@@ -21,8 +21,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../common/models/city.dart';
-import '../common/models/state.dart';
+import '../../common/models/city.dart';
+import '../../common/models/state.dart';
 
 const sharedUFList = 'UFList';
 

@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/models/bgg_boards.dart';
 import '../../common/models/boardgame.dart';
-import '../../repository/bgg_xmlapi_repository.dart';
+import '../../repository/bgg_xml/bgg_xmlapi_repository.dart';
 import 'bgg_search_state.dart';
 
 class BggController extends ChangeNotifier {
